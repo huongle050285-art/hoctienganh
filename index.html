@@ -430,7 +430,7 @@ function segs(html){
   let t=s.text;
   if(s.lang==="vi")t=t.replace(/→/g,", thành ").replace(/\s\+\s/g,", ").replace(/\s\/\s/g," hoặc ").replace(/…/g,"").replace(/[“”]/g,"");
   else t=t.replace(/\s?\/\s?/g,", ").replace(/\s?→\s?/g,", ").replace(/[“”…]/g,"");
-  t.split(/(?<=[.!?:;])\s+/).forEach(x=>{if(/[\p{L}\p{N}]/u.test(x))res.push({lang:s.lang,text:x.trim()});});
+  t.replace(/([.!?:;])\s+/g,"$1\n").split("\n").forEach(x=>{if(/[A-Za-z0-9\u00C0-\u1EF9]/.test(x))res.push({lang:s.lang,text:x.trim()});});
  });
  return res;
 }
@@ -463,15 +463,44 @@ function listen(){
   listen.current=r;
  });
 }
+const UA=navigator.userAgent||"";
+const IOS=/iPad|iPhone|iPod/.test(UA)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const IOS_OTHER=IOS&&/CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|Instagram|Zalo|Line\//i.test(UA);
+const IN_FRAME=(()=>{try{return window.self!==window.top;}catch(e){return true;}})();
 function srErrorText(code){
- if(code==="unsupported")return "Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Hãy dùng Chrome hoặc Edge (máy tính, Android) hoặc Safari (iPhone, iPad).";
- if(code==="not-allowed"||code==="service-not-allowed")return "Micro đang bị chặn. Nếu bạn đang mở trong khung xem của Claude, hãy tải file .html về và mở bằng Chrome/Edge/Safari, rồi bấm “Cho phép” khi trình duyệt hỏi quyền dùng micro.";
+ const blocked=code==="not-allowed"||code==="service-not-allowed"||code==="unsupported";
+ if(blocked&&IN_FRAME)return "Micro bị chặn trong khung xem này. Hãy mở trang web của app (ví dụ link github.io) trực tiếp bằng trình duyệt.";
+ if(blocked&&IOS_OTHER)return "Trên iPhone/iPad, chỉ Safari cho phép trang web chấm phát âm. Hãy sao chép địa chỉ trang này và mở bằng Safari. Trong lúc chờ, bạn có thể dùng nút “Tự ghi âm để so sánh” bên dưới.";
+ if(blocked&&IOS)return "Safari chưa được phép nghe giọng nói. Hãy làm 2 việc rồi tải lại trang: (1) Cài đặt › Cài đặt chung › Bàn phím › bật “Đọc chính tả”. (2) Trong Safari, bấm biểu tượng “Aa” cạnh địa chỉ web › Cài đặt trang web › Micrô › Cho phép.";
+ if(code==="unsupported")return "Trình duyệt này chưa hỗ trợ chấm phát âm. Hãy dùng Chrome hoặc Edge (Android, máy tính) hoặc Safari (iPhone, iPad).";
+ if(blocked)return "Micro đang bị chặn. Bấm biểu tượng ổ khóa (hoặc ⓘ) cạnh địa chỉ web › Quyền › Micrô › Cho phép, rồi tải lại trang.";
  if(code==="no-speech")return "Cô chưa nghe thấy gì. Bấm nút ghi âm rồi đọc to, rõ ràng nhé.";
- if(code==="network")return "Nhận diện giọng nói cần kết nối Internet. Kiểm tra mạng rồi thử lại.";
+ if(code==="network")return "Chấm phát âm cần kết nối Internet. Kiểm tra mạng rồi thử lại.";
  if(code==="audio-capture")return "Không tìm thấy micro. Kiểm tra micro của máy rồi thử lại.";
  return "Có lỗi khi ghi âm ("+code+"). Thử lại sau giây lát.";
 }
-
+/* Dự phòng: tự ghi âm rồi nghe lại để so với giọng mẫu */
+function selfRecorder(target){
+ const box=el(`<div class="row"></div>`);
+ if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder))return box;
+ const btn=el(`<button class="btn" type="button">${IC.mic} Tự ghi âm để so sánh</button>`);
+ const out=el(`<div style="width:100%;display:flex;flex-direction:column;gap:6px"></div>`);
+ let rec=null,stream=null,chunks=[];
+ btn.onclick=async()=>{
+  if(rec&&rec.state==="recording"){rec.stop();return;}
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:true});}
+  catch(e){out.innerHTML=`<div class="alert">${esc(IOS?"Không mở được micro. Vào Cài đặt › tên trình duyệt (Chrome/Safari) › bật Micrô, rồi tải lại trang.":"Không mở được micro. Hãy cho phép trang web dùng micro rồi tải lại trang.")}</div>`;return;}
+  chunks=[];rec=new MediaRecorder(stream);
+  rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+  rec.onstop=()=>{stream.getTracks().forEach(t=>t.stop());const url=URL.createObjectURL(new Blob(chunks,{type:rec.mimeType||"audio/mp4"}));
+   out.innerHTML="";const au=el(`<audio controls style="width:100%"></audio>`);au.src=url;
+   const cmp=el(`<button class="btn sm" type="button">${IC.spk} Nghe giọng mẫu để so</button>`);cmp.onclick=e=>sayBtn(e.currentTarget,target);
+   out.append(el(`<span class="muted" style="font-size:14px">Nghe lại giọng của bạn rồi so với giọng mẫu, chú ý âm cuối và trọng âm.</span>`),au,cmp);
+   btn.className="btn";btn.innerHTML=IC.mic+" Ghi âm lại để so sánh";};
+  rec.start();btn.className="btn rec";btn.innerHTML=IC.stop+" Đang ghi… bấm để dừng";
+ };
+ box.append(btn,out);return box;
+}
 /* ============ SO SÁNH PHÁT ÂM ============ */
 const NUM={"0":"zero","1":"one","2":"two","3":"three","4":"four","5":"five","6":"six","7":"seven","8":"eight","9":"nine","10":"ten"};
 function toks(s){return s.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean).map(w=>NUM[w]||w);}
@@ -515,7 +544,7 @@ function checkAns(input,answers){const n=normAns(input);return answers.some(a=>n
 
 function localReview(text){
  const issues=[];
- const sentences=text.split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean);
+ const sentences=text.replace(/([.!?])\s+/g,"$1\n").split(/\n+/).map(s=>s.trim()).filter(Boolean);
  sentences.forEach(s=>{
   if(/^[a-z]/.test(s))issues.push({wrong:s.slice(0,12)+"…",right:s[0].toUpperCase()+s.slice(1,12)+"…",why:"Câu phải bắt đầu bằng chữ in hoa."});
   if(!/[.!?]$/.test(s))issues.push({wrong:"…"+s.slice(-12),right:"…"+s.slice(-12)+".",why:"Cuối câu cần dấu chấm (.), chấm hỏi (?) hoặc chấm than (!)."});
@@ -600,7 +629,7 @@ function home(){
  fp.append(ta,go,holder);app.append(fp);
  holder.append(practiceBox(ta.value));
 
- app.append(el(`<footer>Tiến độ được lưu trên trình duyệt của máy này. Phát âm mẫu dùng giọng đọc có sẵn của thiết bị; chấm phát âm dùng nhận diện giọng nói của trình duyệt (Chrome, Edge, Safari).</footer>`));
+ app.append(el(`<footer>Tiến độ được lưu trên trình duyệt của máy này. Phát âm mẫu dùng giọng đọc có sẵn của thiết bị; chấm phát âm dùng nhận diện giọng nói của trình duyệt: Chrome hoặc Edge trên Android và máy tính, Safari trên iPhone và iPad.</footer>`));
 }
 
 function wordCard(w){
@@ -637,7 +666,7 @@ function practiceBox(target,o={}){
     const row=el(`<div class="row"><span class="muted" style="font-size:14px">Nghe lại từ sai:</span></div>`);
     [...new Set(missed)].slice(0,6).forEach(w=>{const b=el(`<button class="btn sm" type="button">${IC.spk} ${esc(w.replace(/[.,!?]/g,""))}</button>`);b.onclick=e=>sayBtn(e.currentTarget,w.replace(/[.,!?—]/g,""),0.6);row.append(b);});
     res.append(row);}
-  }catch(code){res.innerHTML=`<div class="alert">${esc(srErrorText(String(code)))}</div>`;}
+  }catch(code){res.innerHTML=`<div class="alert">${esc(srErrorText(String(code)))}</div>`;if(String(code)!=="no-speech")res.append(selfRecorder(target));}
   recording=false;rb.className="btn primary";rb.innerHTML=IC.mic+" Ghi âm lại";
  };
  rb.onclick=start;
@@ -748,7 +777,7 @@ function tabListen(L,body){
 function tabSpeak(L,body){
  const t=el(`<section class="block"></section>`);
  t.append(el(`<p style="margin:0">Chọn một câu, bấm <b>Nghe mẫu</b>, sau đó bấm <b>Ghi âm và chấm</b> rồi đọc to. Từ đọc đúng hiện màu xanh, từ cần sửa hiện màu đỏ kèm cách sửa.</p>`));
- if(!SR)t.append(el(`<div class="alert">${esc(srErrorText("unsupported"))}</div>`));
+ if(!SR||IOS_OTHER)t.append(el(`<div class="alert">${esc(srErrorText(IOS_OTHER?"not-allowed":"unsupported"))}</div>`));
  const dd=curDialogue(L);const items=[...L.speak,...dd.lines.map(x=>x[1])];
  const pick=el(`<div class="picker" role="group" aria-label="Chọn câu luyện"></div>`);
  const holder=el(`<div></div>`);
