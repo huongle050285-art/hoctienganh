@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Học tiếng Anh từ sơ cấp: ngữ pháp, nghe, từ vựng mỗi ngày, luyện phát âm và viết.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Lớp Tiếng Anh Mỗi Ngày</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;700&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: lớp học bảng đen — thanh trên cố định, cột nội dung 760px, bài học chia 4 thẻ */
+:root{
+  --bg:#f6f8f6; --paper:#ffffff; --ink:#18231f; --muted:#5b6a64; --line:#dbe3df;
+  --board:#1f4b42; --board-ink:#eaf3ef; --chalk:#f3c94a; --chalk-soft:#fbefc4;
+  --ok:#1f8a4c; --ok-soft:#dff3e6; --bad:#c2412d; --bad-soft:#fbe4df;
+  --f-display:"Lexend","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-ipa:"Noto Sans Mono","Noto Sans","Segoe UI","DejaVu Sans",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101614; --paper:#17201d; --ink:#e6eeea; --muted:#9aaca5; --line:#2a3833;
+  --board:#24564c; --board-ink:#eaf3ef; --chalk:#f0c64a; --chalk-soft:#3a3420;
+  --ok:#5cc489; --ok-soft:#183324; --bad:#f08b78; --bad-soft:#3b1f1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101614; --paper:#17201d; --ink:#e6eeea; --muted:#9aaca5; --line:#2a3833;
+  --board:#24564c; --board-ink:#eaf3ef; --chalk:#f0c64a; --chalk-soft:#3a3420;
+  --ok:#5cc489; --ok-soft:#183324; --bad:#f08b78; --bad-soft:#3b1f1a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+button,input,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);line-height:1.25;text-wrap:balance;margin:0}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--board);color:var(--board-ink)}
+header.top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:18px;cursor:pointer;background:none;border:0;padding:0;color:inherit}
+.brand span{color:var(--chalk)}
+.levels{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.levels button{background:transparent;border:1px solid rgba(255,255,255,.25);color:var(--board-ink);border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer}
+.levels button[aria-pressed="true"]{background:var(--chalk);color:#1b1b1b;border-color:var(--chalk);font-weight:600}
+button:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+section.block{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.board{background:var(--board);color:var(--board-ink);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.board h1{font-size:clamp(22px,5vw,30px)}
+.board .eyebrow{color:#b9d3cb}
+.stats{display:flex;gap:18px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.stats b{font-family:var(--f-display);font-size:22px;color:var(--chalk);display:block;line-height:1.1}
+.stats small{font-size:13px;color:#b9d3cb}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500;font-size:15px}
+.btn:hover{border-color:var(--board)}
+.btn.primary{background:var(--board);color:var(--board-ink);border-color:var(--board)}
+.btn.chalk{background:var(--chalk);color:#1b1b1b;border-color:var(--chalk)}
+.btn.rec{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:14px;border-radius:8px}
+.btn svg{width:18px;height:18px;flex:none}
+.btn[disabled]{opacity:.55;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vocab{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.word{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.word.done{border-color:var(--ok);background:var(--ok-soft)}
+.word h3{font-size:20px}
+.ipa{font-family:var(--f-ipa);font-size:14px;color:var(--muted)}
+.word .vi{font-weight:600}
+.word .ex{font-size:14px;color:var(--muted);font-style:italic}
+.lessons{display:flex;flex-direction:column;gap:8px}
+.lesson-item{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;text-align:left;width:100%}
+.lesson-item:hover{border-color:var(--board)}
+.lesson-item .num{font-family:var(--f-display);font-weight:700;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--chalk-soft);color:var(--ink);flex:none;font-size:15px}
+.lesson-item.done .num{background:var(--ok);color:#fff}
+.lesson-item .t{flex:1;min-width:0}
+.lesson-item .t b{display:block;font-family:var(--f-display);font-weight:500}
+.lesson-item .t small{color:var(--muted)}
+.lesson-item[disabled]{cursor:default;opacity:.6}
+.tag{font-size:12px;border-radius:999px;padding:2px 8px;background:var(--line);color:var(--muted);white-space:nowrap}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);overflow-x:auto;margin-top:18px}
+.tabs button{background:none;border:0;padding:10px 14px;cursor:pointer;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--chalk)}
+.teach{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.teach p{margin:0;max-width:65ch}
+.teacher{display:flex;gap:12px;align-items:flex-start}
+.teacher .av{flex:none;width:40px;height:40px;border-radius:50%;background:var(--board);color:var(--chalk);display:grid;place-items:center;font-family:var(--f-display);font-weight:700}
+.formula{overflow-x:auto}
+.formula table{border-collapse:collapse;width:100%;min-width:420px}
+.formula th,.formula td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.formula th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.formula td:first-child{font-weight:600;white-space:nowrap}
+.formula code{font-family:var(--f-body);background:var(--chalk-soft);padding:1px 6px;border-radius:5px;font-weight:600}
+.note{border-left:4px solid var(--chalk);background:var(--chalk-soft);padding:10px 14px;border-radius:0 10px 10px 0}
+.note ul{margin:4px 0 0;padding-left:20px}
+.ex-list{display:flex;flex-direction:column;gap:8px}
+.ex-item{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.ex-item .txt{flex:1;min-width:0}
+.ex-item .en{font-weight:600;font-size:17px}
+.ex-item .vi{color:var(--muted);font-size:15px}
+.ex-item .why{font-size:14px;margin-top:4px}
+.ex-item .why b{color:var(--board)}
+:root[data-theme="dark"] .ex-item .why b{color:var(--chalk)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ex-item .why b{color:var(--chalk)}}
+.icon-btn{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn:hover{border-color:var(--board)}
+.icon-btn.playing{background:var(--chalk);border-color:var(--chalk);color:#1b1b1b}
+.dialog{display:flex;flex-direction:column;gap:8px}
+.bubble{max-width:85%;padding:10px 14px;border-radius:14px;background:var(--paper);border:1px solid var(--line);cursor:pointer}
+.bubble.B{align-self:flex-end;background:var(--chalk-soft);border-color:transparent}
+.bubble .who{font-size:12px;font-weight:700;color:var(--muted)}
+.bubble .vi{font-size:14px;color:var(--muted)}
+.bubble.playing{outline:2px solid var(--chalk)}
+.reading{background:var(--chalk-soft)!important;outline:2px solid var(--chalk);outline-offset:4px;border-radius:8px}
+.g{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px}
+.g::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--g-col)}
+.g-F{--g-col:#c2569b}.g-M{--g-col:#2f74c0}
+.bubble.gb-F{border-left:4px solid #c2569b}.bubble.gb-M{border-left:4px solid #2f74c0}
+.hidden-vi .bubble .vi,.hidden-vi .ex-item .vi{display:none}
+.practice{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.practice .target{font-size:clamp(18px,4.5vw,22px);font-weight:600;font-family:var(--f-display)}
+.result{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.w{display:inline-block;padding:0 4px;border-radius:5px;margin:1px 0}
+.w.ok{background:var(--ok-soft);color:var(--ok)}
+.w.miss{background:var(--bad-soft);color:var(--bad);text-decoration:underline wavy}
+.score{font-family:var(--f-display);font-weight:700;font-size:28px;font-variant-numeric:tabular-nums}
+.tips{margin:0;padding-left:20px;font-size:15px}
+.picker{display:flex;gap:6px;flex-wrap:wrap}
+.picker button{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:14px;max-width:100%;text-align:left}
+.picker button[aria-pressed="true"]{background:var(--board);color:var(--board-ink);border-color:var(--board)}
+textarea,input[type=text]{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px 12px}
+textarea{min-height:110px;resize:vertical}
+.ex-w{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.ex-w.right{border-color:var(--ok)}
+.ex-w.wrong{border-color:var(--bad)}
+.ex-w .q{font-weight:600}
+.ex-w .fb{font-size:15px}
+.ex-w .fb.ok{color:var(--ok)}
+.ex-w .fb.bad{color:var(--bad)}
+.ex-w .inrow{display:flex;gap:8px}
+.ex-w .inrow input{flex:1;min-width:0}
+.alert{border-radius:10px;padding:10px 14px;background:var(--bad-soft);color:var(--ink);font-size:15px}
+.alert.info{background:var(--chalk-soft)}
+.fix-list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.fix-list li{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--bg)}
+.fix-list s{color:var(--bad)}
+.fix-list ins{color:var(--ok);text-decoration:none;font-weight:600}
+.back{background:none;border:0;color:var(--muted);cursor:pointer;padding:0;font-size:15px}
+.speed{display:flex;gap:6px;align-items:center;font-size:14px}
+.progress{height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--chalk)}
+footer{margin-top:40px;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<header class="top"><div class="in">
+  <button class="brand" id="brand" type="button">Lớp Tiếng Anh <span>Mỗi Ngày</span></button>
+  <nav class="levels" id="levels" aria-label="Trình độ"></nav>
+</div></header>
+
+<main class="wrap" id="app"></main>
+
+<script>
+/* ============ DỮ LIỆU ============ */
+const LEVELS=[{id:"A",name:"Sơ cấp"},{id:"B",name:"Trung cấp"},{id:"C",name:"Cao cấp"}];
+
+const PLANNED={
+ B:["Quá khứ đơn (Past Simple)","Quá khứ tiếp diễn","Hiện tại hoàn thành","Tương lai: will và be going to","So sánh hơn và so sánh nhất","Động từ khuyết thiếu: can, must, should","Câu điều kiện loại 1","Danh động từ và động từ nguyên mẫu"],
+ C:["Hiện tại hoàn thành tiếp diễn","Câu điều kiện loại 2 và 3","Câu bị động","Câu gián tiếp (Reported speech)","Mệnh đề quan hệ","Đảo ngữ","Cụm động từ (Phrasal verbs)","Viết đoạn nghị luận"]
+};
+
+const LESSONS=[
+{id:"be",title:"Động từ “to be”",sub:"am · is · are",
+ teach:[
+  "Chào bạn! Bài đầu tiên, cô giới thiệu động từ quan trọng nhất trong tiếng Anh: <b>to be</b>. Trong tiếng Việt nó có thể là “là”, “thì” hoặc “ở”.",
+  "Điểm khác lớn nhất: câu tiếng Anh <b>bắt buộc có động từ</b>. Tiếng Việt nói “Tôi vui” là đủ, nhưng tiếng Anh phải nói <b>I am happy</b>, không được nói “I happy”.",
+  "Ở thì hiện tại, to be có 3 dạng và đổi theo chủ ngữ: <b>I</b> đi với <b>am</b>; <b>he, she, it</b> và danh từ số ít đi với <b>is</b>; <b>you, we, they</b> và danh từ số nhiều đi với <b>are</b>."],
+ rules:[["Khẳng định","S + <code>am / is / are</code> + …","She is a nurse."],["Phủ định","S + <code>am / is / are</code> + <code>not</code> + …","I am not tired."],["Câu hỏi","<code>Am / Is / Are</code> + S + …?","Are you ready?"],["Trả lời ngắn","Yes, S + be. / No, S + be + not.","Yes, I am. / No, she isn't."]],
+ notes:["Viết tắt: I'm, you're, he's, she's, it's, we're, they're.","Phủ định viết tắt: isn't, aren't. Riêng “I am not” chỉ viết tắt thành <b>I'm not</b>.","Trả lời ngắn “Yes, I am.” không viết tắt thành “Yes, I'm.”"],
+ examples:[["I am a student.","Tôi là sinh viên.","Chủ ngữ <b>I</b> luôn đi với <b>am</b>."],["She is happy.","Cô ấy vui.","Tiếng Việt không có “là” nhưng tiếng Anh vẫn cần <b>is</b>."],["They are at home.","Họ đang ở nhà.","<b>They</b> là số nhiều nên đi với <b>are</b>."],["He is not tired.","Anh ấy không mệt.","Phủ định: thêm <b>not</b> sau is."],["Are you from Vietnam? — Yes, I am.","Bạn đến từ Việt Nam phải không? — Vâng, đúng vậy.","Câu hỏi: đưa <b>Are</b> lên đầu câu."]],
+ dialogue:{title:"Làm quen",sp:{A:["Lan","F"],B:["Tom","M"]},lines:[["A","Hi! I'm Lan. What's your name?","Chào! Mình là Lan. Bạn tên gì?"],["B","Hello, Lan. I'm Tom.","Chào Lan. Mình là Tom."],["A","Nice to meet you, Tom. Are you a student?","Rất vui được gặp bạn, Tom. Bạn là sinh viên à?"],["B","Yes, I am. Are you a teacher?","Ừ, đúng rồi. Bạn là giáo viên à?"],["A","No, I'm not. I'm a nurse.","Không phải. Mình là y tá."]]},
+ speak:["I am a student.","She is my sister.","We are not late.","Are you from Vietnam?","Nice to meet you."],
+ write:[{q:"She ___ a teacher.",a:["is"],h:"Chủ ngữ “she” là ngôi thứ ba số ít."},{q:"I ___ hungry.",a:["am"],h:"“I” luôn đi với một dạng riêng."},{q:"They ___ not at school.",a:["are"],h:"“They” là số nhiều."},{q:"___ he your brother?",a:["is"],h:"Câu hỏi: đưa to be lên đầu."},{tr:1,q:"Tôi là sinh viên.",a:["I am a student","I'm a student"]},{tr:1,q:"Họ không mệt.",a:["They are not tired","They aren't tired","They're not tired"]}],
+ free:"Viết 3 câu giới thiệu bản thân: tên, nghề nghiệp, quê quán. Dùng am / is / are."},
+
+{id:"pron",title:"Đại từ và tính từ sở hữu",sub:"I – my · she – her",
+ teach:[
+  "Hôm nay chúng ta học cách nói “tôi”, “của tôi” và các ngôi khác. <b>Đại từ chủ ngữ</b> (I, you, he, she, it, we, they) đứng trước động từ, làm chủ ngữ của câu.",
+  "<b>Tính từ sở hữu</b> (my, your, his, her, its, our, their) luôn đứng <b>trước danh từ</b>. Tiếng Việt nói “sách <b>của tôi</b>”, tiếng Anh đảo lên trước: <b>my</b> book.",
+  "Lưu ý: chọn his hay her theo <b>người sở hữu</b>, không theo đồ vật. Sách của Nam là <b>his</b> book, dù quyển sách không có giới tính."],
+ rules:[["Tôi","<code>I</code> → <code>my</code>","my bag"],["Bạn / các bạn","<code>you</code> → <code>your</code>","your name"],["Anh ấy","<code>he</code> → <code>his</code>","his car"],["Cô ấy","<code>she</code> → <code>her</code>","her phone"],["Nó","<code>it</code> → <code>its</code>","its tail"],["Chúng tôi","<code>we</code> → <code>our</code>","our class"],["Họ","<code>they</code> → <code>their</code>","their house"]],
+ notes:["<b>its</b> (của nó) khác <b>it's</b> (= it is).","<b>their</b> (của họ) khác <b>there</b> (ở đó) — đọc giống nhau nhưng nghĩa khác."],
+ examples:[["This is my bag.","Đây là túi của tôi.","<b>my</b> đứng trước danh từ <b>bag</b>."],["Her name is Mai.","Tên cô ấy là Mai.","Người sở hữu là nữ → <b>her</b>."],["Their house is big.","Nhà của họ to.","<b>their</b> = của họ."],["The cat is hungry. Its bowl is empty.","Con mèo đói. Bát của nó trống rỗng.","Con vật / đồ vật → <b>its</b>."],["We love our teacher.","Chúng tôi yêu quý cô giáo của mình.","<b>we</b> → <b>our</b>."]],
+ dialogue:{title:"Điện thoại của ai?",sp:{A:["Hoa","F"],B:["Huy","M"]},lines:[["A","Is this your phone?","Đây có phải điện thoại của bạn không?"],["B","No, it isn't. My phone is black.","Không phải. Điện thoại của mình màu đen."],["A","Is it Nam's phone?","Có phải của Nam không?"],["B","Yes, it's his phone. His phone is white.","Đúng, đó là điện thoại của cậu ấy. Điện thoại của cậu ấy màu trắng."]]},
+ speak:["This is my bag.","Her name is Mai.","Is this your phone?","Their house is very big.","We love our teacher."],
+ write:[{q:"This is ___ book. (của tôi)",a:["my"],h:"Tính từ sở hữu của I."},{q:"Mai is a doctor. ___ husband is a teacher.",a:["her"],h:"Người sở hữu là Mai (nữ)."},{q:"We have a dog. ___ name is Lucky.",a:["its"],h:"Con vật → tính từ sở hữu của it."},{q:"They love ___ children.",a:["their"],h:"Của họ."},{tr:1,q:"Tên anh ấy là Nam.",a:["His name is Nam","His name's Nam"]},{tr:1,q:"Đây là nhà của chúng tôi.",a:["This is our house","This is our home"]}],
+ free:"Viết 3 câu về gia đình bạn, dùng my, his, her, their."},
+
+{id:"art",title:"Mạo từ a, an, the",sub:"a book · an apple · the sun",
+ teach:[
+  "<b>a / an</b> nghĩa là “một”, dùng với danh từ <b>đếm được, số ít</b>, khi nhắc đến lần đầu hoặc chưa xác định.",
+  "Chọn a hay an theo <b>âm đọc</b>, không theo chữ cái. Trước âm nguyên âm dùng <b>an</b>: an apple, an <b>h</b>our (h câm). Trước âm phụ âm dùng <b>a</b>: a book, a <b>u</b>niversity (đọc /juː/ nên là phụ âm).",
+  "<b>the</b> dùng khi người nghe đã biết ta nói về cái nào: đã nhắc trước đó, hoặc là thứ duy nhất như <b>the sun</b>, <b>the moon</b>."],
+ rules:[["a","<code>a</code> + âm phụ âm","a cat, a car, a uniform"],["an","<code>an</code> + âm nguyên âm","an egg, an hour, an umbrella"],["the","<code>the</code> + vật đã xác định","the book on the table"],["Không mạo từ","danh từ số nhiều / không đếm được, nói chung","I like cats. Water is important."]],
+ notes:["Nhắc lần đầu dùng a/an, nhắc lại dùng the: I have <b>a</b> cat. <b>The</b> cat is black.","Không dùng a/an với danh từ số nhiều: <s>a books</s> → books."],
+ examples:[["I have a cat. The cat is black.","Tôi có một con mèo. Con mèo màu đen.","Lần đầu <b>a</b>, lần sau <b>the</b>."],["She eats an apple every day.","Cô ấy ăn một quả táo mỗi ngày.","apple bắt đầu bằng âm nguyên âm → <b>an</b>."],["It takes an hour.","Mất một tiếng.","Chữ h câm → <b>an</b> hour."],["He is a university student.","Anh ấy là sinh viên đại học.","university đọc /juː/ → <b>a</b>."],["The sun is very hot.","Mặt trời rất nóng.","Thứ duy nhất → <b>the</b>."]],
+ dialogue:{title:"Đi mua váy",sp:{A:["Mai","F"],B:["Long","M"]},lines:[["A","I want to buy a dress.","Mình muốn mua một chiếc váy."],["B","I know a good shop.","Mình biết một cửa hàng tốt."],["A","Where is the shop?","Cửa hàng đó ở đâu?"],["B","It's on Le Loi Street. The dresses there are beautiful.","Ở đường Lê Lợi. Váy ở đó rất đẹp."]]},
+ speak:["I have a cat.","She eats an apple every day.","It takes an hour.","The sun is very hot.","He is a university student."],
+ write:[{q:"She is ___ engineer.",a:["an"],h:"engineer bắt đầu bằng âm nguyên âm."},{q:"I need ___ umbrella.",a:["an"],h:"umbrella đọc /ʌm-/."},{q:"Look at ___ moon!",a:["the"],h:"Thứ duy nhất."},{q:"It is ___ useful book.",a:["a"],h:"useful đọc /juː/."},{tr:1,q:"Tôi có một con chó.",a:["I have a dog","I've got a dog","I have got a dog"]},{tr:1,q:"Anh ấy ăn một quả trứng.",a:["He eats an egg","He is eating an egg","He's eating an egg"]}],
+ free:"Viết 3 câu về đồ vật trong phòng bạn, có dùng a, an và the."},
+
+{id:"plural",title:"Danh từ số nhiều",sub:"book → books · child → children",
+ teach:[
+  "Tiếng Việt chỉ cần thêm số đếm: “hai quyển sách”. Tiếng Anh thì danh từ phải <b>đổi hình thức</b> khi nhiều hơn một: one book, two book<b>s</b>.",
+  "Phần lớn chỉ thêm <b>-s</b>. Sau các âm s, x, ch, sh và nhiều từ tận cùng o thì thêm <b>-es</b>. Phụ âm + y thì đổi thành <b>-ies</b>.",
+  "Một số từ <b>bất quy tắc</b> phải học thuộc: man → men, woman → women, child → children, person → people, foot → feet, tooth → teeth."],
+ rules:[["Thêm -s","N + <code>s</code>","book → books, car → cars"],["Thêm -es","s, x, ch, sh, o + <code>es</code>","box → boxes, watch → watches, tomato → tomatoes"],["y → ies","phụ âm + y → <code>ies</code>","baby → babies, city → cities (nhưng boy → boys)"],["f / fe → ves","<code>ves</code>","knife → knives, leaf → leaves"],["Bất quy tắc","học thuộc","child → children, mouse → mice"]],
+ notes:["Cách đọc đuôi -s: /s/ sau p, t, k, f (books); /ɪz/ sau s, x, ch, sh (boxes); /z/ với các trường hợp còn lại (cars).","Người Việt hay quên đọc âm cuối /s/, /z/. Hãy bật rõ âm này khi luyện nói.","Danh từ không đếm được không thêm s: water, rice, money, information."],
+ examples:[["I have two cats.","Tôi có hai con mèo.","cat + <b>s</b>, đọc /kæts/."],["These boxes are heavy.","Những cái hộp này nặng.","box + <b>es</b>, đọc /ˈbɒksɪz/."],["The children are happy.","Bọn trẻ vui vẻ.","child → <b>children</b> (bất quy tắc)."],["Three women are at the door.","Ba người phụ nữ đang ở cửa.","woman → <b>women</b>."],["Brush your teeth every night.","Đánh răng mỗi tối nhé.","tooth → <b>teeth</b>."]],
+ dialogue:{title:"Ở chợ",sp:{A:["Người bán","M"],B:["Lan","F"]},lines:[["A","How many apples do you want?","Chị muốn mấy quả táo?"],["B","Six apples, please. And two bananas.","Cho tôi sáu quả táo. Và hai quả chuối."],["A","Anything else?","Còn gì nữa không ạ?"],["B","Yes, three tomatoes and some potatoes.","Có, ba quả cà chua và ít khoai tây."]]},
+ speak:["I have two cats.","These boxes are heavy.","The children are happy.","Six apples, please.","Three tomatoes and some potatoes."],
+ write:[{q:"one child, two ___",a:["children"],h:"Bất quy tắc."},{q:"one box, three ___",a:["boxes"],h:"Tận cùng bằng x."},{q:"one city, two ___",a:["cities"],h:"Phụ âm + y."},{q:"one knife, two ___",a:["knives"],h:"Tận cùng bằng fe."},{tr:1,q:"Tôi có hai quyển sách.",a:["I have two books","I've got two books","I have got two books"]},{tr:1,q:"Những người phụ nữ đó là giáo viên.",a:["Those women are teachers","These women are teachers","The women are teachers"]}],
+ free:"Viết 3 câu kể những thứ bạn mua ở chợ, dùng danh từ số nhiều."},
+
+{id:"ps",title:"Thì hiện tại đơn",sub:"I work · She works",
+ teach:[
+  "Thì hiện tại đơn dùng để nói về <b>thói quen</b> (I drink coffee every morning), <b>sự thật</b> (The sun rises in the east) và <b>lịch trình</b> (The train leaves at 7).",
+  "Quy tắc vàng: với <b>he, she, it</b> và danh từ số ít, động từ phải <b>thêm -s hoặc -es</b>: she work<b>s</b>, he watch<b>es</b>. Đây là lỗi người Việt hay mắc nhất.",
+  "Câu phủ định và câu hỏi phải <b>mượn trợ động từ</b> do / does. Khi đã có does thì động từ chính <b>trở về nguyên mẫu</b>: She doesn't <b>like</b> (không phải <s>likes</s>)."],
+ rules:[["Khẳng định","I / You / We / They + <code>V</code><br>He / She / It + <code>V-s/es</code>","They live here. She lives here."],["Phủ định","S + <code>don't / doesn't</code> + V","He doesn't eat meat."],["Câu hỏi","<code>Do / Does</code> + S + V?","Do you speak English?"],["Trả lời ngắn","Yes, S + do/does. No, S + don't/doesn't.","Yes, I do. No, she doesn't."]],
+ notes:["Dấu hiệu: always, usually, often, sometimes, never, every day, on Mondays.","Đặc biệt: have → has, go → goes, do → does, study → studies, watch → watches."],
+ examples:[["I drink coffee every morning.","Sáng nào tôi cũng uống cà phê.","Thói quen, chủ ngữ I → động từ giữ nguyên."],["She works in a hospital.","Cô ấy làm việc ở bệnh viện.","She → work<b>s</b>."],["He doesn't like fish.","Anh ấy không thích cá.","doesn't + <b>like</b> (nguyên mẫu)."],["Do you speak English? — Yes, I do.","Bạn có nói tiếng Anh không? — Có.","Câu hỏi mượn <b>Do</b>."],["The sun rises in the east.","Mặt trời mọc ở hướng đông.","Sự thật hiển nhiên."]],
+ dialogue:{title:"Bạn làm nghề gì?",sp:{A:["Linda","F"],B:["Tom","M"]},lines:[["A","What do you do?","Anh làm nghề gì?"],["B","I'm a cook. I work in a restaurant.","Tôi là đầu bếp. Tôi làm ở một nhà hàng."],["A","Do you work every day?","Anh có làm mỗi ngày không?"],["B","No, I don't. I don't work on Mondays.","Không. Tôi không làm vào thứ Hai."],["A","What does your wife do?","Vợ anh làm nghề gì?"],["B","She teaches English.","Cô ấy dạy tiếng Anh."]]},
+ speak:["She works in a hospital.","He doesn't like fish.","Do you speak English?","I drink coffee every morning.","What does your wife do?"],
+ write:[{q:"She ___ to school by bus. (go)",a:["goes"],h:"She → thêm es."},{q:"They ___ milk. (not like)",a:["don't like","do not like"],h:"They → don't."},{q:"___ he play football?",a:["does"],h:"Câu hỏi, chủ ngữ he."},{q:"My father ___ TV every evening. (watch)",a:["watches"],h:"Tận cùng ch → es."},{tr:1,q:"Cô ấy không uống cà phê.",a:["She doesn't drink coffee","She does not drink coffee"]},{tr:1,q:"Bạn sống ở đâu?",a:["Where do you live"]}],
+ free:"Viết 4 câu về một ngày bình thường của bạn (thức dậy, ăn sáng, đi làm…). Nhớ thêm s cho he/she nếu viết về người khác."},
+
+{id:"pc",title:"Thì hiện tại tiếp diễn",sub:"I am reading now",
+ teach:[
+  "Thì hiện tại tiếp diễn diễn tả việc <b>đang xảy ra ngay lúc nói</b>, giống chữ “đang” trong tiếng Việt.",
+  "Công thức gồm hai phần, thiếu phần nào cũng sai: <b>am / is / are</b> + <b>V-ing</b>. Người học hay quên to be: <s>I reading</s> → I <b>am</b> reading.",
+  "Thêm -ing: thường thêm thẳng (read → reading); bỏ e câm (make → making); gấp đôi phụ âm cuối khi có dạng phụ âm–nguyên âm–phụ âm ngắn (run → running, sit → sitting)."],
+ rules:[["Khẳng định","S + <code>am/is/are</code> + <code>V-ing</code>","She is cooking."],["Phủ định","S + <code>am/is/are not</code> + V-ing","They aren't sleeping."],["Câu hỏi","<code>Am/Is/Are</code> + S + V-ing?","Are you listening?"]],
+ notes:["Dấu hiệu: now, right now, at the moment, Look!, Listen!","Không dùng với động từ trạng thái như know, like, want, need: nói <b>I want</b>, không nói <s>I am wanting</s>."],
+ examples:[["I am reading a book now.","Bây giờ tôi đang đọc sách.","<b>am</b> + read<b>ing</b>."],["Look! It is raining.","Nhìn kìa! Trời đang mưa.","Dấu hiệu <b>Look!</b>"],["They are not watching TV.","Họ không đang xem TV.","Phủ định: are <b>not</b>."],["What are you doing? — I'm cooking dinner.","Bạn đang làm gì thế? — Mình đang nấu bữa tối.","Câu hỏi với What."],["She is sitting next to me.","Cô ấy đang ngồi cạnh tôi.","sit → si<b>tt</b>ing."]],
+ dialogue:{title:"Gọi điện",sp:{A:["Thu","F"],B:["Minh","M"]},lines:[["A","Hi Minh, where are you?","Chào Minh, cậu đang ở đâu?"],["B","I'm at the bus stop. I'm waiting for the bus.","Mình đang ở trạm xe buýt. Mình đang đợi xe."],["A","Are you coming to the party?","Cậu có đến bữa tiệc không?"],["B","Yes, I am. I'm bringing a cake.","Có chứ. Mình đang mang theo một cái bánh."]]},
+ speak:["I am reading a book now.","Look! It is raining.","What are you doing?","I'm waiting for the bus.","She is sitting next to me."],
+ write:[{q:"She ___ now. (cook)",a:["is cooking","'s cooking"],h:"is + V-ing."},{q:"Listen! The baby ___. (cry)",a:["is crying"],h:"is + V-ing."},{q:"We ___ football. (not play)",a:["are not playing","aren't playing"],h:"are not + V-ing."},{q:"They are ___ in the pool. (swim)",a:["swimming"],h:"Gấp đôi m."},{tr:1,q:"Tôi đang học tiếng Anh.",a:["I am learning English","I'm learning English","I am studying English","I'm studying English"]},{tr:1,q:"Trời đang mưa.",a:["It is raining","It's raining"]}],
+ free:"Nhìn quanh bạn và viết 4 câu: mọi người xung quanh đang làm gì?"},
+
+{id:"there",title:"There is / There are",sub:"Có cái gì ở đâu",
+ teach:[
+  "Muốn nói “<b>có</b>” một thứ gì đó tồn tại ở đâu, tiếng Anh dùng <b>There is / There are</b>. Ví dụ: Có một công viên gần nhà tôi → <b>There is</b> a park near my house.",
+  "<b>There is</b> đi với danh từ số ít hoặc không đếm được. <b>There are</b> đi với danh từ số nhiều.",
+  "Đừng nhầm với <b>have</b>: have là “sở hữu” (I have a car = tôi có xe). There is là “tồn tại ở đâu đó” (There is a car outside = có một chiếc xe ở ngoài)."],
+ rules:[["Số ít","<code>There is</code> + a/an + N","There is a bank here."],["Số nhiều","<code>There are</code> + Ns","There are two banks here."],["Phủ định","<code>There isn't / aren't</code> + any …","There aren't any chairs."],["Câu hỏi","<code>Is there / Are there</code> …?","Is there a hotel near here?"]],
+ notes:["Câu khẳng định số nhiều dùng <b>some</b>, câu phủ định và câu hỏi dùng <b>any</b>.","Hỏi số lượng: How many + Ns + are there? → How many students are there?"],
+ examples:[["There is a park near my house.","Có một công viên gần nhà tôi.","Số ít → <b>There is</b>."],["There are four people in my family.","Gia đình tôi có bốn người.","Số nhiều → <b>There are</b>."],["There is some milk in the fridge.","Có ít sữa trong tủ lạnh.","milk không đếm được → <b>is</b>."],["There aren't any chairs in the room.","Không có cái ghế nào trong phòng.","Phủ định dùng <b>any</b>."],["Is there a bank near here? — Yes, there is.","Gần đây có ngân hàng không? — Có.","Câu hỏi: đảo <b>Is</b> lên đầu."]],
+ dialogue:{title:"Hỏi đường",sp:{A:["Anna","F"],B:["Peter","M"]},lines:[["A","Excuse me, is there a pharmacy near here?","Xin lỗi, gần đây có hiệu thuốc không?"],["B","Yes, there is. It's next to the post office.","Có. Nó ở cạnh bưu điện."],["A","Are there any restaurants on this street?","Trên phố này có nhà hàng nào không?"],["B","Yes, there are two good ones.","Có, có hai nhà hàng ngon."]]},
+ speak:["There is a park near my house.","There are four people in my family.","Is there a bank near here?","Excuse me, is there a pharmacy near here?","There aren't any chairs in the room."],
+ write:[{q:"There ___ a book on the table.",a:["is","'s"],h:"Số ít."},{q:"There ___ many students in the class.",a:["are"],h:"Số nhiều."},{q:"___ there a hotel near here?",a:["is"],h:"Câu hỏi, số ít."},{q:"There aren't ___ eggs.",a:["any"],h:"Câu phủ định."},{tr:1,q:"Có một con mèo trong vườn.",a:["There is a cat in the garden","There's a cat in the garden"]},{tr:1,q:"Gia đình tôi có năm người.",a:["There are five people in my family"]}],
+ free:"Mô tả căn phòng của bạn trong 4 câu, dùng There is và There are."},
+
+{id:"wh",title:"Câu hỏi với từ để hỏi",sub:"What · Where · When · Who · Why · How",
+ teach:[
+  "Câu hỏi Wh- giúp bạn hỏi thông tin cụ thể. Thứ tự luôn là: <b>Từ để hỏi</b> + <b>trợ động từ</b> (am/is/are hoặc do/does) + <b>chủ ngữ</b> + …",
+  "Tiếng Việt để từ hỏi ở cuối: “Bạn sống <b>ở đâu</b>?”. Tiếng Anh đưa lên đầu: <b>Where</b> do you live?",
+  "Các từ cần nhớ: What (gì), Where (đâu), When (khi nào), Who (ai), Why (tại sao), How (thế nào), How old (bao nhiêu tuổi), How much (bao nhiêu tiền), How many (bao nhiêu cái)."],
+ rules:[["Với to be","<code>Wh-</code> + am/is/are + S?","Where is the station?"],["Với động từ thường","<code>Wh-</code> + do/does + S + V?","What do you eat for breakfast?"],["Trả lời Why","<code>Because</code> + mệnh đề","Because I am busy."]],
+ notes:["Đừng quên trợ động từ: <s>Where you live?</s> → Where <b>do</b> you live?","Giọng đọc câu hỏi Wh- thường <b>đi xuống</b> ở cuối câu, khác câu hỏi Yes/No đi lên."],
+ examples:[["What is your name?","Bạn tên là gì?","What + <b>is</b> + your name."],["Where do you live? — I live in Da Nang.","Bạn sống ở đâu? — Tôi sống ở Đà Nẵng.","Động từ thường → mượn <b>do</b>."],["When does the class start? — At seven.","Lớp học bắt đầu khi nào? — Lúc bảy giờ.","he/she/it → <b>does</b>."],["Why are you tired? — Because I work late.","Sao bạn mệt vậy? — Vì tôi làm việc muộn.","Trả lời bằng <b>Because</b>."],["How much is this shirt?","Cái áo này bao nhiêu tiền?","Hỏi giá → <b>How much</b>."]],
+ dialogue:{title:"Gặp du khách",sp:{A:["Emma","F"],B:["Huy","M"]},lines:[["A","Where are you from?","Bạn đến từ đâu?"],["B","I'm from Da Nang.","Mình đến từ Đà Nẵng."],["A","What do you do there?","Bạn làm gì ở đó?"],["B","I'm a tour guide.","Mình là hướng dẫn viên du lịch."],["A","Why do you like your job?","Sao bạn thích công việc của mình?"],["B","Because I meet new people every day.","Vì ngày nào mình cũng gặp người mới."]]},
+ speak:["What is your name?","Where do you live?","When does the class start?","Why do you like your job?","How much is this shirt?"],
+ write:[{q:"___ do you live? (ở đâu)",a:["where"],h:"Hỏi nơi chốn."},{q:"___ is your birthday? (khi nào)",a:["when"],h:"Hỏi thời gian."},{q:"___ is that man? (ai)",a:["who"],h:"Hỏi người."},{q:"___ old are you?",a:["how"],h:"Hỏi tuổi."},{tr:1,q:"Bạn tên là gì?",a:["What is your name","What's your name"]},{tr:1,q:"Cô ấy làm việc ở đâu?",a:["Where does she work"]}],
+ free:"Viết 4 câu hỏi bạn muốn hỏi một người bạn mới quen, mỗi câu dùng một từ để hỏi khác nhau."}
+];
+
+/* Hội thoại theo chủ đề — thêm chủ đề mới bằng cách thêm một mục vào danh sách này */
+const TOPICS=[
+{id:"work",title:"Ở nơi làm việc",desc:"Ngày đầu đi làm",sp:{A:["Linda","F"],B:["David","M"]},lines:[
+ ["A","Good morning! Are you the new staff member?","Chào buổi sáng! Anh là nhân viên mới phải không?"],
+ ["B","Yes, I am. My name is David.","Vâng, đúng vậy. Tôi tên là David."],
+ ["A","Welcome to the team, David. I'm Linda, your manager.","Chào mừng anh vào nhóm, David. Tôi là Linda, quản lý của anh."],
+ ["B","Nice to meet you, Linda. Where is my desk?","Rất vui được gặp chị. Bàn làm việc của tôi ở đâu?"],
+ ["A","It's next to the window. Here is your computer.","Ở cạnh cửa sổ. Đây là máy tính của anh."],
+ ["B","Thank you. What time does the meeting start?","Cảm ơn chị. Cuộc họp bắt đầu lúc mấy giờ?"],
+ ["A","At ten o'clock, in room two hundred and four.","Lúc mười giờ, ở phòng 204."],
+ ["B","Great. See you there.","Tốt quá. Hẹn gặp chị ở đó."]]},
+{id:"school",title:"Ở trường học",desc:"Cô giáo và học sinh",sp:{A:["Cô Hoa","F"],B:["Nam","M"]},lines:[
+ ["A","Good morning, Nam. Where is your homework?","Chào Nam. Bài tập về nhà của em đâu?"],
+ ["B","I'm sorry, Ms. Hoa. It's at home.","Em xin lỗi cô Hoa. Bài tập để ở nhà ạ."],
+ ["A","Please bring it tomorrow.","Ngày mai em mang đến nhé."],
+ ["B","Yes, I will. Can I ask a question?","Vâng ạ. Em hỏi cô một câu được không ạ?"],
+ ["A","Of course. What is it?","Tất nhiên rồi. Em hỏi gì?"],
+ ["B","What does library mean?","Library nghĩa là gì ạ?"],
+ ["A","It's a room with many books. You can read there.","Đó là căn phòng có nhiều sách. Em có thể đọc sách ở đó."],
+ ["B","Thank you, Ms. Hoa.","Em cảm ơn cô."]]},
+{id:"restaurant",title:"Tại nhà hàng",desc:"Gọi món",sp:{A:["Sarah","F"],B:["Mark","M"]},lines:[
+ ["A","Good evening. A table for how many?","Chào anh. Bàn cho mấy người ạ?"],
+ ["B","For two, please.","Cho hai người."],
+ ["A","This way, please. Here is the menu.","Mời anh đi lối này. Đây là thực đơn."],
+ ["B","Thank you. What do you recommend?","Cảm ơn chị. Chị gợi ý món gì?"],
+ ["A","The chicken soup is very good today.","Hôm nay món súp gà rất ngon."],
+ ["B","OK. Two chicken soups and two glasses of water, please.","Được. Cho tôi hai súp gà và hai cốc nước."],
+ ["A","Anything else?","Anh cần gì thêm không ạ?"],
+ ["B","That's all, thank you.","Vậy thôi, cảm ơn chị."]]},
+{id:"shopping",title:"Đi mua sắm",desc:"Mua áo",sp:{A:["Người bán","M"],B:["Mai","F"]},lines:[
+ ["A","Hello! Can I help you?","Xin chào! Tôi giúp gì được chị?"],
+ ["B","Yes, please. I'm looking for a T-shirt.","Vâng. Tôi đang tìm một chiếc áo phông."],
+ ["A","What size are you?","Chị mặc cỡ nào?"],
+ ["B","Medium. Do you have it in blue?","Cỡ vừa. Có màu xanh dương không anh?"],
+ ["A","Yes, we do. Here you are.","Có ạ. Của chị đây."],
+ ["B","How much is it?","Cái này bao nhiêu tiền?"],
+ ["A","It's fifteen dollars.","Mười lăm đô la."],
+ ["B","OK, I'll take it.","Được, tôi lấy cái này."]]},
+{id:"party",title:"Dự tiệc",desc:"Tiệc sinh nhật",sp:{A:["Emma","F"],B:["Ken","M"]},lines:[
+ ["A","Hi Ken! Thanks for coming. Come in!","Chào Ken! Cảm ơn anh đã đến. Vào đi!"],
+ ["B","Thanks for inviting me. This is for you.","Cảm ơn chị đã mời. Cái này tặng chị."],
+ ["A","Oh, flowers! They're beautiful.","Ôi, hoa! Đẹp quá."],
+ ["B","Happy birthday, Emma!","Chúc mừng sinh nhật, Emma!"],
+ ["A","Thank you! Would you like something to drink?","Cảm ơn anh! Anh muốn uống gì không?"],
+ ["B","Yes, orange juice, please.","Có, cho tôi nước cam."],
+ ["A","Let me introduce my friend Anna. She's a doctor.","Để tôi giới thiệu bạn tôi, Anna. Cô ấy là bác sĩ."],
+ ["B","Nice to meet you, Anna.","Rất vui được gặp chị, Anna."]]},
+{id:"directions",title:"Hỏi đường",desc:"Tìm ga tàu",sp:{A:["Julia","F"],B:["Tony","M"]},lines:[
+ ["A","Excuse me. How can I get to the train station?","Xin lỗi. Làm sao để đến ga tàu?"],
+ ["B","Go straight and turn left at the traffic lights.","Đi thẳng rồi rẽ trái ở đèn giao thông."],
+ ["A","Is it far from here?","Có xa đây không?"],
+ ["B","No, it isn't. It's about ten minutes on foot.","Không xa. Đi bộ khoảng mười phút."],
+ ["A","Can I take a bus?","Tôi đi xe buýt được không?"],
+ ["B","Yes. Bus number five goes there.","Được. Xe buýt số năm đi đến đó."],
+ ["A","Thank you very much.","Cảm ơn anh rất nhiều."],
+ ["B","You're welcome.","Không có gì."]]},
+{id:"hotel",title:"Ở khách sạn",desc:"Nhận phòng",sp:{A:["Lễ tân","F"],B:["Peter","M"]},lines:[
+ ["A","Good afternoon. Welcome to Sunrise Hotel.","Chào anh. Chào mừng anh đến khách sạn Sunrise."],
+ ["B","Hello. I have a reservation. My name is Peter Brown.","Xin chào. Tôi đã đặt phòng. Tên tôi là Peter Brown."],
+ ["A","Let me check. Yes, a single room for three nights.","Để tôi kiểm tra. Vâng, phòng đơn ba đêm."],
+ ["B","That's right. What time is breakfast?","Đúng vậy. Bữa sáng lúc mấy giờ?"],
+ ["A","From six thirty to nine thirty. Here is your key.","Từ sáu rưỡi đến chín rưỡi. Đây là chìa khóa của anh."],
+ ["B","Is there Wi-Fi in the room?","Trong phòng có Wi-Fi không?"],
+ ["A","Yes, there is. The password is on the card.","Có ạ. Mật khẩu ghi trên thẻ."],
+ ["B","Thank you.","Cảm ơn chị."]]},
+{id:"doctor",title:"Đi khám bệnh",desc:"Bị cảm",sp:{A:["Bác sĩ","F"],B:["Tom","M"]},lines:[
+ ["A","Hello. What's the matter?","Chào anh. Anh bị sao vậy?"],
+ ["B","I have a headache and a sore throat.","Tôi bị đau đầu và đau họng."],
+ ["A","Do you have a fever?","Anh có bị sốt không?"],
+ ["B","Yes, a little.","Có, hơi sốt."],
+ ["A","Open your mouth, please. You have a cold.","Anh há miệng ra nào. Anh bị cảm rồi."],
+ ["B","What should I do?","Tôi nên làm gì?"],
+ ["A","Drink a lot of water and rest at home for two days.","Uống nhiều nước và nghỉ ở nhà hai ngày."],
+ ["B","Thank you, doctor.","Cảm ơn bác sĩ."]]}
+];
+let curTopic=null; // null = hội thoại của bài học
+function curDialogue(L){const t=curTopic&&TOPICS.find(x=>x.id===curTopic);return t||L.dialogue;}
+function spOf(d,s){return (d.sp&&d.sp[s])||(s==="A"?["Người A","F"]:["Người B","M"]);}
+
+const VOCAB=[
+["family","/ˈfæm.əl.i/","gia đình","I love my family."],["mother","/ˈmʌð.ə/","mẹ","My mother is a nurse."],["father","/ˈfɑː.ðə/","bố","My father works in a bank."],["sister","/ˈsɪs.tə/","chị / em gái","My sister is ten years old."],["brother","/ˈbrʌð.ə/","anh / em trai","I have one brother."],
+["friend","/frend/","bạn bè","She is my best friend."],["teacher","/ˈtiː.tʃə/","giáo viên","Our teacher is very kind."],["student","/ˈstjuː.dənt/","học sinh, sinh viên","I am a student."],["doctor","/ˈdɒk.tə/","bác sĩ","The doctor is busy."],["house","/haʊs/","ngôi nhà","Their house is big."],
+["kitchen","/ˈkɪtʃ.ɪn/","nhà bếp","Mom is in the kitchen."],["water","/ˈwɔː.tə/","nước","Drink some water."],["rice","/raɪs/","cơm, gạo","We eat rice every day."],["bread","/bred/","bánh mì","I have bread for breakfast."],["apple","/ˈæp.əl/","quả táo","This apple is sweet."],
+["morning","/ˈmɔː.nɪŋ/","buổi sáng","Good morning!"],["evening","/ˈiːv.nɪŋ/","buổi tối","I read in the evening."],["today","/təˈdeɪ/","hôm nay","It is hot today."],["tomorrow","/təˈmɒr.əʊ/","ngày mai","See you tomorrow."],["week","/wiːk/","tuần","I work five days a week."],
+["eat","/iːt/","ăn","Let's eat lunch."],["drink","/drɪŋk/","uống","I drink tea."],["sleep","/sliːp/","ngủ","Babies sleep a lot."],["work","/wɜːk/","làm việc","He works at night."],["study","/ˈstʌd.i/","học","I study English."],
+["read","/riːd/","đọc","She reads every night."],["write","/raɪt/","viết","Write your name here."],["speak","/spiːk/","nói","Do you speak English?"],["listen","/ˈlɪs.ən/","nghe","Listen to the teacher."],["go","/ɡəʊ/","đi","We go to school by bus."],
+["come","/kʌm/","đến","Come here, please."],["buy","/baɪ/","mua","I want to buy a bike."],["happy","/ˈhæp.i/","vui vẻ","The children are happy."],["sad","/sæd/","buồn","Why are you sad?"],["tired","/taɪəd/","mệt","I am tired today."],
+["hungry","/ˈhʌŋ.ɡri/","đói","Are you hungry?"],["big","/bɪɡ/","to, lớn","That is a big dog."],["small","/smɔːl/","nhỏ","My room is small."],["hot","/hɒt/","nóng","The soup is hot."],["cold","/kəʊld/","lạnh","It is cold outside."],
+["beautiful","/ˈbjuː.tɪ.fəl/","đẹp","What a beautiful day!"],["cheap","/tʃiːp/","rẻ","This shirt is cheap."],["expensive","/ɪkˈspen.sɪv/","đắt","The phone is expensive."],["market","/ˈmɑː.kɪt/","chợ","I go to the market."],["school","/skuːl/","trường học","The school is near here."],
+["hospital","/ˈhɒs.pɪ.təl/","bệnh viện","She works in a hospital."],["street","/striːt/","đường phố","This street is busy."],["city","/ˈsɪt.i/","thành phố","I live in a big city."],["weather","/ˈweð.ə/","thời tiết","The weather is nice."],["rain","/reɪn/","mưa","I like the rain."],
+["money","/ˈmʌn.i/","tiền","I don't have much money."],["time","/taɪm/","thời gian, giờ","What time is it?"],["phone","/fəʊn/","điện thoại","Where is my phone?"],["book","/bʊk/","quyển sách","This book is interesting."],["door","/dɔː/","cửa ra vào","Please close the door."],
+["chair","/tʃeə/","cái ghế","Sit on the chair."],["car","/kɑː/","xe hơi","His car is red."],["bus","/bʌs/","xe buýt","The bus is late."],["help","/help/","giúp đỡ","Can you help me?"],["thank you","/ˈθæŋk juː/","cảm ơn","Thank you very much."]
+];
+const DAILY=5;
+
+/* ============ LƯU TIẾN ĐỘ (trên máy người học) ============ */
+const KEY="ltamn-v1";
+let S={done:{},words:{},level:"A",days:[]};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const todayStr=new Date().toLocaleDateString("en-CA");
+if(!S.days.includes(todayStr)){S.days.push(todayStr);S.days=S.days.slice(-60);save();}
+function streak(){let n=0;const d=new Date();for(;;){const k=d.toLocaleDateString("en-CA");if(S.days.includes(k)){n++;d.setDate(d.getDate()-1);}else break;}return n;}
+function todaysWords(){const day=Math.floor(Date.UTC(new Date().getFullYear(),new Date().getMonth(),new Date().getDate())/864e5);const start=(day*DAILY)%VOCAB.length;return Array.from({length:DAILY},(_,i)=>VOCAB[(start+i)%VOCAB.length]);}
+
+/* ============ GIỌNG ĐỌC (Text-to-Speech) ============ */
+const IC={
+ spk:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+ mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>',
+ slow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></svg>',
+ stop:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'
+};
+let voices=[],allVoices=[];
+function loadVoices(){try{allVoices=speechSynthesis.getVoices();voices=allVoices.filter(v=>/^en[-_]/i.test(v.lang));}catch(e){}}
+function viVoice(){return allVoices.find(v=>/^vi/i.test(v.lang)&&/Google|Natural|HoaiMy|Linh|NamMinh/i.test(v.name))||allVoices.find(v=>/^vi/i.test(v.lang));}
+if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function pickVoice(){return voices.find(v=>/en[-_]GB/i.test(v.lang)&&/Google|Natural|Daniel|Serena|Libby|Sonia/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Natural|Samantha|Aria|Jenny/i.test(v.name))||voices.find(v=>/en[-_]GB/i.test(v.lang))||voices.find(v=>/en[-_]US/i.test(v.lang))||voices[0];}
+/* Giọng nam / nữ cho hội thoại. Trình duyệt không cho biết giới tính giọng, nên đoán theo tên giọng;
+   nếu máy chỉ có một giọng thì dùng cùng giọng nhưng đổi cao độ (nữ cao, nam trầm). */
+const FEM=/female|samantha|serena|libby|sonia|aria|jenny|karen|moira|tessa|fiona|victoria|zira|susan|hazel|kate|emma|ava|allison|michelle|natasha|clara|joanna|salli|kendra|kimberly|ivy|amy|martha|catherine|google us english$/i;
+const MAL=/\bmale|daniel|ryan|guy\b|alex\b|fred|david|mark|george|arthur|christopher|eric|thomas|oliver|aaron|james|william|brian|matthew|joey|justin|rishi|gordon|liam|andrew|roger|steffan/i;
+function rankVoice(v){return (/en[-_]GB/i.test(v.lang)?2:/en[-_]US/i.test(v.lang)?1:0)+(/Natural|Neural|Google|Enhanced|Premium/i.test(v.name)?3:0);}
+function genderVoices(){
+ const best=re=>voices.filter(v=>re.test(v.name)&&!(re===MAL&&FEM.test(v.name))).sort((a,b)=>rankVoice(b)-rankVoice(a))[0];
+ const F=best(FEM),M=best(MAL);
+ if(F&&M&&F!==M)return {F,M,pitch:false};
+ const any=F||M||pickVoice();return {F:any,M:any,pitch:true};
+}
+let rate=Number((()=>{try{return localStorage.getItem(KEY+"-rate")}catch(e){return null}})())||0.9;
+function say(text,opts={}){
+ if(!("speechSynthesis" in window)){toast("Trình duyệt này chưa hỗ trợ đọc tiếng Anh.");return Promise.resolve();}
+ speechSynthesis.cancel();
+ return new Promise(res=>{const u=new SpeechSynthesisUtterance(text);
+  if(opts.lang==="vi"){const v=viVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang="vi-VN";u.rate=opts.rate||1;}
+  else if(opts.gender){const g=genderVoices();const v=opts.gender==="F"?g.F:g.M;if(v){u.voice=v;u.lang=v.lang;}else u.lang="en-GB";if(g.pitch)u.pitch=opts.gender==="F"?1.25:0.7;u.rate=opts.rate||rate;}
+  else{const v=pickVoice();if(v){u.voice=v;u.lang=v.lang;}else u.lang="en-GB";u.rate=opts.rate||rate;}
+  u.onend=res;u.onerror=res;speechSynthesis.speak(u);});
+}
+
+/* ---- Cô đọc bài giảng: tiếng Việt giọng Việt, tiếng Anh giọng Anh ---- */
+const isEn=t=>/[a-z]/i.test(t)&&!/[À-ỹ]/.test(t);
+function segs(html){
+ const out=[];const push=(lang,text)=>{text=text.replace(/\s+/g," ");if(!text.trim())return;const last=out[out.length-1];if(last&&last.lang===lang)last.text+=" "+text;else out.push({lang,text});};
+ const walk=node=>{node.childNodes.forEach(n=>{
+  if(n.nodeType===3){n.textContent.split(/([“(][^”)]*[”)])/).forEach(p=>{const inner=p.replace(/^[“(]|[”)]$/g,"");if(/^[“(]/.test(p)&&isEn(inner)&&inner.length>1)push("en",inner);else push("vi",p);});}
+  else if(/^(B|S|CODE)$/.test(n.nodeName)&&isEn(n.textContent))push("en",n.textContent);
+  else walk(n);
+ });};
+ const d=document.createElement("div");d.innerHTML=html;walk(d);
+ const res=[];
+ out.forEach(s=>{
+  let t=s.text;
+  if(s.lang==="vi")t=t.replace(/→/g,", thành ").replace(/\s\+\s/g,", ").replace(/\s\/\s/g," hoặc ").replace(/…/g,"").replace(/[“”]/g,"");
+  else t=t.replace(/\s?\/\s?/g,", ").replace(/\s?→\s?/g,", ").replace(/[“”…]/g,"");
+  t.split(/(?<=[.!?:;])\s+/).forEach(x=>{if(/[\p{L}\p{N}]/u.test(x))res.push({lang:s.lang,text:x.trim()});});
+ });
+ return res;
+}
+let readToken=0;
+function stopReading(){readToken++;try{speechSynthesis.cancel();}catch(e){}document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));}
+async function readBlocks(blocks,onDone){
+ const my=++readToken;
+ for(const b of blocks){
+  if(my!==readToken)return;
+  document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));
+  if(b.el){b.el.classList.add("reading");b.el.scrollIntoView({block:"nearest",behavior:"smooth"});}
+  for(const s of b.segs){if(my!==readToken)return;await say(s.text,{lang:s.lang});}
+  await new Promise(r=>setTimeout(r,250));
+ }
+ if(my===readToken){document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));onDone&&onDone();}
+}
+async function sayBtn(btn,text,r){readToken++;document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));document.querySelectorAll(".playing").forEach(b=>b.classList.remove("playing"));btn.classList.add("playing");await say(text,{rate:r});btn.classList.remove("playing");}
+
+/* ============ NHẬN DIỆN GIỌNG NÓI ============ */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function listen(){
+ return new Promise((resolve,reject)=>{
+  if(!SR){reject("unsupported");return;}
+  const r=new SR();r.lang="en-US";r.interimResults=false;r.maxAlternatives=3;r.continuous=false;
+  let got=false;
+  r.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>a.transcript);resolve(alts);};
+  r.onerror=e=>{reject(e.error||"error");};
+  r.onend=()=>{if(!got)reject("no-speech");};
+  try{r.start();}catch(e){reject("busy");}
+  listen.current=r;
+ });
+}
+function srErrorText(code){
+ if(code==="unsupported")return "Trình duyệt này chưa hỗ trợ nhận diện giọng nói. Hãy dùng Chrome hoặc Edge (máy tính, Android) hoặc Safari (iPhone, iPad).";
+ if(code==="not-allowed"||code==="service-not-allowed")return "Micro đang bị chặn. Nếu bạn đang mở trong khung xem của Claude, hãy tải file .html về và mở bằng Chrome/Edge/Safari, rồi bấm “Cho phép” khi trình duyệt hỏi quyền dùng micro.";
+ if(code==="no-speech")return "Cô chưa nghe thấy gì. Bấm nút ghi âm rồi đọc to, rõ ràng nhé.";
+ if(code==="network")return "Nhận diện giọng nói cần kết nối Internet. Kiểm tra mạng rồi thử lại.";
+ if(code==="audio-capture")return "Không tìm thấy micro. Kiểm tra micro của máy rồi thử lại.";
+ return "Có lỗi khi ghi âm ("+code+"). Thử lại sau giây lát.";
+}
+
+/* ============ SO SÁNH PHÁT ÂM ============ */
+const NUM={"0":"zero","1":"one","2":"two","3":"three","4":"four","5":"five","6":"six","7":"seven","8":"eight","9":"nine","10":"ten"};
+function toks(s){return s.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean).map(w=>NUM[w]||w);}
+const CONTR={"i'm":["i","am"],"you're":["you","are"],"he's":["he","is"],"she's":["she","is"],"it's":["it","is"],"we're":["we","are"],"they're":["they","are"],"isn't":["is","not"],"aren't":["are","not"],"don't":["do","not"],"doesn't":["does","not"],"what's":["what","is"],"there's":["there","is"],"can't":["can","not"],"i've":["i","have"],"let's":["let","us"],"name's":["name","is"]};
+function expand(arr){const o=[];arr.forEach(w=>{if(CONTR[w])o.push(...CONTR[w]);else o.push(w.replace(/'s$/,"s").replace(/'/g,""));});return o;}
+function align(target,heard){
+ const T=target,H=heard,n=T.length,m=H.length,dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
+ for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)dp[i][j]=T[i].k===H[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+ const ok=new Set();let i=0,j=0;while(i<n&&j<m){if(T[i].k===H[j]){ok.add(i);i++;j++;}else if(dp[i+1][j]>=dp[i][j+1])i++;else j++;}
+ return ok;
+}
+function grade(targetText,alts){
+ const words=targetText.split(/\s+/).filter(Boolean);
+ // mỗi từ hiển thị → các khóa so sánh
+ const T=[];words.forEach((w,wi)=>{expand(toks(w)).forEach(k=>T.push({k,wi}));});
+ let best=null;
+ alts.forEach(a=>{const H=expand(toks(a));const ok=align(T,H);const sc=T.length?ok.size/T.length:0;if(!best||sc>best.sc)best={sc,ok,heard:a};});
+ const wordOk=words.map((_,wi)=>T.filter(t=>t.wi===wi).every(t=>best.ok.has(T.indexOf(t))));
+ return {words,wordOk,score:Math.round(best.sc*100),heard:best.heard};
+}
+const VDICT=Object.fromEntries(VOCAB.map(v=>[v[0],v[1]]));
+function tipsFor(missed){
+ const t=new Set();
+ missed.forEach(w=>{const c=w.toLowerCase().replace(/[^a-z']/g,"");
+  if(/(s|es)$/.test(c)&&c.length>3)t.add("Âm cuối /s/ hoặc /z/: người Việt hay nuốt mất. Hãy kéo dài nhẹ tiếng “xì” hoặc “zì” ở cuối từ.");
+  if(/(t|d|ed)$/.test(c))t.add("Âm cuối /t/, /d/: chạm đầu lưỡi vào chân răng trên rồi bật nhẹ hơi ra, đừng bỏ âm.");
+  if(/(k|ck|g)$/.test(c))t.add("Âm cuối /k/, /g/: bật hơi ở cuống lưỡi, khác chữ “c” câm của tiếng Việt.");
+  if(/th/.test(c))t.add("Âm “th” (/θ/, /ð/): đặt đầu lưỡi giữa hai hàm răng rồi thổi hơi, không đọc thành “t” hay “d”.");
+  if(/^v|v/.test(c))t.add("Âm /v/: răng trên chạm nhẹ môi dưới, rung dây thanh.");
+  if(/r/.test(c))t.add("Âm /r/: cong lưỡi về sau, không chạm vòm miệng, không rung lưỡi như “r” tiếng Việt.");
+  if(/(sh|ch)/.test(c))t.add("Âm /ʃ/ (sh) và /tʃ/ (ch): chu môi ra trước, khác âm “s” và “ch” tiếng Việt.");
+  if(VDICT[c])t.add("“"+c+"” đọc là "+VDICT[c]+".");
+ });
+ if(!t.size&&missed.length)t.add("Nghe mẫu ở tốc độ chậm, đọc theo từng cụm từ, sau đó đọc cả câu.");
+ return [...t].slice(0,4);
+}
+
+/* ============ KIỂM TRA BÀI VIẾT ============ */
+function normAns(s){return expand(toks(s)).join(" ");}
+function checkAns(input,answers){const n=normAns(input);return answers.some(a=>normAns(a)===n);}
+
+function localReview(text){
+ const issues=[];
+ const sentences=text.split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(Boolean);
+ sentences.forEach(s=>{
+  if(/^[a-z]/.test(s))issues.push({wrong:s.slice(0,12)+"…",right:s[0].toUpperCase()+s.slice(1,12)+"…",why:"Câu phải bắt đầu bằng chữ in hoa."});
+  if(!/[.!?]$/.test(s))issues.push({wrong:"…"+s.slice(-12),right:"…"+s.slice(-12)+".",why:"Cuối câu cần dấu chấm (.), chấm hỏi (?) hoặc chấm than (!)."});
+ });
+ const add=(re,fix,why)=>{let m;const r=new RegExp(re.source,re.flags.includes("g")?re.flags:re.flags+"g");while((m=r.exec(text))){issues.push({wrong:m[0],right:typeof fix==="function"?fix(m):fix,why});}};
+ add(/\bi\b(?!')/g,"I","Đại từ “I” (tôi) luôn viết hoa.");
+ add(/\bI (is|are)\b/gi,"I am","Chủ ngữ I đi với am.");
+ add(/\b(he|she|it) (are|am)\b/gi,m=>m[1]+" is","He / she / it đi với is.");
+ add(/\b(you|we|they) (is|am)\b/gi,m=>m[1]+" are","You / we / they đi với are.");
+ add(/\b(he|she|it) don'?t\b/gi,m=>m[1]+" doesn't","He / she / it dùng doesn't.");
+ add(/\b(I|you|we|they) doesn'?t\b/gi,m=>m[1]+" don't","I / you / we / they dùng don't.");
+ add(/\b(doesn'?t|does not|didn'?t|did not|don'?t|do not) (has|\w+?[^s](?:es|s))\b/gi,m=>{let v=m[2].toLowerCase(),base;if(v==="has")base="have";else if(/ies$/.test(v))base=v.slice(0,-3)+"y";else if(/(sh|ch|x|o|ss)es$/.test(v))base=v.slice(0,-2);else base=v.slice(0,-1);return m[1]+" "+base;},"Sau don't / doesn't / didn't, động từ ở dạng nguyên mẫu.");
+ add(/\b(he|she|it) (like|want|have|go|live|work|play|eat|drink|need|love|watch|study|come|read|speak)\b/gi,m=>{const v=m[2].toLowerCase();const map={have:"has",go:"goes",watch:"watches",study:"studies"};return m[1]+" "+(map[v]||v+"s");},"Thì hiện tại đơn: he / she / it thì động từ thêm s hoặc es.");
+ add(/\ba ([aeio]\w*)/gi,m=>"an "+m[1],"Trước âm nguyên âm dùng an.");
+ add(/\ban ([bcdfgjklmnpqrstvwxyz]\w*)/gi,m=>/^h(our|onest|onor)/i.test(m[1])?m[0]:"a "+m[1],"Trước âm phụ âm dùng a.");
+ add(/\b(I|you|we|they|he|she|it) (reading|writing|cooking|playing|watching|eating|working|studying|learning|going|sleeping|waiting)\b/gi,m=>{const be={i:"am",he:"is",she:"is",it:"is"}[m[1].toLowerCase()]||"are";return m[1]+" "+be+" "+m[2];},"Thì tiếp diễn cần am / is / are trước V-ing.");
+ return issues.filter(x=>x.wrong!==x.right);
+}
+
+/* ============ CLAUDE (khi mở trong claude.ai) ============ */
+let samplePromise=null;
+function getSample(){if(!samplePromise)samplePromise=(window.claude&&window.claude.use)?window.claude.use("sample").catch(()=>null):Promise.resolve(null);return samplePromise;}
+getSample();
+
+/* ============ GIAO DIỆN ============ */
+const app=document.getElementById("app");
+function el(html){const t=document.createElement("template");t.innerHTML=html.trim();return t.content.firstElementChild;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+let toastT;function toast(msg){let t=document.getElementById("toast");if(!t){t=el('<div id="toast" role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;max-width:calc(100% - 32px);z-index:20;font-size:15px"></div>');document.body.append(t);}t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,4000);}
+
+function renderLevels(){
+ const nav=document.getElementById("levels");nav.innerHTML="";
+ LEVELS.forEach(l=>{const b=el(`<button type="button" aria-pressed="${S.level===l.id}">${l.name}</button>`);b.onclick=()=>{S.level=l.id;save();renderLevels();home();};nav.append(b);});
+}
+document.getElementById("brand").onclick=()=>home();
+
+function speedControl(){
+ const w=el(`<div class="speed"><span class="muted">Tốc độ đọc:</span></div>`);
+ [[0.6,"Chậm"],[0.9,"Vừa"],[1.05,"Tự nhiên"]].forEach(([r,n])=>{const b=el(`<button type="button" class="btn sm" aria-pressed="${rate===r}">${n}</button>`);if(rate===r)b.classList.add("chalk");b.onclick=()=>{rate=r;try{localStorage.setItem(KEY+"-rate",r)}catch(e){}w.replaceWith(speedControl());};w.append(b);});
+ return w;
+}
+
+/* ---- Trang chủ ---- */
+function home(){
+ stopReading();window.scrollTo(0,0);app.innerHTML="";
+ const doneN=Object.keys(S.done).length,wordsN=Object.keys(S.words).length;
+ const tw=todaysWords();const twDone=tw.filter(w=>S.words[w[0]]).length;
+ const next=LESSONS.find(l=>!S.done[l.id])||LESSONS[0];
+ const levelName=LEVELS.find(l=>l.id===S.level).name;
+
+ app.append(el(`<div class="board">
+   <span class="eyebrow">Mục tiêu hôm nay · ${new Date().toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"numeric"})}</span>
+   <h1>${S.level==="A"?"Học "+DAILY+" từ mới và 1 bài ngữ pháp":"Trình độ "+levelName}</h1>
+   <div class="progress" aria-label="Từ vựng hôm nay"><i style="width:${twDone/DAILY*100}%"></i></div>
+   <div class="stats"><div><b>${twDone}/${DAILY}</b><small>từ hôm nay</small></div><div><b>${doneN}/${LESSONS.length}</b><small>bài sơ cấp xong</small></div><div><b>${wordsN}</b><small>từ đã thuộc</small></div><div><b>${streak()}</b><small>ngày liên tiếp</small></div></div>
+ </div>`));
+
+ if(S.level!=="A"){
+  const sec=el(`<section class="block"><div class="alert info">Chương trình ${levelName} đang được soạn. Bạn nên hoàn thành 8 bài Sơ cấp trước — nền tảng này dùng cho mọi bài sau.</div><div class="lessons"></div></section>`);
+  PLANNED[S.level].forEach((t,i)=>sec.querySelector(".lessons").append(el(`<button class="lesson-item" disabled><span class="num">${i+1}</span><span class="t"><b>${t}</b><small>Đang soạn</small></span><span class="tag">Sắp có</span></button>`)));
+  const b=el(`<button class="btn primary" type="button">Quay lại Sơ cấp</button>`);b.onclick=()=>{S.level="A";save();renderLevels();home();};sec.append(b);
+  app.append(sec);return;
+ }
+
+ const cont=el(`<section class="block"><span class="eyebrow">Học tiếp</span><button class="lesson-item" type="button"><span class="num">${LESSONS.indexOf(next)+1}</span><span class="t"><b>${next.title}</b><small>${next.sub}</small></span><span class="btn sm primary">Vào học</span></button></section>`);
+ cont.querySelector("button").onclick=()=>lesson(next.id);app.append(cont);
+
+ const vs=el(`<section class="block"><div class="row" style="justify-content:space-between"><div><span class="eyebrow">Từ vựng hôm nay</span><h2 style="font-size:20px">${DAILY} từ cần thuộc</h2></div></div><div class="vocab"></div></section>`);
+ vs.querySelector(".row").append(speedControl());
+ tw.forEach(w=>vs.querySelector(".vocab").append(wordCard(w)));
+ app.append(vs);
+
+ const ls=el(`<section class="block"><span class="eyebrow">Lộ trình Sơ cấp</span><div class="lessons"></div></section>`);
+ LESSONS.forEach((l,i)=>{const b=el(`<button class="lesson-item ${S.done[l.id]?"done":""}" type="button"><span class="num">${S.done[l.id]?"✓":i+1}</span><span class="t"><b>${l.title}</b><small>${l.sub}</small></span>${S.done[l.id]?'<span class="tag ok">Đã xong</span>':""}</button>`);b.onclick=()=>lesson(l.id);ls.querySelector(".lessons").append(b);});
+ app.append(ls);
+
+ const fp=el(`<section class="block"><span class="eyebrow">Luyện đọc tự do</span><h2 style="font-size:20px">Gõ bất kỳ từ hay đoạn hội thoại nào để luyện đọc</h2></section>`);
+ const ta=el(`<textarea id="free-read" aria-label="Câu muốn luyện đọc">Good morning! How are you today?</textarea>`);
+ const holder=el(`<div></div>`);
+ const go=el(`<button class="btn primary" type="button">Dùng câu này để luyện</button>`);
+ go.onclick=()=>{const v=ta.value.trim();if(!v)return;holder.innerHTML="";holder.append(practiceBox(v));};
+ fp.append(ta,go,holder);app.append(fp);
+ holder.append(practiceBox(ta.value));
+
+ app.append(el(`<footer>Tiến độ được lưu trên trình duyệt của máy này. Phát âm mẫu dùng giọng đọc có sẵn của thiết bị; chấm phát âm dùng nhận diện giọng nói của trình duyệt (Chrome, Edge, Safari).</footer>`));
+}
+
+function wordCard(w){
+ const [word,ipa,vi,ex]=w;
+ const c=el(`<div class="word ${S.words[word]?"done":""}"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><h3>${esc(word)}</h3><button class="icon-btn" type="button" aria-label="Nghe từ ${esc(word)}">${IC.spk}</button></div><span class="ipa">${esc(ipa)}</span><span class="vi">${esc(vi)}</span><span class="ex">${esc(ex)}</span><div class="row"><button class="btn sm" type="button" data-a="ex">${IC.spk} Câu ví dụ</button><button class="btn sm" type="button" data-a="try">${IC.mic} Đọc thử</button><button class="btn sm" type="button" data-a="ok">${S.words[word]?"Đã thuộc ✓":"Đánh dấu đã thuộc"}</button></div><div data-slot></div></div>`);
+ c.querySelector(".icon-btn").onclick=e=>sayBtn(e.currentTarget,word);
+ c.querySelector('[data-a="ex"]').onclick=e=>sayBtn(e.currentTarget,ex);
+ c.querySelector('[data-a="try"]').onclick=()=>{const s=c.querySelector("[data-slot]");s.innerHTML="";s.append(practiceBox(word,{compact:true,autostart:true}));};
+ c.querySelector('[data-a="ok"]').onclick=e=>{if(S.words[word])delete S.words[word];else S.words[word]=todayStr;save();c.replaceWith(wordCard(w));};
+ return c;
+}
+
+/* ---- Hộp luyện phát âm ---- */
+function practiceBox(target,o={}){
+ const box=el(`<div class="practice">${o.compact?"":`<div class="target">${esc(target)}</div>`}<div class="row"><button class="btn" type="button" data-a="n">${IC.spk} Nghe mẫu</button><button class="btn" type="button" data-a="s">${IC.slow} Nghe chậm</button><button class="btn primary" type="button" data-a="r">${IC.mic} Ghi âm và chấm</button></div><div class="result" hidden></div></div>`);
+ const res=box.querySelector(".result"),rb=box.querySelector('[data-a="r"]');
+ box.querySelector('[data-a="n"]').onclick=e=>sayBtn(e.currentTarget,target);
+ box.querySelector('[data-a="s"]').onclick=e=>sayBtn(e.currentTarget,target,0.55);
+ let recording=false;
+ const start=async()=>{
+  if(recording){try{listen.current&&listen.current.stop();}catch(e){}return;}
+  try{speechSynthesis.cancel();}catch(e){}
+  recording=true;rb.className="btn rec";rb.innerHTML=IC.stop+" Đang nghe… bấm để dừng";
+  res.hidden=false;res.innerHTML=`<span class="muted">Hãy đọc: <b>${esc(target)}</b></span>`;
+  try{
+   const alts=await listen();
+   const g=grade(target,alts);
+   const missed=g.words.filter((_,i)=>!g.wordOk[i]);
+   const verdict=g.score>=90?"Rất tốt! Phát âm rõ ràng.":g.score>=70?"Khá tốt, còn vài từ cần sửa.":g.score>=40?"Cố lên! Nghe mẫu chậm rồi đọc lại.":"Máy chưa nhận ra câu này. Đọc chậm và rõ từng từ nhé.";
+   res.innerHTML=`<div class="row" style="gap:14px"><span class="score" style="color:${g.score>=70?"var(--ok)":"var(--bad)"}">${g.score}%</span><span>${verdict}</span></div>
+    <div>${g.words.map((w,i)=>`<span class="w ${g.wordOk[i]?"ok":"miss"}">${esc(w)}</span>`).join(" ")}</div>
+    <div class="muted" style="font-size:14px">Máy nghe được: “${esc(g.heard)}”</div>`;
+   if(missed.length){const tips=tipsFor(missed);res.append(el(`<div><b>Cách sửa:</b><ul class="tips">${tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`));
+    const row=el(`<div class="row"><span class="muted" style="font-size:14px">Nghe lại từ sai:</span></div>`);
+    [...new Set(missed)].slice(0,6).forEach(w=>{const b=el(`<button class="btn sm" type="button">${IC.spk} ${esc(w.replace(/[.,!?]/g,""))}</button>`);b.onclick=e=>sayBtn(e.currentTarget,w.replace(/[.,!?—]/g,""),0.6);row.append(b);});
+    res.append(row);}
+  }catch(code){res.innerHTML=`<div class="alert">${esc(srErrorText(String(code)))}</div>`;}
+  recording=false;rb.className="btn primary";rb.innerHTML=IC.mic+" Ghi âm lại";
+ };
+ rb.onclick=start;
+ if(o.autostart)setTimeout(start,50);
+ return box;
+}
+
+/* ---- Trang bài học ---- */
+let curTab="teach";
+function lesson(id){
+ stopReading();const L=LESSONS.find(l=>l.id===id),idx=LESSONS.indexOf(L);
+ window.scrollTo(0,0);app.innerHTML="";
+ const back=el(`<button class="back" type="button">← Về trang chính</button>`);back.onclick=home;app.append(back);
+ app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Bài ${idx+1} / ${LESSONS.length} · Sơ cấp</span><h1>${L.title}</h1><span style="color:#b9d3cb">${esc(L.sub)}</span></div>`));
+ const tabs=el(`<div class="tabs" role="tablist"></div>`);
+ const T=[["teach","1. Bài giảng"],["listen","2. Nghe"],["speak","3. Luyện nói"],["write","4. Luyện viết"]];
+ const body=el(`<div></div>`);
+ T.forEach(([k,n])=>{const b=el(`<button type="button" role="tab" aria-selected="${curTab===k}">${n}</button>`);b.onclick=()=>{curTab=k;lesson(id);};tabs.append(b);});
+ app.append(tabs,body);
+ ({teach:tabTeach,listen:tabListen,speak:tabSpeak,write:tabWrite})[curTab](L,body);
+ const nav=el(`<div class="row" style="justify-content:space-between;margin-top:28px"></div>`);
+ const ti=T.findIndex(t=>t[0]===curTab);
+ if(ti>0){const p=el(`<button class="btn" type="button">← ${T[ti-1][1]}</button>`);p.onclick=()=>{curTab=T[ti-1][0];lesson(id);};nav.append(p);}else nav.append(el("<span></span>"));
+ if(ti<T.length-1){const n=el(`<button class="btn primary" type="button">${T[ti+1][1]} →</button>`);n.onclick=()=>{curTab=T[ti+1][0];lesson(id);};nav.append(n);}
+ else if(idx<LESSONS.length-1){const n=el(`<button class="btn primary" type="button">Bài tiếp: ${LESSONS[idx+1].title} →</button>`);n.onclick=()=>{curTab="teach";lesson(LESSONS[idx+1].id);};nav.append(n);}
+ app.append(nav);
+}
+
+function exItem(en,vi,why){
+ const d=el(`<div class="ex-item"><button class="icon-btn" type="button" aria-label="Nghe câu">${IC.spk}</button><div class="txt"><div class="en">${esc(en)}</div><div class="vi">${esc(vi)}</div>${why?`<div class="why">${why}</div>`:""}</div></div>`);
+ d.querySelector("button").onclick=e=>sayBtn(e.currentTarget,en);return d;
+}
+
+function tabTeach(L,body){
+ const t=el(`<section class="block"></section>`);
+ const blocks=[];
+ const bar=el(`<div class="row" style="justify-content:space-between"><button class="btn chalk" type="button" id="read-lec">${IC.spk} Nghe Cô giảng bài</button></div>`);
+ bar.append(speedControl());
+ const rb=bar.querySelector("#read-lec");
+ const idle=()=>{rb.innerHTML=IC.spk+" Nghe Cô giảng bài";delete rb.dataset.on;};
+ rb.onclick=()=>{
+  if(rb.dataset.on){stopReading();idle();return;}
+  if(!("speechSynthesis" in window)){toast("Trình duyệt này chưa hỗ trợ đọc thành tiếng.");return;}
+  loadVoices();if(!viVoice())toast("Máy chưa có giọng đọc tiếng Việt nên phần tiếng Việt có thể đọc không chuẩn. Có thể thêm giọng Tiếng Việt trong Cài đặt › Ngôn ngữ / Giọng nói của máy.");
+  rb.dataset.on=1;rb.innerHTML=IC.stop+" Dừng";readBlocks(blocks,idle);
+ };
+ t.append(bar);
+ const tb=el(`<div class="teach"></div>`);
+ L.teach.forEach((p,i)=>{const e=el(i===0?`<div class="teacher"><span class="av">Cô</span><p>${p}</p></div>`:`<p>${p}</p>`);tb.append(e);blocks.push({el:e,segs:segs(p)});});
+ t.append(tb);
+ t.append(el(`<h2 style="font-size:20px">Công thức</h2>`));
+ t.append(el(`<div class="formula teach" style="padding:6px 10px"><table><thead><tr><th>Dạng</th><th>Cấu trúc</th><th>Ví dụ</th></tr></thead><tbody>${L.rules.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${esc(r[2])}</td></tr>`).join("")}</tbody></table></div>`));
+ const note=el(`<div class="note"><b>Ghi nhớ</b><ul>${L.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div>`);
+ t.append(note);
+ [...note.querySelectorAll("li")].forEach((li,i)=>blocks.push({el:li,segs:(i===0?[{lang:"vi",text:"Các bạn ghi nhớ nhé."}]:[]).concat(segs(L.notes[i]))}));
+ t.append(el(`<div class="row" style="justify-content:space-between"><h2 style="font-size:20px">Ví dụ có giải thích</h2></div>`));
+ const list=el(`<div class="ex-list"></div>`);
+ L.examples.forEach((e,i)=>{const it=exItem(...e);list.append(it);
+  blocks.push({el:it,segs:(i===0?[{lang:"vi",text:"Bây giờ Cô đọc ví dụ, bạn nghe và đọc theo."}]:[]).concat([{lang:"en",text:e[0]},{lang:"vi",text:e[1]}],segs(e[2]))});});
+ t.append(list);
+ body.append(t);
+}
+
+function tabListen(L,body){
+ const t=el(`<section class="block"></section>`);
+ const ctl=el(`<div class="row" style="justify-content:space-between"></div>`);
+ ctl.append(speedControl());
+ const hide=el(`<label class="row" style="gap:6px;cursor:pointer"><input type="checkbox" id="hidevi-${L.id}"> Ẩn nghĩa tiếng Việt (tự nghe hiểu)</label>`);
+ ctl.append(hide);t.append(ctl);
+ t.append(el(`<p class="muted" style="margin:0">Nghe từng câu, đoán nghĩa trước rồi mới xem bản dịch. Nghe lại đến khi hiểu hết.</p>`));
+ const wrap=el(`<div></div>`);
+ wrap.append(el(`<h2 style="font-size:20px;margin-bottom:10px">Nghe câu ví dụ</h2>`));
+ const list=el(`<div class="ex-list"></div>`);L.examples.forEach(e=>list.append(exItem(e[0],e[1])));wrap.append(list);
+ wrap.append(el(`<h2 style="font-size:20px;margin:22px 0 6px">Hội thoại theo chủ đề</h2>`));
+ wrap.append(el(`<p class="muted" style="margin:0 0 10px">Chọn tình huống bạn muốn luyện. Hai nhân vật được đọc bằng hai giọng khác nhau (nam và nữ) để bạn dễ phân biệt người hỏi và người trả lời.</p>`));
+ const tp=el(`<div class="picker" role="group" aria-label="Chọn chủ đề hội thoại" style="margin-bottom:12px"></div>`);
+ const dbox=el(`<div></div>`);
+ const drawTopics=()=>{tp.innerHTML="";
+  [{id:null,title:"Bài này: "+L.dialogue.title},...TOPICS].forEach(x=>{const b=el(`<button type="button" aria-pressed="${curTopic===x.id}">${esc(x.title)}</button>`);b.onclick=()=>{stopReading();curTopic=x.id;drawTopics();drawDialogue();};tp.append(b);});};
+ const drawDialogue=()=>{
+  const d=curDialogue(L);dbox.innerHTML="";
+  const gv=genderVoices();
+  const [nA,gA]=spOf(d,"A"),[nB,gB]=spOf(d,"B");
+  const gName=g=>g==="F"?"nữ":"nam";
+  dbox.append(el(`<div class="row" style="margin-bottom:8px;font-size:14px"><span class="g g-${gA}">${esc(nA)} · giọng ${gName(gA)}</span><span class="g g-${gB}">${esc(nB)} · giọng ${gName(gB)}</span>${d.desc?`<span class="muted">${esc(d.desc)}</span>`:""}</div>`));
+  if(gv.pitch)dbox.append(el(`<p class="muted" style="font-size:13px;margin:0 0 8px">Máy này chỉ có một giọng tiếng Anh, nên giọng nữ được đọc cao hơn và giọng nam trầm hơn.</p>`));
+  const play=el(`<button class="btn primary" type="button" style="margin-bottom:10px">${IC.spk} Nghe cả đoạn hội thoại</button>`);
+  const dlg=el(`<div class="dialog"></div>`);
+  d.lines.forEach(([s,en,vi])=>{const [n,g]=spOf(d,s);const b=el(`<div class="bubble ${s} gb-${g}" role="button" tabindex="0"><div class="who"><span class="g g-${g}">${esc(n)}</span></div><div>${esc(en)}</div><div class="vi">${esc(vi)}</div></div>`);
+   b.onclick=async()=>{readToken++;document.querySelectorAll(".playing").forEach(x=>x.classList.remove("playing"));b.classList.add("playing");await say(en,{gender:g});b.classList.remove("playing");};
+   b.onkeydown=e=>{if(e.key==="Enter")b.click();};dlg.append(b);});
+  const idle=()=>{delete play.dataset.on;play.innerHTML=IC.spk+" Nghe cả đoạn hội thoại";dlg.querySelectorAll(".playing").forEach(x=>x.classList.remove("playing"));};
+  play.onclick=async()=>{
+   if(play.dataset.on){stopReading();idle();return;}
+   const my=++readToken;play.dataset.on=1;play.innerHTML=IC.stop+" Dừng";const bs=[...dlg.children];
+   for(let i=0;i<bs.length;i++){if(my!==readToken)break;bs[i].classList.add("playing");bs[i].scrollIntoView({block:"nearest",behavior:"smooth"});await say(d.lines[i][1],{gender:spOf(d,d.lines[i][0])[1]});bs[i].classList.remove("playing");await new Promise(r=>setTimeout(r,400));}
+   idle();};
+  const prac=el(`<button class="btn" type="button" style="margin-bottom:10px">${IC.mic} Luyện nói hội thoại này</button>`);
+  prac.onclick=()=>{curTab="speak";lesson(L.id);};
+  dbox.append(el(`<div class="row"></div>`));dbox.lastChild.append(play,prac);dbox.append(dlg);
+ };
+ drawTopics();drawDialogue();
+ wrap.append(tp,dbox);t.append(wrap);
+ hide.querySelector("input").onchange=e=>wrap.classList.toggle("hidden-vi",e.target.checked);
+ body.append(t);
+}
+
+function tabSpeak(L,body){
+ const t=el(`<section class="block"></section>`);
+ t.append(el(`<p style="margin:0">Chọn một câu, bấm <b>Nghe mẫu</b>, sau đó bấm <b>Ghi âm và chấm</b> rồi đọc to. Từ đọc đúng hiện màu xanh, từ cần sửa hiện màu đỏ kèm cách sửa.</p>`));
+ if(!SR)t.append(el(`<div class="alert">${esc(srErrorText("unsupported"))}</div>`));
+ const dd=curDialogue(L);const items=[...L.speak,...dd.lines.map(x=>x[1])];
+ const pick=el(`<div class="picker" role="group" aria-label="Chọn câu luyện"></div>`);
+ const holder=el(`<div></div>`);
+ let sel=0;
+ const draw=()=>{pick.innerHTML="";items.forEach((s,i)=>{const b=el(`<button type="button" aria-pressed="${i===sel}">${esc(s)}</button>`);b.onclick=()=>{sel=i;draw();};pick.append(b);});holder.innerHTML="";holder.append(practiceBox(items[sel]));};
+ draw();
+ t.append(el(`<span class="eyebrow">Câu trong bài · Hội thoại: ${esc(dd.title)}</span>`),pick,holder);
+ const own=el(`<div class="practice"><b>Hoặc tự gõ một câu / đoạn giao tiếp muốn luyện</b><input type="text" id="own-${L.id}" placeholder="Ví dụ: Can I have the bill, please?"><button class="btn" type="button">Luyện câu này</button><div></div></div>`);
+ own.querySelector("button").onclick=()=>{const v=own.querySelector("input").value.trim();if(!v)return;const s=own.lastElementChild;s.innerHTML="";s.append(practiceBox(v));};
+ t.append(own);
+ body.append(t);
+}
+
+function tabWrite(L,body){
+ const t=el(`<section class="block"></section>`);
+ t.append(el(`<h2 style="font-size:20px">Bài tập</h2>`));
+ const state=L.write.map(()=>false);
+ const list=el(`<div class="ex-list"></div>`);
+ L.write.forEach((x,i)=>{
+  const c=el(`<div class="ex-w"><div class="q">${i+1}. ${x.tr?"Dịch sang tiếng Anh: ":"Điền vào chỗ trống: "}${esc(x.q)}</div><div class="inrow"><input type="text" id="w-${L.id}-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Câu trả lời ${i+1}"><button class="btn sm primary" type="button">Kiểm tra</button></div><div class="fb" aria-live="polite"></div></div>`);
+  const inp=c.querySelector("input"),fb=c.querySelector(".fb");let tries=0;
+  const chk=()=>{const v=inp.value.trim();if(!v)return;tries++;
+   if(checkAns(v,x.a)){state[i]=true;c.className="ex-w right";fb.className="fb ok";fb.innerHTML="Chính xác! "+(x.tr?"":"Câu đầy đủ: <b>"+esc(x.q.replace(/ \(.*\)$/,"").replace("___",x.a[0]))+"</b>");const sp=el(`<button class="btn sm" type="button" style="margin-left:6px">${IC.spk} Nghe</button>`);sp.onclick=e=>sayBtn(e.currentTarget,x.tr?x.a[0]:x.q.replace(/ \(.*\)$/,"").replace("___",x.a[0]));fb.append(sp);finish();}
+   else{c.className="ex-w wrong";fb.className="fb bad";fb.innerHTML="Chưa đúng. "+(x.h?"Gợi ý: "+esc(x.h)+" ":"")+(tries>=2?"<br>Đáp án: <b>"+esc(x.a[0])+"</b>":"Thử lại nhé.");}};
+  c.querySelector("button").onclick=chk;inp.onkeydown=e=>{if(e.key==="Enter")chk();};
+  list.append(c);
+ });
+ t.append(list);
+ const doneMsg=el(`<div class="alert info" ${S.done[L.id]?"":"hidden"}>Bạn đã hoàn thành bài này. Tiến độ đã được lưu.</div>`);t.append(doneMsg);
+ function finish(){if(state.every(Boolean)&&!S.done[L.id]){S.done[L.id]=todayStr;save();doneMsg.hidden=false;toast("Hoàn thành bài “"+L.title+"”!");}}
+
+ t.append(el(`<h2 style="font-size:20px;margin-top:16px">Viết tự do và nhờ chữa bài</h2>`));
+ const fw=el(`<div class="practice"><div><b>Đề bài:</b> ${esc(L.free)}</div><textarea id="free-${L.id}" placeholder="Viết bằng tiếng Anh ở đây…"></textarea><div class="row"><button class="btn primary" type="button" data-a="fix">Chữa bài</button><button class="btn" type="button" data-a="read">${IC.spk} Nghe bài đã viết</button></div><div class="fwres" aria-live="polite"></div></div>`);
+ const ta=fw.querySelector("textarea"),out=fw.querySelector(".fwres"),fix=fw.querySelector('[data-a="fix"]');
+ try{ta.value=localStorage.getItem(KEY+"-free-"+L.id)||"";}catch(e){}
+ ta.oninput=()=>{try{localStorage.setItem(KEY+"-free-"+L.id,ta.value);}catch(e){}};
+ fw.querySelector('[data-a="read"]').onclick=e=>{if(ta.value.trim())sayBtn(e.currentTarget,ta.value);};
+ fix.onclick=async()=>{
+  const text=ta.value.trim();if(!text){out.innerHTML=`<div class="alert">Hãy viết vài câu trước đã.</div>`;return;}
+  fix.disabled=true;out.innerHTML=`<span class="muted">Cô đang đọc bài của bạn…</span>`;
+  const sample=await getSample();
+  if(sample){
+   try{
+    const prompt=`Bạn là cô giáo tiếng Anh thân thiện dạy người Việt trình độ sơ cấp. Xưng “Cô” và gọi học viên là “bạn”. Bài học hôm nay: "${L.title}" (${L.sub}). Đề bài: ${L.free}
+Bài viết của học viên:
+"""${text.slice(0,3000)}"""
+Hãy chữa lỗi ngữ pháp, chính tả, dấu câu. Giải thích bằng tiếng Việt, ngắn gọn, dễ hiểu. Chỉ trả về JSON đúng dạng:
+{"corrected":"toàn bộ bài đã sửa bằng tiếng Anh","errors":[{"wrong":"cụm sai","right":"cụm đúng","why":"giải thích tiếng Việt"}],"comment":"1-2 câu nhận xét và khích lệ bằng tiếng Việt","score":số từ 0 đến 10}
+Nếu bài không có lỗi thì errors là mảng rỗng.`;
+    const r=await sample.json(prompt,{modelTier:"quick"});
+    showReview(out,r.corrected||text,Array.isArray(r.errors)?r.errors:[],r.comment||"",r.score,true);
+   }catch(e){
+    if(e&&e.code==="rate_limited")out.innerHTML=`<div class="alert">Bạn vừa gửi nhiều quá, đợi một lát rồi bấm lại nhé.</div>`;
+    else{const iss=localReview(text);showReview(out,null,iss,"",null,false);}
+   }
+  }else{const iss=localReview(text);showReview(out,null,iss,"",null,false);}
+  fix.disabled=false;
+ };
+ t.append(fw);
+ body.append(t);
+}
+function showReview(out,corrected,errors,comment,score,byClaude){
+ out.innerHTML="";
+ if(score!=null)out.append(el(`<div class="row"><span class="score">${esc(score)}/10</span><span>${esc(comment)}</span></div>`));
+ else if(comment)out.append(el(`<p style="margin:0">${esc(comment)}</p>`));
+ if(!errors.length){out.append(el(`<div class="alert info">${byClaude?"Không tìm thấy lỗi. Rất tốt!":"Chưa phát hiện lỗi thường gặp nào. Làm tốt lắm!"}</div>`));}
+ else{const ul=el(`<ul class="fix-list"></ul>`);errors.slice(0,12).forEach(x=>ul.append(el(`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why||"")}</span></li>`)));out.append(el(`<b>Lỗi cần sửa (${errors.length})</b>`),ul);}
+ if(corrected){const c=el(`<div class="practice" style="background:var(--ok-soft);border-color:transparent"><b>Bài đã sửa</b><div>${esc(corrected)}</div><div class="row"><button class="btn sm" type="button">${IC.spk} Nghe bài đã sửa</button></div></div>`);c.querySelector("button").onclick=e=>sayBtn(e.currentTarget,corrected);out.append(c);}
+ if(!byClaude)out.append(el(`<p class="muted" style="font-size:14px;margin:0">Bộ chữa bài ngoại tuyến chỉ bắt các lỗi sơ cấp thường gặp (viết hoa, dấu câu, am/is/are, s/es, a/an, don't/doesn't). Khi mở trong Claude, bài sẽ được chữa đầy đủ hơn.</p>`));
+}
+
+renderLevels();home();
+</script>
+
+</body>
+</html>
