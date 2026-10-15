@@ -115,6 +115,25 @@ section.block{margin-top:28px;display:flex;flex-direction:column;gap:12px}
 .g::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--g-col)}
 .g-F{--g-col:#c2569b}.g-M{--g-col:#2f74c0}
 .bubble.gb-F{border-left:4px solid #c2569b}.bubble.gb-M{border-left:4px solid #2f74c0}
+.chat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.chat-card{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;min-width:0}
+.chat-card:hover{border-color:var(--board)}
+.chat-card b{font-family:var(--f-display);font-weight:500;font-size:17px}
+.chat-card small{color:var(--muted)}
+.big-mic{padding:12px 18px;font-size:16px}
+.chat-log .bubble{cursor:default}
+.chat-log .bubble .en{font-weight:600;font-size:17px}
+.chat-fb{border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);background:var(--paper)}
+.chat-fb p{margin:0}
+.chat-fb .verdict{font-family:var(--f-display);font-weight:700;font-size:17px}
+.chat-fb.ok{border-color:var(--ok);background:var(--ok-soft)}.chat-fb.ok .verdict{color:var(--ok)}
+.chat-fb.warn{border-color:var(--chalk);background:var(--chalk-soft)}
+.chat-fb.bad{border-color:var(--bad);background:var(--bad-soft)}.chat-fb.bad .verdict{color:var(--bad)}
+.chat-fb .models{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.chat-fb .model{text-align:left}
+.pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:1px 8px;margin-right:6px}
+.pill.ok{background:var(--ok);color:#fff}.pill.warn{background:var(--chalk);color:#1b1b1b}.pill.bad{background:var(--bad);color:#fff}
+.sum-list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
 .hidden-vi .bubble .vi,.hidden-vi .ex-item .vi{display:none}
 .practice{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .practice .target{font-size:clamp(18px,4.5vw,22px);font-weight:600;font-family:var(--f-display)}
@@ -351,6 +370,54 @@ const TOPICS=[
  ["A","Drink a lot of water and rest at home for two days.","Uống nhiều nước và nghỉ ở nhà hai ngày."],
  ["B","Thank you, doctor.","Cảm ơn bác sĩ."]]}
 ];
+/* ===== TRÒ CHUYỆN VỚI CÔ =====
+   Mỗi lượt: q = câu Cô hỏi; good = mẫu câu trả lời tốt; ok = trả lời hiểu được nhưng chưa đủ;
+   bad = lỗi hay gặp {re, fix, why}; models = câu mẫu nên nói; explain = giải thích câu hỏi; react = Cô đáp lại.
+   Mẫu (regex) được so trên câu đã chuẩn hoá: chữ thường, bỏ dấu câu, I'm → i am, don't → do not… */
+const N="(\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|half)";
+const FOOD="(chicken|beef|fish|pho|noodles?|rice|soup|pizza|salad|steak|burger|spaghetti|pork|vegetables|sandwich|seafood|shrimp|egg|eggs|fried rice|spring rolls)";
+const DRINK="(water|juice|orange juice|coffee|tea|beer|coke|milk|lemonade|wine|soda|smoothie|iced tea)";
+const COLOR="(red|blue|black|white|green|yellow|pink|grey|gray|brown|purple|orange)";
+const FEEL="(fine|good|great|ok|okay|well|very well|tired|happy|not bad|so so|excellent|wonderful)";
+const SUBJ="(english|math|maths|music|art|history|science|geography|literature|physics|chemistry|biology|pe|sports?|vietnamese|it|computer science)";
+const CHATS=[
+{id:"intro",title:"Làm quen",role:"một người bạn mới",turns:[
+ {q:"Hi! I'm Anna. What's your name?",vi:"Chào! Mình là Anna. Bạn tên là gì?",good:["\\b(my name is|i am|call me) [a-z]+"],ok:["^(?!yes\\b|no\\b)[a-z]+( [a-z]+)?$"],models:["My name is Lan.","I'm Lan. Nice to meet you."],explain:"Câu hỏi tên. Trả lời: My name is + tên, hoặc I'm + tên.",tipOk:"Chỉ nói tên cũng hiểu được, nhưng nói cả câu sẽ lịch sự hơn: My name is …",react:"Nice to meet you!"},
+ {q:"Where are you from?",vi:"Bạn đến từ đâu?",good:["\\bi am from [a-z]+","\\bi come from [a-z]+"],ok:["\\bfrom [a-z]+","\\b(vietnam|viet nam|hanoi|ha noi|da nang|danang|hue|saigon|ho chi minh|hai phong|can tho|nha trang)\\b"],bad:[{re:"\\bi from\\b",fix:"I'm from …",why:"Thiếu động từ to be: phải nói I am from (I'm from)."}],models:["I'm from Vietnam.","I come from Da Nang."],explain:"Câu hỏi quê quán. Trả lời: I'm from + nơi chốn.",tipOk:"Nên nói đủ câu: I'm from Vietnam.",react:"Oh, that's nice!"},
+ {q:"What do you do?",vi:"Bạn làm nghề gì?",good:["\\bi am (a|an) [a-z]+","\\bi work (as|in|at|for)\\b","\\bi am retired\\b"],ok:["\\b(student|teacher|doctor|nurse|engineer|worker|farmer|driver|cook|housewife|retired|businessman|businesswoman|accountant|seller|office|manager|tour guide)\\b"],bad:[{re:"\\bi am (student|teacher|doctor|nurse|engineer|worker|farmer|driver|cook|accountant|manager|office worker)\\b",fix:"I'm a / an + nghề",why:"Trước nghề nghiệp số ít cần a hoặc an: I'm a teacher, I'm an engineer."}],models:["I'm a teacher.","I work in a hospital.","I'm a student."],explain:"“What do you do?” hỏi nghề nghiệp, không phải “bạn đang làm gì”. Trả lời: I'm a / an + nghề.",tipOk:"Nói đủ câu: I'm a + nghề, ví dụ I'm a nurse.",react:"Interesting!"},
+ {q:"What do you like to do in your free time?",vi:"Lúc rảnh bạn thích làm gì?",good:["\\bi (like|love|enjoy) [a-z]+"],ok:["\\b(reading|music|movies|films|football|cooking|swimming|travel|travelling|traveling|games|sports|singing|dancing|shopping|walking|running|watching|playing|listening|gardening)\\b"],bad:[{re:"\\bi (like|love|enjoy) (read|cook|swim|sing|dance|play|watch|listen|travel|walk|run|go)\\b",fix:"I like + V-ing (I like reading)",why:"Sau like / love / enjoy dùng V-ing: I like reading, I enjoy cooking."}],models:["I like reading books.","I love listening to music.","I enjoy cooking with my family."],explain:"Hỏi sở thích lúc rảnh. Trả lời: I like / I love / I enjoy + V-ing.",tipOk:"Nói đủ câu: I like + V-ing, ví dụ I like swimming.",react:"That sounds fun! It was nice talking to you."}]},
+{id:"restaurant",title:"Tại nhà hàng",role:"người phục vụ",turns:[
+ {q:"Good evening! How many people?",vi:"Chào buổi tối! Mấy người ạ?",good:["\\b(table for|for) "+N+"\\b","\\b"+N+" (people|persons|of us)\\b"],ok:["\\b"+N+"\\b","\\b(just me|only me|alone)\\b"],models:["A table for two, please.","Two people, please."],explain:"Người phục vụ hỏi số người. Trả lời: A table for + số người, please.",tipOk:"Nói đủ và lịch sự hơn: A table for two, please.",react:"This way, please. Here is the menu."},
+ {q:"What would you like to eat?",vi:"Anh chị muốn ăn gì ạ?",good:["\\b(i would like|i will have|can i have|could i have|can we have|could we have|we would like|i want)\\b","\\b"+FOOD+"\\b.*\\bplease\\b"],ok:["\\b"+FOOD+"\\b"],bad:[{re:"\\bi want\\b",fix:"I'd like …",why:"“I want” đúng ngữ pháp nhưng nghe hơi cộc khi gọi món. Lịch sự hơn: I'd like …"}],models:["I'd like the chicken soup, please.","Can I have a beef noodle soup, please?"],explain:"Gọi món lịch sự: I'd like + món, please. Hoặc: Can I have + món, please?",tipOk:"Chỉ nói tên món nghe hơi cộc. Thêm I'd like … please.",react:"Good choice!"},
+ {q:"Anything to drink?",vi:"Anh chị uống gì không ạ?",good:["\\b"+DRINK+"\\b.*\\bplease\\b","\\b(i would like|can i have|could i have|i will have)\\b","\\bno thank(s| you)\\b"],ok:["\\b"+DRINK+"\\b","^no\\b"],models:["An orange juice, please.","Just water, please.","No, thank you."],explain:"Hỏi bạn có uống gì không. Trả lời: + đồ uống, please. Hoặc No, thank you.",tipOk:"Thêm please (hoặc No, thank you) cho lịch sự.",react:"OK. I'll be right back."},
+ {q:"Here you are. Is everything OK?",vi:"Món của anh chị đây. Mọi thứ ổn chứ ạ?",good:["\\byes\\b.*\\b(delicious|good|great|fine|perfect|nice|wonderful|ok|okay|thank)","\\b(it is|this is|everything is|the food is) (very )?(delicious|good|great|fine|perfect|nice|wonderful)\\b"],ok:["\\b(yes|delicious|good|great|fine|ok|okay|perfect)\\b"],models:["Yes, it's delicious. Thank you!","Everything is great, thanks."],explain:"Hỏi bạn thấy món ăn thế nào. Trả lời: Yes, it's delicious. Thank you!",tipOk:"Nói thêm một câu khen: Yes, it's delicious!",react:"I'm glad you like it."},
+ {q:"Would you like anything else?",vi:"Anh chị cần gì thêm không ạ?",good:["\\b(can|could) (i|we) (have|get) the (bill|check)\\b","\\bthe (bill|check) please\\b","\\bno thank(s| you)\\b"],ok:["\\b(no|bill|check|that is all)\\b"],models:["No, thank you. Can I have the bill, please?","The bill, please."],explain:"Hỏi bạn cần thêm gì không. Muốn tính tiền: Can I have the bill, please?",tipOk:"Nói lịch sự hơn: No, thank you. Can I have the bill, please?",react:"Sure. Thank you, and have a nice evening!"}]},
+{id:"work",title:"Ở nơi làm việc",role:"quản lý của bạn",turns:[
+ {q:"Hello! Are you the new staff member?",vi:"Xin chào! Bạn là nhân viên mới phải không?",good:["\\byes i am\\b"],ok:["\\byes\\b","\\bnew\\b"],bad:[{re:"\\byes i do\\b",fix:"Yes, I am.",why:"Câu hỏi bắt đầu bằng Are you … thì trả lời bằng am: Yes, I am."}],models:["Yes, I am. My name is Lan.","Yes, I am. Nice to meet you."],explain:"Câu hỏi Yes / No với Are you …? Trả lời: Yes, I am.",tipOk:"Trả lời ngắn đầy đủ: Yes, I am. (Không nói “Yes, I'm.”)",react:"Welcome to the team!"},
+ {q:"What time do you start work every day?",vi:"Mỗi ngày bạn bắt đầu làm việc lúc mấy giờ?",good:["\\bi (start|begin)( work| working)? at\\b","^at "+N],ok:["\\b"+N+"\\b"],bad:[{re:"\\bi starts\\b",fix:"I start",why:"Với chủ ngữ I, động từ không thêm s."}],models:["I start work at eight o'clock.","At half past seven."],explain:"Hỏi giờ bắt đầu làm việc. Trả lời: I start work at + giờ.",tipOk:"Nói đủ câu: I start work at eight o'clock.",react:"Good. Please be on time."},
+ {q:"Do you have any questions?",vi:"Bạn có câu hỏi gì không?",good:["\\b(where is|where are|what time|when is|when does|how do|can i|could i|who is|what is)\\b","\\bno i do not\\b","\\bno thank(s| you)\\b"],ok:["\\b(yes|no)\\b"],bad:[{re:"\\bno i (am not|have not)\\b",fix:"No, I don't.",why:"Câu hỏi bắt đầu bằng Do you … thì trả lời: Yes, I do. / No, I don't."}],models:["Yes. Where is the meeting room?","No, I don't. Thank you."],explain:"Hỏi bạn có thắc mắc gì không. Nếu có thì hỏi luôn: Where is …? Nếu không: No, I don't. Thank you.",tipOk:"Nếu nói Yes thì nên hỏi luôn một câu, ví dụ: Where is the meeting room?",react:"OK."},
+ {q:"Can you send me the report by Friday?",vi:"Bạn gửi tôi bản báo cáo trước thứ Sáu được không?",good:["\\b(yes i can|sure|of course|no problem|certainly)\\b","\\bsorry\\b.*\\b(can not|cannot)\\b"],ok:["\\b(yes|ok|okay)\\b"],models:["Yes, I can. No problem.","Sure. I'll send it on Thursday."],explain:"Câu nhờ việc với Can you …? Đồng ý: Yes, I can. / Sure. / No problem.",tipOk:"Trả lời đầy đủ hơn: Yes, I can. No problem.",react:"Thank you. Have a good first day!"}]},
+{id:"school",title:"Ở trường học",role:"giáo viên",turns:[
+ {q:"Good morning! How are you today?",vi:"Chào buổi sáng! Hôm nay bạn thế nào?",good:["\\bi am "+FEEL+"\\b","\\b"+FEEL+"\\b.*\\bthank"],ok:["\\b"+FEEL+"\\b","\\bbad\\b"],models:["I'm fine, thank you. And you?","I'm great, thanks!"],explain:"Câu chào hỏi sức khỏe. Trả lời: I'm fine, thank you. And you?",tipOk:"Nói đủ câu và cảm ơn: I'm fine, thank you.",react:"I'm fine too, thank you."},
+ {q:"Do you have your homework?",vi:"Bạn có mang bài tập về nhà không?",good:["\\byes i do\\b","\\bno i do not\\b","\\byes\\b.*\\bhere (it is|you are)\\b"],ok:["\\b(yes|no|here)\\b"],bad:[{re:"\\b(yes i am|no i am not)\\b",fix:"Yes, I do. / No, I don't.",why:"Câu hỏi bắt đầu bằng Do you … thì trả lời bằng do / don't."}],models:["Yes, I do. Here it is.","No, I don't. I'm sorry."],explain:"Câu hỏi Do you …? Trả lời ngắn: Yes, I do. / No, I don't.",tipOk:"Trả lời ngắn đầy đủ: Yes, I do.",react:"Good."},
+ {q:"What is your favorite subject?",vi:"Môn học yêu thích của bạn là gì?",good:["\\bmy favou?rite subject is\\b","\\bi (like|love) "+SUBJ+"\\b"],ok:["\\b"+SUBJ+"\\b"],models:["My favorite subject is English.","I like math."],explain:"Hỏi môn học yêu thích. Trả lời: My favorite subject is + môn học.",tipOk:"Nói đủ câu: My favorite subject is English.",react:"Oh, really?"},
+ {q:"Why do you like it?",vi:"Tại sao bạn thích môn đó?",good:["\\bbecause (it|i|they|my|the|we) [a-z]+"],ok:["\\b(because|interesting|fun|easy|useful|like|love)\\b"],bad:[{re:"\\bbecause (interesting|fun|easy|useful|good|important)\\b",fix:"Because it is …",why:"Sau because cần cả chủ ngữ và động từ: Because it is interesting."}],models:["Because it is interesting.","Because I want to travel the world."],explain:"Câu hỏi Why. Trả lời bắt đầu bằng Because + chủ ngữ + động từ.",tipOk:"Trả lời bằng câu có Because: Because it is useful.",react:"That's a good reason."},
+ {q:"How do you go to school?",vi:"Bạn đi học bằng gì?",good:["\\bi (go|come|get) to school (by|on)\\b","\\bi (walk|ride|drive|cycle)\\b","\\bby (bus|bike|bicycle|motorbike|car|train|taxi)\\b","\\bon foot\\b"],ok:["\\b(bus|bike|bicycle|motorbike|car|walk|foot|taxi)\\b"],bad:[{re:"\\bby foot\\b",fix:"on foot",why:"Đi bộ là on foot, không nói by foot."},{re:"\\bby (a|the|my) (bus|bike|car|motorbike)\\b",fix:"by bus / by bike",why:"Sau by không dùng mạo từ: by bus, by bike."}],models:["I go to school by bike.","I walk to school.","I go to school by bus."],explain:"Hỏi phương tiện đi học. Trả lời: I go to school by + phương tiện. Đi bộ: I walk to school.",tipOk:"Nói đủ câu: I go to school by bike.",react:"Great. Let's start our lesson!"}]},
+{id:"shopping",title:"Đi mua sắm",role:"người bán hàng",turns:[
+ {q:"Hello! Can I help you?",vi:"Xin chào! Tôi giúp gì được bạn?",good:["\\bi am looking for\\b","\\bi (would like|want) to buy\\b","\\bi (need|want) (a|an|some)\\b","\\bjust looking\\b"],ok:["\\b(yes|shirt|t shirt|dress|shoes|bag|hat|jacket|jeans|look)\\b"],models:["Yes, please. I'm looking for a T-shirt.","I'd like to buy a dress.","I'm just looking, thanks."],explain:"Người bán hỏi bạn cần gì. Trả lời: I'm looking for + món đồ.",tipOk:"Nói đủ câu: I'm looking for a T-shirt.",react:"Sure. We have many nice ones."},
+ {q:"What size do you need?",vi:"Bạn cần cỡ nào?",good:["\\b(small|medium|large|extra large)\\b.*\\bplease\\b","\\b(i need|i wear|i am) (a |an )?(size|small|medium|large|extra large)\\b","\\bsize ([a-z]+|\\d+)\\b"],ok:["\\b(small|medium|large|s|m|l|xl|\\d+)\\b"],models:["Medium, please.","I need size M.","I usually wear size large."],explain:"Hỏi cỡ quần áo. Trả lời: Medium, please. Hoặc: I need size M.",tipOk:"Thêm please hoặc nói đủ câu: I need size M.",react:"OK."},
+ {q:"What color would you like?",vi:"Bạn thích màu gì?",good:["\\b"+COLOR+"\\b.*\\bplease\\b","\\bi (would like|like|want) (a |the )?"+COLOR+"\\b","\\bdo you have (it |this |one )?in\\b"],ok:["\\b"+COLOR+"\\b"],models:["Blue, please.","I'd like a black one.","Do you have it in white?"],explain:"Hỏi màu bạn muốn. Trả lời: + màu, please. Hoặc: I'd like a black one.",tipOk:"Thêm please cho lịch sự: Blue, please.",react:"Here you are."},
+ {q:"It's twenty dollars.",vi:"Giá hai mươi đô la.",good:["\\bi will take (it|this|one)\\b","\\bcan i pay (by|with) (card|cash)\\b","\\b(can|could) you give me a discount\\b","\\b(it is|that is) (a bit |too |very )?expensive\\b","\\bcan i try (it|this) on\\b","\\bhere you (are|go)\\b"],ok:["\\b(ok|okay|take|expensive|cheap|card|cash|discount|try|buy)\\b"],models:["OK, I'll take it.","That's a bit expensive. Can you give me a discount?","Can I try it on?"],explain:"Người bán báo giá. Bạn có thể: đồng ý mua (I'll take it), hỏi trả giá (Can you give me a discount?) hoặc xin thử (Can I try it on?).",tipOk:"Nói thành câu: OK, I'll take it.",react:"Thank you! Have a nice day."}]},
+{id:"party",title:"Dự tiệc",role:"chủ bữa tiệc",turns:[
+ {q:"Hi! Welcome to my party. How are you?",vi:"Chào bạn! Chào mừng đến bữa tiệc của tôi. Bạn khỏe không?",good:["\\bi am "+FEEL+"\\b","\\b"+FEEL+"\\b.*\\bthank"],ok:["\\b"+FEEL+"\\b"],models:["I'm great, thank you. Thanks for inviting me!","I'm fine, thanks. And you?"],explain:"Chào hỏi khi đến tiệc. Trả lời: I'm great, thank you. Thanks for inviting me!",tipOk:"Nói đủ câu và cảm ơn: I'm great, thank you.",react:"I'm glad you're here."},
+ {q:"Would you like something to drink?",vi:"Bạn uống gì không?",good:["\\byes please\\b","\\b"+DRINK+"\\b.*\\bplease\\b","\\b(i would like|can i have|could i have)\\b","\\bno thank(s| you)\\b"],ok:["\\b(yes|no|sure)\\b","\\b"+DRINK+"\\b"],models:["Yes, please. An orange juice.","No, thank you."],explain:"Lời mời đồ uống. Trả lời: Yes, please. Hoặc: No, thank you.",tipOk:"Thêm please hoặc thank you: Yes, please.",react:"Here you are."},
+ {q:"Do you know anyone here?",vi:"Bạn có quen ai ở đây không?",good:["\\byes i do\\b","\\bno i do not\\b","\\bi know [a-z]+"],ok:["\\b(yes|no)\\b"],bad:[{re:"\\b(yes i am|no i am not)\\b",fix:"Yes, I do. / No, I don't.",why:"Câu hỏi bắt đầu bằng Do you … thì trả lời bằng do / don't."}],models:["No, I don't. Can you introduce me?","Yes, I do. I know Tom."],explain:"Câu hỏi Do you …? Trả lời: Yes, I do. / No, I don't.",tipOk:"Trả lời ngắn đầy đủ: No, I don't.",react:"Let me introduce you."},
+ {q:"This is my friend Peter. He is a doctor.",vi:"Đây là bạn tôi, Peter. Anh ấy là bác sĩ.",good:["\\b(nice|pleased|glad|happy) to meet you\\b"],ok:["\\b(hello|hi|nice|meet)\\b"],models:["Nice to meet you, Peter.","Hi Peter! Nice to meet you."],explain:"Khi được giới thiệu với ai đó, nói: Nice to meet you.",tipOk:"Nói thêm: Nice to meet you, Peter.",react:"Have fun at the party!"}]},
+{id:"directions",title:"Hỏi đường",role:"người dân địa phương",turns:[
+ {q:"Hello! You look lost. Can I help you?",vi:"Xin chào! Trông bạn như bị lạc. Tôi giúp gì được không?",good:["\\b(where is|where are|how can i get to|how do i get to|i am looking for)\\b"],ok:["\\b(yes|station|hotel|bank|market|hospital|museum|beach|restaurant|post office|bus stop|airport)\\b"],models:["Yes, please. Where is the train station?","How can I get to the market?"],explain:"Người địa phương hỏi bạn cần giúp gì. Hỏi đường: Where is …? hoặc How can I get to …?",tipOk:"Hỏi đủ câu: Where is the train station?",react:"Oh, I know it."},
+ {q:"Are you walking or driving?",vi:"Bạn đi bộ hay đi xe?",good:["\\b(walking|driving|on foot|by (motorbike|car|bike|taxi))\\b"],ok:["\\b(walk|drive|car|bike|motorbike)\\b"],bad:[{re:"\\bi am walk\\b|\\bi walk now\\b",fix:"I'm walking.",why:"Việc đang diễn ra dùng hiện tại tiếp diễn: I'm walking."}],models:["I'm walking.","Walking.","I'm on foot."],explain:"Câu hỏi lựa chọn (or): chọn một trong hai. Trả lời: I'm walking.",tipOk:"Trả lời rõ hơn: I'm walking.",react:"OK."},
+ {q:"Go straight and turn left at the bank. Is that clear?",vi:"Đi thẳng rồi rẽ trái ở ngân hàng. Bạn rõ chưa?",good:["\\byes\\b.*\\bthank","\\b(can|could) you (repeat|say)\\b","\\bsorry\\b.*\\b(repeat|again)\\b"],ok:["\\b(yes|ok|okay|thank|clear|sorry|again)\\b"],models:["Yes, thank you very much!","Sorry, could you repeat that, please?"],explain:"Hỏi bạn đã hiểu chưa. Hiểu rồi: Yes, thank you! Chưa hiểu: Sorry, could you repeat that, please?",tipOk:"Nói thêm lời cảm ơn: Yes, thank you very much!",react:"You're welcome. Have a nice day!"}]}
+];
 let curTopic=null; // null = hội thoại của bài học
 function curDialogue(L){const t=curTopic&&TOPICS.find(x=>x.id===curTopic);return t||L.dialogue;}
 function spOf(d,s){return (d.sp&&d.sp[s])||(s==="A"?["Người A","F"]:["Người B","M"]);}
@@ -456,7 +523,7 @@ function listen(){
   if(!SR){reject("unsupported");return;}
   const r=new SR();r.lang="en-US";r.interimResults=false;r.maxAlternatives=3;r.continuous=false;
   let got=false;
-  r.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>a.transcript);resolve(alts);};
+  r.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>a.transcript);alts.conf=e.results[0][0].confidence||0;resolve(alts);};
   r.onerror=e=>{reject(e.error||"error");};
   r.onend=()=>{if(!got)reject("no-speech");};
   try{r.start();}catch(e){reject("busy");}
@@ -504,7 +571,7 @@ function selfRecorder(target){
 /* ============ SO SÁNH PHÁT ÂM ============ */
 const NUM={"0":"zero","1":"one","2":"two","3":"three","4":"four","5":"five","6":"six","7":"seven","8":"eight","9":"nine","10":"ten"};
 function toks(s){return s.toLowerCase().replace(/[’']/g,"'").replace(/[^a-z0-9' ]+/g," ").split(/\s+/).filter(Boolean).map(w=>NUM[w]||w);}
-const CONTR={"i'm":["i","am"],"you're":["you","are"],"he's":["he","is"],"she's":["she","is"],"it's":["it","is"],"we're":["we","are"],"they're":["they","are"],"isn't":["is","not"],"aren't":["are","not"],"don't":["do","not"],"doesn't":["does","not"],"what's":["what","is"],"there's":["there","is"],"can't":["can","not"],"i've":["i","have"],"let's":["let","us"],"name's":["name","is"]};
+const CONTR={"i'm":["i","am"],"you're":["you","are"],"he's":["he","is"],"she's":["she","is"],"it's":["it","is"],"we're":["we","are"],"they're":["they","are"],"isn't":["is","not"],"aren't":["are","not"],"don't":["do","not"],"doesn't":["does","not"],"what's":["what","is"],"there's":["there","is"],"can't":["can","not"],"i've":["i","have"],"let's":["let","us"],"name's":["name","is"],"i'd":["i","would"],"i'll":["i","will"],"we'd":["we","would"],"we'll":["we","will"],"you'd":["you","would"],"that's":["that","is"],"won't":["will","not"],"cannot":["can","not"],"didn't":["did","not"],"wasn't":["was","not"],"haven't":["have","not"],"here's":["here","is"],"where's":["where","is"],"how's":["how","is"]};
 function expand(arr){const o=[];arr.forEach(w=>{if(CONTR[w])o.push(...CONTR[w]);else o.push(w.replace(/'s$/,"s").replace(/'/g,""));});return o;}
 function align(target,heard){
  const T=target,H=heard,n=T.length,m=H.length,dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
@@ -542,15 +609,15 @@ function tipsFor(missed){
 function normAns(s){return expand(toks(s)).join(" ");}
 function checkAns(input,answers){const n=normAns(input);return answers.some(a=>normAns(a)===n);}
 
-function localReview(text){
+function localReview(text,speech){
  const issues=[];
  const sentences=text.replace(/([.!?])\s+/g,"$1\n").split(/\n+/).map(s=>s.trim()).filter(Boolean);
- sentences.forEach(s=>{
+ if(!speech)sentences.forEach(s=>{
   if(/^[a-z]/.test(s))issues.push({wrong:s.slice(0,12)+"…",right:s[0].toUpperCase()+s.slice(1,12)+"…",why:"Câu phải bắt đầu bằng chữ in hoa."});
   if(!/[.!?]$/.test(s))issues.push({wrong:"…"+s.slice(-12),right:"…"+s.slice(-12)+".",why:"Cuối câu cần dấu chấm (.), chấm hỏi (?) hoặc chấm than (!)."});
  });
  const add=(re,fix,why)=>{let m;const r=new RegExp(re.source,re.flags.includes("g")?re.flags:re.flags+"g");while((m=r.exec(text))){issues.push({wrong:m[0],right:typeof fix==="function"?fix(m):fix,why});}};
- add(/\bi\b(?!')/g,"I","Đại từ “I” (tôi) luôn viết hoa.");
+ if(!speech)add(/\bi\b(?!')/g,"I","Đại từ “I” (tôi) luôn viết hoa.");
  add(/\bI (is|are)\b/gi,"I am","Chủ ngữ I đi với am.");
  add(/\b(he|she|it) (are|am)\b/gi,m=>m[1]+" is","He / she / it đi với is.");
  add(/\b(you|we|they) (is|am)\b/gi,m=>m[1]+" are","You / we / they đi với are.");
@@ -611,6 +678,7 @@ function home(){
 
  const cont=el(`<section class="block"><span class="eyebrow">Học tiếp</span><button class="lesson-item" type="button"><span class="num">${LESSONS.indexOf(next)+1}</span><span class="t"><b>${next.title}</b><small>${next.sub}</small></span><span class="btn sm primary">Vào học</span></button></section>`);
  cont.querySelector("button").onclick=()=>lesson(next.id);app.append(cont);
+ chatHome(app);
 
  const vs=el(`<section class="block"><div class="row" style="justify-content:space-between"><div><span class="eyebrow">Từ vựng hôm nay</span><h2 style="font-size:20px">${DAILY} từ cần thuộc</h2></div></div><div class="vocab"></div></section>`);
  vs.querySelector(".row").append(speedControl());
@@ -672,6 +740,112 @@ function practiceBox(target,o={}){
  rb.onclick=start;
  if(o.autostart)setTimeout(start,50);
  return box;
+}
+
+/* ---- Trò chuyện với Cô ---- */
+function evalTurn(T,text){
+ const norm=expand(toks(text)).join(" ");
+ const m=arr=>(arr||[]).some(r=>new RegExp(r).test(norm));
+ const issues=[];
+ (T.bad||[]).forEach(b=>{const r=new RegExp(b.re);const x=norm.match(r);if(x)issues.push({wrong:x[0],right:b.fix,why:b.why});});
+ localReview(text,true).forEach(x=>{if(!issues.some(y=>y.wrong.toLowerCase()===x.wrong.toLowerCase()))issues.push(x);});
+ let level;
+ if(!norm)level="none";else if(m(T.good))level=issues.length?"ok":"good";else if(m(T.ok))level="ok";else level="bad";
+ return {level,issues,text,rank:{good:3,ok:2,bad:1,none:0}[level]-issues.length*0.1};
+}
+function chatHome(container){
+ const sec=el(`<section class="block"><div><span class="eyebrow">Luyện phản xạ</span><h2 style="font-size:20px">Trò chuyện với Cô</h2><p class="muted" style="margin:4px 0 0">Cô đóng vai và hỏi bạn bằng tiếng Anh. Bạn bấm micro trả lời, Cô chấm và chỉ cách nói đúng.</p></div><div class="chat-grid"></div></section>`);
+ CHATS.forEach(C=>{const best=S.chat&&S.chat[C.id];
+  const b=el(`<button class="chat-card" type="button"><b>${esc(C.title)}</b><small>Cô là ${esc(C.role)} · ${C.turns.length} câu</small>${best!=null?`<span class="tag ${best===C.turns.length?"ok":""}">Tốt nhất ${best}/${C.turns.length}</span>`:`<span class="tag">Chưa luyện</span>`}</button>`);
+  b.onclick=()=>chat(C.id);sec.querySelector(".chat-grid").append(b);});
+ container.append(sec);
+}
+function chat(id){
+ stopReading();window.scrollTo(0,0);app.innerHTML="";
+ const C=CHATS.find(c=>c.id===id);let i=0;const best=[];
+ const back=el(`<button class="back" type="button">← Về trang chính</button>`);back.onclick=()=>{stopReading();home();};app.append(back);
+ app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Trò chuyện với Cô</span><h1>${esc(C.title)}</h1><span style="color:#b9d3cb">Cô đóng vai ${esc(C.role)}. Nghe Cô hỏi, bấm micro và trả lời bằng tiếng Anh.</span></div>`));
+ const log=el(`<div class="dialog chat-log" aria-live="polite"></div>`);
+ const ctrl=el(`<div class="practice chat-ctrl"></div>`);
+ const prog=el(`<div class="muted" style="font-size:14px;font-variant-numeric:tabular-nums"></div>`);
+ app.append(el(`<div style="height:14px"></div>`),log,prog,ctrl);
+ const scroll=n=>{try{n.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}};
+ function coBubble(en,vi){
+  const b=el(`<div class="bubble A gb-F"><div class="who"><span class="g g-F">Cô</span></div><div class="en">${esc(en)}</div>${vi?`<div class="vi" hidden>${esc(vi)}</div>`:""}<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-a="n">${IC.spk} Nghe lại</button><button class="btn sm" type="button" data-a="s">${IC.slow} Chậm</button>${vi?`<button class="btn sm" type="button" data-a="v">Xem nghĩa</button>`:""}</div></div>`);
+  b.querySelector('[data-a="n"]').onclick=e=>{e.stopPropagation();readToken++;say(en,{gender:"F"});};
+  b.querySelector('[data-a="s"]').onclick=e=>{e.stopPropagation();readToken++;say(en,{gender:"F",rate:0.6});};
+  const v=b.querySelector('[data-a="v"]');if(v)v.onclick=e=>{e.stopPropagation();const x=b.querySelector(".vi");x.hidden=!x.hidden;v.textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
+  log.append(b);scroll(b);return say(en,{gender:"F"});
+ }
+ function ask(){
+  const T=C.turns[i];prog.textContent=`Câu ${i+1} / ${C.turns.length}`;
+  coBubble(T.q,T.vi);controls(T);
+ }
+ function controls(T){
+  ctrl.innerHTML="";
+  const mic=el(`<button class="btn primary big-mic" type="button">${IC.mic} Bấm để trả lời</button>`);
+  const hintB=el(`<button class="btn" type="button">Gợi ý</button>`);
+  const typeB=el(`<button class="btn" type="button">Gõ câu trả lời</button>`);
+  const hint=el(`<div class="note" hidden><b>Gợi ý:</b> ${esc(T.explain)}</div>`);
+  const typeBox=el(`<div class="inrow" hidden style="display:flex;gap:8px"><input type="text" id="chat-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
+  const msg=el(`<div></div>`);
+  const row=el(`<div class="row"></div>`);row.append(mic,hintB,typeB);
+  ctrl.append(row,hint,typeBox,msg);
+  hintB.onclick=()=>{hint.hidden=!hint.hidden;};
+  const showType=()=>{typeBox.hidden=false;typeBox.style.display="flex";typeBox.querySelector("input").focus();};
+  typeBox.hidden=true;typeBox.style.display="none";
+  typeB.onclick=showType;
+  const send=()=>{const v=typeBox.querySelector("input").value.trim();if(v)answer(T,[v],0);};
+  typeBox.querySelector("button").onclick=send;typeBox.querySelector("input").onkeydown=e=>{if(e.key==="Enter")send();};
+  let rec=false;
+  mic.onclick=async()=>{
+   if(rec){try{listen.current&&listen.current.stop();}catch(e){}return;}
+   readToken++;try{speechSynthesis.cancel();}catch(e){}
+   rec=true;mic.className="btn rec big-mic";mic.innerHTML=IC.stop+" Đang nghe… nói xong bấm để dừng";msg.innerHTML="";
+   try{const alts=await listen();rec=false;answer(T,alts,alts.conf||0);}
+   catch(code){rec=false;mic.className="btn primary big-mic";mic.innerHTML=IC.mic+" Bấm để trả lời";
+    msg.innerHTML=`<div class="alert">${esc(srErrorText(String(code)))}</div>`;if(String(code)!=="no-speech")showType();}
+  };
+ }
+ function answer(T,alts,conf){
+  const r=alts.map(a=>evalTurn(T,a)).sort((a,b)=>b.rank-a.rank)[0];
+  const ub=el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`);log.append(ub);
+  const lv={good:["ok","Rất tốt! Đúng ý và đúng ngữ pháp."],ok:["warn","Cô hiểu ý bạn, nhưng nên nói hay hơn."],bad:["bad","Chưa đúng ý câu hỏi."],none:["bad","Cô chưa nghe được câu trả lời."]}[r.level];
+  const fb=el(`<div class="chat-fb ${lv[0]}"><div class="verdict">${lv[1]}</div></div>`);
+  if(r.level==="ok"&&!r.issues.length&&T.tipOk)fb.append(el(`<p>${esc(T.tipOk)}</p>`));
+  if(r.level==="bad"||r.level==="none")fb.append(el(`<p><b>Câu hỏi nghĩa là:</b> “${esc(T.vi)}”. ${esc(T.explain)}</p>`));
+  if(r.issues.length){const ul=el(`<ul class="fix-list"></ul>`);r.issues.slice(0,4).forEach(x=>ul.append(el(`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`)));fb.append(el(`<b>Cần sửa:</b>`),ul);}
+  if(conf>0&&conf<0.55)fb.append(el(`<p class="muted" style="font-size:14px">Máy nghe chưa rõ lắm. Nếu chữ hiện ra khác với điều bạn nói, hãy nói chậm và rõ hơn, nhất là âm cuối.</p>`));
+  const md=el(`<div class="models"><b>${r.level==="good"?"Cách nói khác:":"Nên nói:"}</b></div>`);
+  T.models.forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};md.append(b);});
+  fb.append(md);
+  const pr=el(`<div></div>`);const prB=el(`<button class="btn sm" type="button">${IC.mic} Tập nói câu mẫu</button>`);prB.onclick=()=>{prB.remove();pr.append(practiceBox(T.models[0]));};
+  fb.append(prB,pr);
+  log.append(fb);scroll(fb);
+  best[i]=Math.max(best[i]||0,{good:3,ok:2,bad:1,none:0}[r.level]);
+  ctrl.innerHTML="";
+  const again=el(`<button class="btn" type="button">${IC.mic} Trả lời lại</button>`);again.onclick=()=>controls(T);
+  const last=i===C.turns.length-1;
+  const next=el(`<button class="btn primary" type="button">${last?"Kết thúc và xem kết quả":"Câu tiếp theo →"}</button>`);
+  next.onclick=async()=>{ctrl.innerHTML="";if(T.react)await coBubble(T.react);i++;if(i<C.turns.length)ask();else summary();};
+  const row=el(`<div class="row"></div>`);row.append(again,next);ctrl.append(row);
+  if(r.level==="good")say(["Great!","Very good!","Excellent!","Well done!"][i%4],{gender:"F"});
+ }
+ function summary(){
+  prog.textContent="";
+  const good=best.filter(x=>x===3).length;
+  S.chat=S.chat||{};S.chat[C.id]=Math.max(S.chat[C.id]||0,good);save();
+  const lines=C.turns.map((T,k)=>`<li><span class="pill ${best[k]===3?"ok":best[k]===2?"warn":"bad"}">${best[k]===3?"Tốt":best[k]===2?"Cần sửa":"Chưa đạt"}</span> ${esc(T.q)}</li>`).join("");
+  const box=el(`<div class="chat-fb ${good===C.turns.length?"ok":"warn"}"><div class="verdict">Kết quả: ${good}/${C.turns.length} câu trả lời tốt</div><p>${good===C.turns.length?"Tuyệt vời! Bạn đã trò chuyện trôi chảy. Thử một tình huống khác nhé.":"Làm lại để luyện những câu chưa tốt. Hãy nghe câu mẫu và nói theo trước khi trả lời."}</p><ul class="sum-list">${lines}</ul></div>`);
+  log.append(box);scroll(box);
+  ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
+  const re=el(`<button class="btn primary" type="button">Làm lại tình huống này</button>`);re.onclick=()=>chat(C.id);
+  const other=el(`<button class="btn" type="button">Chọn tình huống khác</button>`);other.onclick=()=>{home();setTimeout(()=>{const g=document.querySelector(".chat-grid");g&&g.scrollIntoView({block:"start"});},50);};
+  row.append(re,other);ctrl.append(row);
+ }
+ const start=el(`<button class="btn chalk big-mic" type="button">${IC.spk} Bắt đầu trò chuyện</button>`);
+ start.onclick=()=>{ctrl.innerHTML="";ask();};
+ ctrl.append(el(`<p style="margin:0">Mẹo: nghe kỹ câu hỏi, có thể bấm <b>Nghe lại</b> hoặc <b>Chậm</b>. Không nói được thì bấm <b>Gõ câu trả lời</b>.</p>`),start);
 }
 
 /* ---- Trang bài học ---- */
