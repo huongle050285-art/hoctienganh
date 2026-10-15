@@ -502,7 +502,7 @@ function segs(html){
  return res;
 }
 let readToken=0;
-function stopReading(){readToken++;try{speechSynthesis.cancel();}catch(e){}document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));}
+function stopReading(){readToken++;if(typeof chatSession!=="undefined")chatSession++;try{speechSynthesis.cancel();}catch(e){}document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));}
 async function readBlocks(blocks,onDone){
  const my=++readToken;
  for(const b of blocks){
@@ -760,92 +760,129 @@ function chatHome(container){
   b.onclick=()=>chat(C.id);sec.querySelector(".chat-grid").append(b);});
  container.append(sec);
 }
+let chatSession=0;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
 function chat(id){
  stopReading();window.scrollTo(0,0);app.innerHTML="";
- const C=CHATS.find(c=>c.id===id);let i=0;const best=[];
+ const sess=chatSession;const alive=()=>sess===chatSession;
+ const C=CHATS.find(c=>c.id===id);let i=0,tries=0,paused=false;const res=[];
  const back=el(`<button class="back" type="button">← Về trang chính</button>`);back.onclick=()=>{stopReading();home();};app.append(back);
- app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Trò chuyện với Cô</span><h1>${esc(C.title)}</h1><span style="color:#b9d3cb">Cô đóng vai ${esc(C.role)}. Nghe Cô hỏi, bấm micro và trả lời bằng tiếng Anh.</span></div>`));
+ app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Trò chuyện với Cô</span><h1>${esc(C.title)}</h1><span style="color:#b9d3cb">Cô đóng vai ${esc(C.role)}. Nghe Cô hỏi, bấm micro và trả lời bằng tiếng Anh. Trả lời đúng thì Cô chuyển câu tiếp; chưa đúng thì Cô cho nói lại, sau 2 lần Cô sẽ giải thích.</span></div>`));
  const log=el(`<div class="dialog chat-log" aria-live="polite"></div>`);
+ const bar=el(`<div class="row" style="justify-content:space-between;font-size:14px"></div>`);
+ const prog=el(`<span class="muted" style="font-variant-numeric:tabular-nums"></span>`);
+ const pauseB=el(`<button class="btn sm" type="button" hidden>Tạm dừng</button>`);
+ bar.append(prog,pauseB);
  const ctrl=el(`<div class="practice chat-ctrl"></div>`);
- const prog=el(`<div class="muted" style="font-size:14px;font-variant-numeric:tabular-nums"></div>`);
- app.append(el(`<div style="height:14px"></div>`),log,prog,ctrl);
+ app.append(el(`<div style="height:14px"></div>`),log,bar,ctrl);
  const scroll=n=>{try{n.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}};
- function coBubble(en,vi){
-  const b=el(`<div class="bubble A gb-F"><div class="who"><span class="g g-F">Cô</span></div><div class="en">${esc(en)}</div>${vi?`<div class="vi" hidden>${esc(vi)}</div>`:""}<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-a="n">${IC.spk} Nghe lại</button><button class="btn sm" type="button" data-a="s">${IC.slow} Chậm</button>${vi?`<button class="btn sm" type="button" data-a="v">Xem nghĩa</button>`:""}</div></div>`);
-  b.querySelector('[data-a="n"]').onclick=e=>{e.stopPropagation();readToken++;say(en,{gender:"F"});};
-  b.querySelector('[data-a="s"]').onclick=e=>{e.stopPropagation();readToken++;say(en,{gender:"F",rate:0.6});};
-  const v=b.querySelector('[data-a="v"]');if(v)v.onclick=e=>{e.stopPropagation();const x=b.querySelector(".vi");x.hidden=!x.hidden;v.textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
-  log.append(b);scroll(b);return say(en,{gender:"F"});
+ let resumeFn=null;
+ pauseB.onclick=()=>{paused=!paused;pauseB.textContent=paused?"Tiếp tục":"Tạm dừng";if(paused){readToken++;try{speechSynthesis.cancel();}catch(e){}}else if(resumeFn){const f=resumeFn;resumeFn=null;f();}};
+ // chờ nếu đang tạm dừng
+ const gate=()=>new Promise(r=>{if(!paused)r();else resumeFn=r;});
+ async function co(en,vi,opts={}){
+  if(!alive())return;
+  const b=el(`<div class="bubble A gb-F"><div class="who"><span class="g g-F">Cô</span></div><div class="en">${esc(en)}</div>${vi?`<div class="vi" hidden>${esc(vi)}</div>`:""}${opts.buttons===false?"":`<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-a="n">${IC.spk} Nghe lại</button><button class="btn sm" type="button" data-a="s">${IC.slow} Chậm</button>${vi?`<button class="btn sm" type="button" data-a="v">Xem nghĩa</button>`:""}</div>`}</div>`);
+  const q=x=>b.querySelector(`[data-a="${x}"]`);
+  if(q("n"))q("n").onclick=()=>{readToken++;say(en,{gender:"F"});};
+  if(q("s"))q("s").onclick=()=>{readToken++;say(en,{gender:"F",rate:0.6});};
+  if(q("v"))q("v").onclick=()=>{const x=b.querySelector(".vi");x.hidden=!x.hidden;q("v").textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
+  log.append(b);scroll(b);
+  await say(en,{gender:"F"});
  }
- function ask(){
-  const T=C.turns[i];prog.textContent=`Câu ${i+1} / ${C.turns.length}`;
-  coBubble(T.q,T.vi);controls(T);
+ async function ask(){
+  if(!alive())return;await gate();
+  const T=C.turns[i];tries=0;prog.textContent=`Câu ${i+1} / ${C.turns.length}`;
+  await co(T.q,T.vi);if(!alive())return;
+  controls(T);
  }
  function controls(T){
   ctrl.innerHTML="";
-  const mic=el(`<button class="btn primary big-mic" type="button">${IC.mic} Bấm để trả lời</button>`);
+  const mic=el(`<button class="btn primary big-mic" type="button">${IC.mic} ${tries?"Bấm để nói lại":"Bấm để trả lời"}</button>`);
   const hintB=el(`<button class="btn" type="button">Gợi ý</button>`);
   const typeB=el(`<button class="btn" type="button">Gõ câu trả lời</button>`);
   const hint=el(`<div class="note" hidden><b>Gợi ý:</b> ${esc(T.explain)}</div>`);
-  const typeBox=el(`<div class="inrow" hidden style="display:flex;gap:8px"><input type="text" id="chat-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
+  const typeBox=el(`<div hidden style="gap:8px"><input type="text" id="chat-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
   const msg=el(`<div></div>`);
   const row=el(`<div class="row"></div>`);row.append(mic,hintB,typeB);
-  ctrl.append(row,hint,typeBox,msg);
+  ctrl.append(row,hint,typeBox,msg);scroll(ctrl);
   hintB.onclick=()=>{hint.hidden=!hint.hidden;};
   const showType=()=>{typeBox.hidden=false;typeBox.style.display="flex";typeBox.querySelector("input").focus();};
-  typeBox.hidden=true;typeBox.style.display="none";
   typeB.onclick=showType;
-  const send=()=>{const v=typeBox.querySelector("input").value.trim();if(v)answer(T,[v],0);};
+  const send=()=>{const v=typeBox.querySelector("input").value.trim();if(v){ctrl.innerHTML="";judge(T,[v],0);}};
   typeBox.querySelector("button").onclick=send;typeBox.querySelector("input").onkeydown=e=>{if(e.key==="Enter")send();};
   let rec=false;
   mic.onclick=async()=>{
    if(rec){try{listen.current&&listen.current.stop();}catch(e){}return;}
    readToken++;try{speechSynthesis.cancel();}catch(e){}
    rec=true;mic.className="btn rec big-mic";mic.innerHTML=IC.stop+" Đang nghe… nói xong bấm để dừng";msg.innerHTML="";
-   try{const alts=await listen();rec=false;answer(T,alts,alts.conf||0);}
-   catch(code){rec=false;mic.className="btn primary big-mic";mic.innerHTML=IC.mic+" Bấm để trả lời";
-    msg.innerHTML=`<div class="alert">${esc(srErrorText(String(code)))}</div>`;if(String(code)!=="no-speech")showType();}
+   try{const alts=await listen();rec=false;ctrl.innerHTML="";judge(T,alts,alts.conf||0);}
+   catch(code){rec=false;code=String(code);
+    if(code==="no-speech"){ctrl.innerHTML="";judge(T,[""],0);return;}
+    mic.className="btn primary big-mic";mic.innerHTML=IC.mic+" Bấm để trả lời";
+    msg.innerHTML=`<div class="alert">${esc(srErrorText(code))}</div>`;showType();}
   };
  }
- function answer(T,alts,conf){
+ const PRAISE=["Good!","Very good!","Great!","Excellent!","Well done!"];
+ async function judge(T,alts,conf){
+  if(!alive())return;
   const r=alts.map(a=>evalTurn(T,a)).sort((a,b)=>b.rank-a.rank)[0];
-  const ub=el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`);log.append(ub);
-  const lv={good:["ok","Rất tốt! Đúng ý và đúng ngữ pháp."],ok:["warn","Cô hiểu ý bạn, nhưng nên nói hay hơn."],bad:["bad","Chưa đúng ý câu hỏi."],none:["bad","Cô chưa nghe được câu trả lời."]}[r.level];
-  const fb=el(`<div class="chat-fb ${lv[0]}"><div class="verdict">${lv[1]}</div></div>`);
-  if(r.level==="ok"&&!r.issues.length&&T.tipOk)fb.append(el(`<p>${esc(T.tipOk)}</p>`));
-  if(r.level==="bad"||r.level==="none")fb.append(el(`<p><b>Câu hỏi nghĩa là:</b> “${esc(T.vi)}”. ${esc(T.explain)}</p>`));
-  if(r.issues.length){const ul=el(`<ul class="fix-list"></ul>`);r.issues.slice(0,4).forEach(x=>ul.append(el(`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`)));fb.append(el(`<b>Cần sửa:</b>`),ul);}
-  if(conf>0&&conf<0.55)fb.append(el(`<p class="muted" style="font-size:14px">Máy nghe chưa rõ lắm. Nếu chữ hiện ra khác với điều bạn nói, hãy nói chậm và rõ hơn, nhất là âm cuối.</p>`));
-  const md=el(`<div class="models"><b>${r.level==="good"?"Cách nói khác:":"Nên nói:"}</b></div>`);
+  const unclear=r.level==="none"||(conf>0&&conf<0.45&&r.level!=="good");
+  if(r.text)log.append(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
+  // Đúng: good, hoặc ok mà không có lỗi ngữ pháp
+  const pass=!unclear&&(r.level==="good"||(r.level==="ok"&&!r.issues.length));
+  if(pass){
+   res[i]=tries===0?3:2;
+   const fb=el(`<div class="chat-fb ok"><div class="verdict">${r.level==="good"?"Đúng rồi!":"Đúng ý!"}</div>${r.level==="ok"&&T.tipOk?`<p>${esc(T.tipOk)}</p>`:""}</div>`);
+   log.append(fb);scroll(fb);
+   await co(PRAISE[(i+tries)%PRAISE.length]+(T.react?" "+T.react:""),"",{buttons:false});
+   return nextTurn();
+  }
+  tries++;
+  if(tries<2){
+   const line=unclear?"Sorry, I didn't hear you clearly. Please say it again.":r.issues.length?"Almost! Please say it again.":"Hmm, not quite. Please try again.";
+   const note=unclear?"Cô chưa nghe rõ. Nói to, chậm và rõ hơn nhé.":r.issues.length?"Gần đúng rồi, nhưng còn lỗi: "+r.issues.map(x=>x.wrong+" → "+x.right).join("; ")+".":"Câu trả lời chưa đúng ý câu hỏi. Nghe lại câu hỏi rồi thử lần nữa.";
+   log.append(el(`<div class="chat-fb warn"><div class="verdict">Thử lại lần nữa</div><p>${esc(note)}</p></div>`));
+   await co(line,"",{buttons:false});if(!alive())return;
+   return controls(T);
+  }
+  // Sau 2 lần chưa đúng: Cô giải thích, đọc câu mẫu rồi sang câu tiếp
+  res[i]=1;
+  const fb=el(`<div class="chat-fb bad"><div class="verdict">Cô giải thích nhé</div><p><b>Câu hỏi nghĩa là:</b> “${esc(T.vi)}”</p><p>${esc(T.explain)}</p></div>`);
+  if(r.issues.length){const ul=el(`<ul class="fix-list"></ul>`);r.issues.slice(0,3).forEach(x=>ul.append(el(`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`)));fb.append(ul);}
+  const md=el(`<div class="models"><b>Bạn có thể nói:</b></div>`);
   T.models.forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};md.append(b);});
-  fb.append(md);
-  const pr=el(`<div></div>`);const prB=el(`<button class="btn sm" type="button">${IC.mic} Tập nói câu mẫu</button>`);prB.onclick=()=>{prB.remove();pr.append(practiceBox(T.models[0]));};
-  fb.append(prB,pr);
-  log.append(fb);scroll(fb);
-  best[i]=Math.max(best[i]||0,{good:3,ok:2,bad:1,none:0}[r.level]);
-  ctrl.innerHTML="";
-  const again=el(`<button class="btn" type="button">${IC.mic} Trả lời lại</button>`);again.onclick=()=>controls(T);
-  const last=i===C.turns.length-1;
-  const next=el(`<button class="btn primary" type="button">${last?"Kết thúc và xem kết quả":"Câu tiếp theo →"}</button>`);
-  next.onclick=async()=>{ctrl.innerHTML="";if(T.react)await coBubble(T.react);i++;if(i<C.turns.length)ask();else summary();};
-  const row=el(`<div class="row"></div>`);row.append(again,next);ctrl.append(row);
-  if(r.level==="good")say(["Great!","Very good!","Excellent!","Well done!"][i%4],{gender:"F"});
+  fb.append(md);log.append(fb);scroll(fb);
+  await say("Không sao, Cô giải thích nhé. "+T.explain,{lang:"vi"});if(!alive())return;
+  await gate();
+  const ms=T.models.slice(0,2);
+  await co("You can say: "+ms.join(" Or: "),"",{buttons:false});if(!alive())return;
+  await wait(1200);
+  if(T.react)await co(T.react,"",{buttons:false});
+  return nextTurn();
+ }
+ async function nextTurn(){
+  if(!alive())return;await gate();await wait(500);
+  i++;if(i<C.turns.length)ask();else summary();
  }
  function summary(){
-  prog.textContent="";
-  const good=best.filter(x=>x===3).length;
+  if(!alive())return;
+  prog.textContent="";pauseB.hidden=true;
+  const good=res.filter(x=>x>=2).length;
   S.chat=S.chat||{};S.chat[C.id]=Math.max(S.chat[C.id]||0,good);save();
-  const lines=C.turns.map((T,k)=>`<li><span class="pill ${best[k]===3?"ok":best[k]===2?"warn":"bad"}">${best[k]===3?"Tốt":best[k]===2?"Cần sửa":"Chưa đạt"}</span> ${esc(T.q)}</li>`).join("");
-  const box=el(`<div class="chat-fb ${good===C.turns.length?"ok":"warn"}"><div class="verdict">Kết quả: ${good}/${C.turns.length} câu trả lời tốt</div><p>${good===C.turns.length?"Tuyệt vời! Bạn đã trò chuyện trôi chảy. Thử một tình huống khác nhé.":"Làm lại để luyện những câu chưa tốt. Hãy nghe câu mẫu và nói theo trước khi trả lời."}</p><ul class="sum-list">${lines}</ul></div>`);
+  const lab=x=>x===3?["ok","Đúng ngay"]:x===2?["warn","Đúng lần 2"]:["bad","Cần luyện"];
+  const lines=C.turns.map((T,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(T.q)}</li>`;}).join("");
+  const box=el(`<div class="chat-fb ${good===C.turns.length?"ok":"warn"}"><div class="verdict">Kết quả: trả lời đúng ${good}/${C.turns.length} câu</div><p>${good===C.turns.length?"Tuyệt vời! Bạn đã trò chuyện trôi chảy. Thử một tình huống khác nhé.":"Làm lại để luyện những câu “Cần luyện”. Hãy nghe câu mẫu và nói theo trước khi trả lời."}</p><ul class="sum-list">${lines}</ul></div>`);
   log.append(box);scroll(box);
+  say(good===C.turns.length?"Great job! See you next time.":"Good effort! Let's practice again.",{gender:"F"});
   ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
   const re=el(`<button class="btn primary" type="button">Làm lại tình huống này</button>`);re.onclick=()=>chat(C.id);
   const other=el(`<button class="btn" type="button">Chọn tình huống khác</button>`);other.onclick=()=>{home();setTimeout(()=>{const g=document.querySelector(".chat-grid");g&&g.scrollIntoView({block:"start"});},50);};
   row.append(re,other);ctrl.append(row);
  }
  const start=el(`<button class="btn chalk big-mic" type="button">${IC.spk} Bắt đầu trò chuyện</button>`);
- start.onclick=()=>{ctrl.innerHTML="";ask();};
- ctrl.append(el(`<p style="margin:0">Mẹo: nghe kỹ câu hỏi, có thể bấm <b>Nghe lại</b> hoặc <b>Chậm</b>. Không nói được thì bấm <b>Gõ câu trả lời</b>.</p>`),start);
+ start.onclick=()=>{ctrl.innerHTML="";pauseB.hidden=false;ask();};
+ ctrl.append(el(`<p style="margin:0">Mẹo: nghe kỹ câu hỏi, có thể bấm <b>Nghe lại</b>, <b>Chậm</b> hoặc <b>Gợi ý</b>. Không nói được thì bấm <b>Gõ câu trả lời</b>.</p>`),start);
 }
 
 /* ---- Trang bài học ---- */
