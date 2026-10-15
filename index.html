@@ -853,7 +853,7 @@ function chat(id){
   const md=el(`<div class="models"><b>Bạn có thể nói:</b></div>`);
   T.models.forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};md.append(b);});
   fb.append(md);log.append(fb);scroll(fb);
-  await say("Không sao, Cô giải thích nhé. "+T.explain,{lang:"vi"});if(!alive())return;
+  await wait(1500);if(!alive())return;
   await gate();
   const ms=T.models.slice(0,2);
   await co("You can say: "+ms.join(" Or: "),"",{buttons:false});if(!alive())return;
