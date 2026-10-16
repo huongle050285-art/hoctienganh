@@ -1087,19 +1087,23 @@ async function initOnline(){
   NET.uid=cred.user.uid;
   const db=firebase.database();
   NET.ref=db.ref("presence/"+NET.uid);
+  const fail=e=>{NET.err=String(e&&(e.code||e.message)||e);if(/permission/i.test(NET.err))NET.err+=" (kiểm tra Rules của Realtime Database)";renderMe();};
+  const tmo=setTimeout(()=>{if(!NET.on&&!NET.err)fail("Không tới được Realtime Database. Kiểm tra đã tạo Realtime Database và địa chỉ databaseURL.");},12000);
   db.ref(".info/connected").on("value",snap=>{
    if(snap.val()!==true){NET.on=false;renderMe();return;}
-   NET.ref.onDisconnect().update({online:false,last:firebase.database.ServerValue.TIMESTAMP}).then(()=>{NET.on=true;pushProfile();});
+   clearTimeout(tmo);NET.on=true;NET.err=null;
+   // Lưu hồ sơ đầy đủ trước, rồi mới đăng ký tự chuyển offline khi thoát
+   pushProfile(true).then(()=>NET.ref.onDisconnect().update({online:false,last:firebase.database.ServerValue.TIMESTAMP})).catch(fail);
   });
-  db.ref("presence").orderByChild("rank").limitToLast(500).on("value",snap=>{NET.users=snap.val()||{};renderMe();});
+  db.ref("presence").orderByChild("rank").limitToLast(500).on("value",snap=>{NET.users=snap.val()||{};renderMe();},fail);
   document.addEventListener("visibilitychange",()=>{if(NET.ref&&NET.on)NET.ref.update({online:document.visibilityState==="visible",last:firebase.database.ServerValue.TIMESTAMP});});
  }catch(e){NET.err=String(e&&e.message||e);NET.on=false;renderMe();}
 }
-function pushProfile(){
+function pushProfile(strict){
  renderMe();
- if(!NET.ref||!NET.on||!S.name)return;
+ if(!NET.ref||!NET.on)return Promise.resolve();
  const lv=myLevel();
- NET.ref.set({name:S.name,level:lv.label,step:lv.step,passed:lv.passed,rank:lv.rank,online:document.visibilityState!=="hidden",last:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{NET.err=String(e.message||e);renderMe();});
+ return NET.ref.set({name:S.name||"Học viên mới",level:lv.label,step:lv.step,passed:lv.passed,rank:lv.rank,online:document.visibilityState!=="hidden",last:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{NET.err=String(e.code||e.message||e);renderMe();if(strict)throw e;});
 }
 /* ---- Nút tài khoản ở góc trên bên phải ---- */
 let meOpen=false;
