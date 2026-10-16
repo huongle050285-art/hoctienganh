@@ -194,6 +194,75 @@ s.say.wrong{color:var(--bad);border-bottom:0;text-decoration:line-through;font-w
 .story-text.hidden-text .sent{display:none}
 .story-text .story-cover{display:none;margin:0}
 .story-text.hidden-text .story-cover{display:block}
+.levels .guide-btn{border-style:dashed}
+.levels .guide-btn[aria-pressed="true"]{background:var(--board-ink);color:var(--board);border-style:solid;font-weight:600}
+.road-wrap{border-top:1px solid rgba(255,255,255,.14)}
+.road{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:none;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px}
+.road::-webkit-scrollbar{display:none}
+.road-lb{flex:none;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#b9d3cb;margin-right:6px;font-weight:600}
+.rn{flex:none;display:flex;align-items:center;gap:6px;background:transparent;border:1px solid transparent;border-radius:999px;padding:3px 10px 3px 3px;color:var(--board-ink);cursor:pointer;font-size:13px;white-space:nowrap}
+.rn:hover{border-color:rgba(255,255,255,.3)}
+.rn.active{background:rgba(255,255,255,.14);border-color:var(--chalk)}
+.rn-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+.rn-dot svg,.pn-dot svg{width:13px;height:13px}
+.rn.done .rn-dot{background:#3fae6a;color:#fff}
+.rn.review .rn-dot{background:var(--chalk);color:#1b1b1b}
+.rn.current .rn-dot{background:#fff;color:#1f4b42;box-shadow:0 0 0 3px rgba(243,201,74,.55)}
+.rn.locked{opacity:.55}
+.rn.locked .rn-dot{border:1.5px solid rgba(255,255,255,.5);color:var(--board-ink)}
+.rn-arr{flex:none;color:#b9d3cb;font-size:13px}
+.road-legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px;color:var(--muted)}
+.road-legend span{display:inline-flex;align-items:center;gap:5px}
+.lg{width:11px;height:11px;border-radius:50%;display:inline-block}
+.lg.done{background:var(--ok)}.lg.review{background:var(--chalk)}.lg.current{background:var(--board);box-shadow:0 0 0 2px var(--chalk-soft)}.lg.locked{border:1.5px solid var(--muted)}
+.path{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column}
+.pn{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:12px;position:relative;padding-bottom:12px}
+.pn:not(:last-child)::before{content:"";position:absolute;left:17px;top:36px;bottom:-2px;width:2px;background:var(--line)}
+.pn.done:not(:last-child)::before,.pn.review:not(:last-child)::before{background:var(--ok)}
+.pn:not(:last-child)::after{content:"";position:absolute;left:13px;bottom:2px;border:5px solid transparent;border-top:6px solid var(--line)}
+.pn.done:not(:last-child)::after,.pn.review:not(:last-child)::after{border-top-color:var(--ok)}
+.pn-dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:15px;position:relative;z-index:1}
+.pn.done .pn-dot{background:var(--ok);color:#fff}
+.pn.review .pn-dot{background:var(--chalk);color:#1b1b1b}
+.pn.current .pn-dot{background:var(--board);color:var(--board-ink);box-shadow:0 0 0 4px var(--chalk-soft)}
+.pn.locked .pn-dot{background:var(--bg);border:2px solid var(--line);color:var(--muted)}
+.pn-card{display:flex;flex-direction:column;align-items:stretch;gap:4px;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;min-width:0;width:100%}
+.pn.current .pn-card{border-color:var(--board);border-width:2px}
+.pn.locked .pn-card{cursor:default;background:transparent;border-style:dashed}
+.pn-card:hover{border-color:var(--board)}
+.pn.locked .pn-card:hover{border-color:var(--line)}
+.pn-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pn-top b{font-family:var(--f-display);font-weight:500;font-size:16px}
+.pn.locked .pn-top b{color:var(--muted)}
+.pn-card small{color:var(--muted)}
+.pill2{flex:none;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.pill2.done{background:var(--ok-soft);color:var(--ok)}
+.pill2.review{background:var(--chalk-soft);color:var(--ink)}
+.pill2.current{background:var(--board);color:var(--board-ink)}
+.pill2.locked{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.pn-bar{position:relative;display:block;height:8px;border-radius:99px;background:var(--line);margin-top:4px}
+.pn-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--ok)}
+.pn.current .pn-bar i,.score-panel.current .pn-bar i{background:var(--chalk)}
+.pn-bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.45}
+.pn-meta{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pn-act{display:flex;justify-content:flex-end;margin-top:2px}
+.score-panel{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.score-panel p{margin:0;font-size:14px;color:var(--muted)}
+.sp-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;align-items:start}
+.sp-it{display:flex;flex-direction:column}
+.sp-it small{font-size:12.5px;color:var(--muted)}
+.sp-it b{font-family:var(--f-display);font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2}
+.sp-it .pill2{align-self:flex-start;margin-top:2px}
+.picker .sc{font-size:12px;font-weight:700;margin-left:4px;white-space:nowrap}
+.picker .sc.ok{color:var(--ok)}.picker .sc.low{color:var(--bad)}.picker .sc.none{color:var(--muted);font-weight:500}
+.picker button[aria-pressed="true"] .sc{color:inherit}
+.guide{display:flex;flex-direction:column;gap:18px}
+.guide section{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.guide h2{font-size:19px;margin-bottom:6px}
+.guide p{margin:6px 0;max-width:65ch}
+.guide ul,.guide ol{margin:6px 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
+.guide .preview-box{background:transparent;border-style:dashed;font-size:14px;color:var(--muted)}
+@media (max-width:560px){header.top{position:static}.levels{margin-left:0}}
 .hidden-vi .bubble .vi,.hidden-vi .ex-item .vi{display:none}
 .practice{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .practice .target{font-size:clamp(18px,4.5vw,22px);font-weight:600;font-family:var(--f-display)}
@@ -236,7 +305,7 @@ footer{margin-top:40px;font-size:13px;color:var(--muted)}
 <header class="top"><div class="in">
   <button class="brand" id="brand" type="button">Lớp Tiếng Anh <span>Mỗi Ngày</span></button>
   <nav class="levels" id="levels" aria-label="Trình độ"></nav>
-</div></header>
+</div><div class="road-wrap" id="road-wrap"><nav class="road" id="road" aria-label="Lộ trình Sơ cấp"></nav></div></header>
 
 <main class="wrap" id="app"></main>
 
@@ -842,7 +911,9 @@ let toastT;function toast(msg){let t=document.getElementById("toast");if(!t){t=e
 
 function renderLevels(){
  const nav=document.getElementById("levels");nav.innerHTML="";
+ const gb=el(`<button type="button" class="guide-btn" data-g="1" aria-pressed="false">Hướng dẫn</button>`);gb.onclick=guide;nav.append(gb);
  LEVELS.forEach(l=>{const b=el(`<button type="button" aria-pressed="${S.level===l.id}">${l.name}</button>`);b.onclick=()=>{S.level=l.id;save();renderLevels();home();};nav.append(b);});
+ renderRoad();
 }
 document.getElementById("brand").onclick=()=>home();
 
@@ -852,19 +923,103 @@ function speedControl(){
  return w;
 }
 
+/* ============ LỘ TRÌNH & ĐIỂM ============
+   Điểm bài = 50% Luyện nói (trung bình điểm cao nhất của các câu mẫu) + 50% Nghe & trả lời (điểm cao nhất).
+   Đạt từ 70% thì mở bài tiếp theo; từ 85% là Hoàn thành; 70–84% là Cần xem lại. */
+const PASS=70,GOOD=85;
+const SHORT={be:"To be",pron:"Sở hữu",art:"a / an / the",plural:"Số nhiều",ps:"Hiện tại đơn",pc:"Tiếp diễn",there:"There is / are",wh:"Từ để hỏi"};
+S.sp=S.sp||{};S.qa=S.qa||{};
+if(S.story){LESSONS.forEach(L=>{if(S.story[L.id]!=null&&S.qa[L.id]==null)S.qa[L.id]=Math.round(S.story[L.id]/L.story.qs.length*100);});}
+function spScore(L){const m=S.sp[L.id]||{};return Math.round(L.speak.reduce((a,x)=>a+(m[x]||0),0)/L.speak.length);}
+function spCount(L){const m=S.sp[L.id]||{};return L.speak.filter(x=>m[x]!=null).length;}
+function qaScore(L){return S.qa[L.id]||0;}
+function lessonTotal(L){return Math.round((spScore(L)+qaScore(L))/2);}
+function lessonStatus(i){
+ const t=lessonTotal(LESSONS[i]);
+ if(t>=GOOD)return "done";if(t>=PASS)return "review";
+ return (S.preview||i===0||lessonTotal(LESSONS[i-1])>=PASS)?"current":"locked";
+}
+const ST_LABEL={done:"Hoàn thành",review:"Cần xem lại",current:"Đang học",locked:"Chưa mở"};
+const LOCK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+function dotHtml(st,i){return st==="done"?"✓":st==="review"?"!":st==="locked"?LOCK_SVG:String(i+1);}
+function openLesson(id){
+ const i=LESSONS.findIndex(l=>l.id===id);
+ if(lessonStatus(i)==="locked"){toast("Bài này chưa mở. Hãy đạt ít nhất "+PASS+"% ở bài “"+LESSONS[i-1].title+"” trước.");return;}
+ curTab="teach";lesson(id);
+}
+/* Dải lộ trình luôn nằm ở đầu app */
+let roadActive=null;
+function renderRoad(active){
+ if(active!==undefined)roadActive=active;
+ const wrap=document.getElementById("road-wrap"),road=document.getElementById("road");
+ if(!road)return;
+ wrap.hidden=S.level!=="A";road.innerHTML="";
+ road.append(el(`<span class="road-lb">Lộ trình Sơ cấp</span>`));
+ let cur=null;
+ LESSONS.forEach((L,i)=>{
+  const st=lessonStatus(i);
+  if(i>0)road.append(el(`<span class="rn-arr" aria-hidden="true">→</span>`));
+  const b=el(`<button type="button" class="rn ${st}${roadActive===L.id?" active":""}" title="${esc(L.title)} · ${ST_LABEL[st]} · ${lessonTotal(L)}%"><span class="rn-dot">${dotHtml(st,i)}</span><span class="rn-t">${esc(SHORT[L.id])}</span></button>`);
+  if(roadActive===L.id)b.setAttribute("aria-current","page");
+  b.onclick=()=>openLesson(L.id);road.append(b);
+  if(roadActive===L.id||(!cur&&st==="current"))cur=b;
+ });
+ if(cur)requestAnimationFrame(()=>{road.scrollLeft=Math.max(0,cur.offsetLeft-road.clientWidth/2+cur.offsetWidth/2);});
+}
+/* Sơ đồ lộ trình đầy đủ ở trang chính */
+function roadMap(){
+ const passed=LESSONS.filter(L=>lessonTotal(L)>=PASS).length;
+ const sec=el(`<section class="block road-sec"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><span class="eyebrow">Lộ trình của bạn</span><h2 style="font-size:22px">Lộ trình Sơ cấp · ${passed}/${LESSONS.length} bài đạt</h2></div><div class="road-legend"><span><i class="lg done"></i>Hoàn thành</span><span><i class="lg review"></i>Cần xem lại</span><span><i class="lg current"></i>Đang học</span><span><i class="lg locked"></i>Chưa mở</span></div></div><ol class="path"></ol></section>`);
+ const ol=sec.querySelector(".path");
+ LESSONS.forEach((L,i)=>{
+  const st=lessonStatus(i),t=lessonTotal(L),sp=spScore(L),qa=qaScore(L);
+  const btn=st==="locked"?`<span class="muted" style="font-size:14px">Đạt ${PASS}% bài ${i} để mở</span>`:`<span class="btn sm ${st==="current"?"primary":""}">${st==="current"?(t>0?"Học tiếp":"Vào học"):st==="review"?"Xem lại":"Ôn lại"}</span>`;
+  const li=el(`<li class="pn ${st}"><span class="pn-dot">${dotHtml(st,i)}</span><button type="button" class="pn-card" ${st==="locked"?'aria-disabled="true"':""}><span class="pn-top"><b>${i+1}. ${esc(L.title)}</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></span><small>${esc(L.sub)}</small>${st==="locked"?"":`<span class="pn-bar" aria-label="Điểm ${t}%"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><span class="pn-meta">Tổng <b>${t}%</b> · Luyện nói ${sp}% · Nghe & trả lời ${qa}%</span>`}<span class="pn-act">${btn}</span></button></li>`);
+  li.querySelector(".pn-card").onclick=()=>openLesson(L.id);
+  ol.append(li);
+ });
+ return sec;
+}
+/* Bảng điểm trong trang bài học */
+function scorePanel(L){
+ const sp=spScore(L),qa=qaScore(L),t=lessonTotal(L),i=LESSONS.indexOf(L),st=lessonStatus(i);
+ const msg=t>=GOOD?"Bạn đã hoàn thành bài này. Có thể chuyển sang bài tiếp theo.":t>=PASS?`Đã đạt ${PASS}%, bài tiếp theo đã mở. Nên luyện thêm để đạt ${GOOD}% (Hoàn thành).`:`Cần đạt ${PASS}% để mở bài tiếp theo. Hãy luyện nói đủ ${L.speak.length} câu mẫu (phần 3) và làm phần 4. Nghe & trả lời.`;
+ return el(`<div class="score-panel ${st}" id="score-panel"><div class="sp-row"><div class="sp-it"><small>Luyện nói (${spCount(L)}/${L.speak.length} câu)</small><b>${sp}%</b></div><div class="sp-it"><small>Nghe & trả lời</small><b>${qa}%</b></div><div class="sp-it tot"><small>Điểm bài</small><b>${t}%</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></div></div><span class="pn-bar"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><p>${msg}</p></div>`);
+}
+function refreshScore(L){const o=document.getElementById("score-panel");if(o)o.replaceWith(scorePanel(L));renderRoad(L.id);}
+
+/* ============ HƯỚNG DẪN ============ */
+function guide(){
+ stopReading();renderRoad(null);window.scrollTo(0,0);app.innerHTML="";
+ document.querySelectorAll("#levels button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.g?"true":"false"));
+ const g=el(`<article class="guide">
+  <div class="board"><span class="eyebrow">Hướng dẫn sử dụng</span><h1>Học cùng Cô mỗi ngày</h1><span style="color:#b9d3cb">Đọc 2 phút trước khi bắt đầu để học hiệu quả hơn.</span></div>
+  <section><h2>1. App chạy trên mọi thiết bị</h2><p>Điện thoại, máy tính bảng hay máy tính đều dùng được, chỉ cần trình duyệt và Internet.</p><ul><li><b>iPhone, iPad:</b> mở bằng <b>Safari</b>.</li><li><b>Android và máy tính:</b> mở bằng <b>Chrome</b> hoặc <b>Edge</b>.</li><li>Không mở link trong Zalo hay Messenger vì micro sẽ bị chặn.</li><li>Mẹo: trong trình duyệt, bấm nút chia sẻ hoặc menu ⋮ rồi chọn <b>“Thêm vào màn hình chính”</b> để mở app như một ứng dụng.</li></ul></section>
+  <section><h2>2. Cho phép dùng micro</h2><p>Lần đầu bấm nút micro, trình duyệt sẽ hỏi quyền dùng micro. Hãy chọn <b>“Cho phép”</b> (hoặc <b>“Đồng ý”</b>).</p><ul><li><b>Lỡ bấm chặn trên iPhone:</b> bấm “Aa” cạnh địa chỉ web › Cài đặt trang web › Micrô › Cho phép. Và bật Cài đặt › Cài đặt chung › Bàn phím › Đọc chính tả.</li><li><b>Lỡ bấm chặn trên Android, máy tính:</b> bấm biểu tượng ổ khóa cạnh địa chỉ web › Quyền › Micrô › Cho phép, rồi tải lại trang.</li><li>Nói ở nơi yên tĩnh, to và rõ, cầm điện thoại cách miệng khoảng một gang tay.</li></ul></section>
+  <section><h2>3. Học theo lộ trình</h2><p>Học lần lượt từ bài 1 đến bài 8, theo sơ đồ lộ trình ở đầu app. Hoàn thành bài trước rồi mới chuyển sang bài sau.</p><p>Mỗi bài có 4 phần, làm theo thứ tự:</p><ol><li><b>Bài giảng:</b> nghe Cô giảng, xem sơ đồ và ví dụ.</li><li><b>Nghe:</b> nghe câu ví dụ và hội thoại theo chủ đề.</li><li><b>Luyện nói:</b> đọc các câu mẫu, máy chấm phát âm.</li><li><b>Nghe & trả lời:</b> nghe đoạn văn rồi trả lời câu hỏi của Cô.</li></ol></section>
+  <section><h2>4. Cô chấm điểm thế nào?</h2><ul><li><b>Luyện nói (50%):</b> trung bình điểm phát âm cao nhất của các câu mẫu có dấu ★.</li><li><b>Nghe & trả lời (50%):</b> đúng ngay được 100%, đúng ở lần thứ hai được 75%, đúng sau gợi ý được 50%, không đúng được 0%.</li></ul><div class="road-legend" style="margin-top:8px"><span><i class="lg done"></i>Hoàn thành: từ ${GOOD}%</span><span><i class="lg review"></i>Cần xem lại: ${PASS}–${GOOD-1}%</span><span><i class="lg current"></i>Đang học: dưới ${PASS}%</span><span><i class="lg locked"></i>Chưa mở</span></div><p>Đạt từ <b>${PASS}%</b> thì bài tiếp theo được mở. Bạn có thể làm lại nhiều lần, app lưu điểm cao nhất.</p></section>
+  <section><h2>5. Luyện nghe và nói thật nhiều</h2><p>App tập trung vào kỹ năng <b>nghe</b> và <b>nói</b>. Muốn giỏi, hãy chịu khó:</p><ul><li>Nghe mỗi câu nhiều lần, nghe chậm trước rồi nghe tốc độ tự nhiên.</li><li>Nói to theo mẫu, đừng ngại sai. Sai thì nghe lại và nói lại.</li><li>Học đều mỗi ngày 15–20 phút, tốt hơn học dồn một lần.</li><li>Dùng thêm mục <b>Trò chuyện với Cô</b> để luyện phản xạ.</li></ul></section>
+  <section><h2>6. Tiến độ học</h2><p>Điểm và tiến độ được lưu trên trình duyệt của máy này. Nếu đổi máy, xoá dữ liệu trình duyệt hay dùng chế độ ẩn danh, tiến độ sẽ bắt đầu lại từ đầu.</p></section>
+  <section class="preview-box"><label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" id="preview-all" style="margin-top:4px" ${S.preview?"checked":""}> <span><b>Chế độ xem trước</b> (dành cho người soạn bài): mở tất cả bài mà không cần đạt điểm.</span></label></section>
+ </article>`);
+ const start=el(`<button class="btn primary big-mic" type="button">Bắt đầu học</button>`);start.onclick=()=>home();
+ g.append(start);app.append(g);
+ g.querySelector("#preview-all").onchange=e=>{S.preview=e.target.checked;save();renderRoad();toast(S.preview?"Đã mở tất cả bài để xem trước.":"Đã tắt chế độ xem trước. Bài học mở theo điểm.");};
+}
+
 /* ---- Trang chủ ---- */
 function home(){
- stopReading();window.scrollTo(0,0);app.innerHTML="";
- const doneN=Object.keys(S.done).length,wordsN=Object.keys(S.words).length;
+ stopReading();renderLevels();renderRoad(null);window.scrollTo(0,0);app.innerHTML="";
+ const doneN=LESSONS.filter(L=>lessonTotal(L)>=PASS).length,wordsN=Object.keys(S.words).length;
  const tw=todaysWords();const twDone=tw.filter(w=>S.words[w[0]]).length;
- const next=LESSONS.find(l=>!S.done[l.id])||LESSONS[0];
  const levelName=LEVELS.find(l=>l.id===S.level).name;
 
- app.append(el(`<div class="board">
+ if(S.level==="A")app.append(roadMap());
+ app.append(el(`<div class="board" style="margin-top:${S.level==="A"?28:0}px">
    <span class="eyebrow">Mục tiêu hôm nay · ${new Date().toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"numeric"})}</span>
    <h1>${S.level==="A"?"Học "+DAILY+" từ mới và 1 bài ngữ pháp":"Trình độ "+levelName}</h1>
    <div class="progress" aria-label="Từ vựng hôm nay"><i style="width:${twDone/DAILY*100}%"></i></div>
-   <div class="stats"><div><b>${twDone}/${DAILY}</b><small>từ hôm nay</small></div><div><b>${doneN}/${LESSONS.length}</b><small>bài sơ cấp xong</small></div><div><b>${wordsN}</b><small>từ đã thuộc</small></div><div><b>${streak()}</b><small>ngày liên tiếp</small></div></div>
+   <div class="stats"><div><b>${twDone}/${DAILY}</b><small>từ hôm nay</small></div><div><b>${doneN}/${LESSONS.length}</b><small>bài sơ cấp đạt</small></div><div><b>${wordsN}</b><small>từ đã thuộc</small></div><div><b>${streak()}</b><small>ngày liên tiếp</small></div></div>
  </div>`));
 
  if(S.level!=="A"){
@@ -874,8 +1029,6 @@ function home(){
   app.append(sec);return;
  }
 
- const cont=el(`<section class="block"><span class="eyebrow">Học tiếp</span><button class="lesson-item" type="button"><span class="num">${LESSONS.indexOf(next)+1}</span><span class="t"><b>${next.title}</b><small>${next.sub}</small></span><span class="btn sm primary">Vào học</span></button></section>`);
- cont.querySelector("button").onclick=()=>lesson(next.id);app.append(cont);
  chatHome(app);
 
  const vs=el(`<section class="block"><div class="row" style="justify-content:space-between"><div><span class="eyebrow">Từ vựng hôm nay</span><h2 style="font-size:20px">${DAILY} từ cần thuộc</h2></div></div><div class="vocab"></div></section>`);
@@ -883,9 +1036,6 @@ function home(){
  tw.forEach(w=>vs.querySelector(".vocab").append(wordCard(w)));
  app.append(vs);
 
- const ls=el(`<section class="block"><span class="eyebrow">Lộ trình Sơ cấp</span><div class="lessons"></div></section>`);
- LESSONS.forEach((l,i)=>{const b=el(`<button class="lesson-item ${S.done[l.id]?"done":""}" type="button"><span class="num">${S.done[l.id]?"✓":i+1}</span><span class="t"><b>${l.title}</b><small>${l.sub}</small></span>${S.done[l.id]?'<span class="tag ok">Đã xong</span>':""}</button>`);b.onclick=()=>lesson(l.id);ls.querySelector(".lessons").append(b);});
- app.append(ls);
 
  const fp=el(`<section class="block"><span class="eyebrow">Luyện đọc tự do</span><h2 style="font-size:20px">Gõ bất kỳ từ hay đoạn hội thoại nào để luyện đọc</h2></section>`);
  const ta=el(`<textarea id="free-read" aria-label="Câu muốn luyện đọc">Good morning! How are you today?</textarea>`);
@@ -923,6 +1073,7 @@ function practiceBox(target,o={}){
   try{
    const alts=await listen();
    const g=grade(target,alts);
+   if(o.onScore)o.onScore(g.score);
    const missed=g.words.filter((_,i)=>!g.wordOk[i]);
    const verdict=g.score>=90?"Rất tốt! Phát âm rõ ràng.":g.score>=70?"Khá tốt, còn vài từ cần sửa.":g.score>=40?"Cố lên! Nghe mẫu chậm rồi đọc lại.":"Máy chưa nhận ra câu này. Đọc chậm và rõ từng từ nhé.";
    res.innerHTML=`<div class="row" style="gap:14px"><span class="score" style="color:${g.score>=70?"var(--ok)":"var(--bad)"}">${g.score}%</span><span>${verdict}</span></div>
@@ -1087,9 +1238,11 @@ function chat(id){
 let curTab="teach";
 function lesson(id){
  stopReading();const L=LESSONS.find(l=>l.id===id),idx=LESSONS.indexOf(L);
- window.scrollTo(0,0);app.innerHTML="";
+ if(lessonStatus(idx)==="locked"){openLesson(id);return;}
+ renderRoad(id);window.scrollTo(0,0);app.innerHTML="";
  const back=el(`<button class="back" type="button">← Về trang chính</button>`);back.onclick=home;app.append(back);
  app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Bài ${idx+1} / ${LESSONS.length} · Sơ cấp</span><h1>${L.title}</h1><span style="color:#b9d3cb">${esc(L.sub)}</span></div>`));
+ app.append(scorePanel(L));
  const tabs=el(`<div class="tabs" role="tablist"></div>`);
  const T=[["teach","1. Bài giảng"],["listen","2. Nghe"],["speak","3. Luyện nói"],["story","4. Nghe & trả lời"]];
  const body=el(`<div></div>`);
@@ -1100,7 +1253,7 @@ function lesson(id){
  const ti=T.findIndex(t=>t[0]===curTab);
  if(ti>0){const p=el(`<button class="btn" type="button">← ${T[ti-1][1]}</button>`);p.onclick=()=>{curTab=T[ti-1][0];lesson(id);};nav.append(p);}else nav.append(el("<span></span>"));
  if(ti<T.length-1){const n=el(`<button class="btn primary" type="button">${T[ti+1][1]} →</button>`);n.onclick=()=>{curTab=T[ti+1][0];lesson(id);};nav.append(n);}
- else if(idx<LESSONS.length-1){const n=el(`<button class="btn primary" type="button">Bài tiếp: ${LESSONS[idx+1].title} →</button>`);n.onclick=()=>{curTab="teach";lesson(LESSONS[idx+1].id);};nav.append(n);}
+ else if(idx<LESSONS.length-1){const lk=lessonStatus(idx+1)==="locked";const n=el(`<button class="btn ${lk?"":"primary"}" type="button">${lk?"Bài tiếp đang khóa (cần "+PASS+"%)":"Bài tiếp: "+LESSONS[idx+1].title+" →"}</button>`);n.onclick=()=>openLesson(LESSONS[idx+1].id);nav.append(n);}
  app.append(nav);
 }
 
@@ -1226,9 +1379,13 @@ function tabSpeak(L,body){
  const pick=el(`<div class="picker" role="group" aria-label="Chọn câu luyện"></div>`);
  const holder=el(`<div></div>`);
  let sel=0;
- const draw=()=>{pick.innerHTML="";items.forEach((s,i)=>{const b=el(`<button type="button" aria-pressed="${i===sel}">${esc(s)}</button>`);b.onclick=()=>{sel=i;draw();};pick.append(b);});holder.innerHTML="";holder.append(practiceBox(items[sel]));};
+ const best=x=>(S.sp[L.id]||{})[x];
+ const badge=x=>{const v=best(x);return v==null?`<span class="sc none">★ chưa chấm</span>`:`<span class="sc ${v>=PASS?"ok":"low"}">★ ${v}%</span>`;};
+ const draw=()=>{pick.innerHTML="";items.forEach((s,i)=>{const scored=i<L.speak.length;const b=el(`<button type="button" aria-pressed="${i===sel}">${esc(s)}${scored?" "+badge(s):""}</button>`);b.onclick=()=>{sel=i;draw();};pick.append(b);});
+  holder.innerHTML="";const x=items[sel],scored=sel<L.speak.length;
+  holder.append(practiceBox(x,{onScore:sc=>{if(!scored)return;S.sp[L.id]=S.sp[L.id]||{};if(sc>(S.sp[L.id][x]||0)||S.sp[L.id][x]==null){S.sp[L.id][x]=Math.max(sc,S.sp[L.id][x]||0);save();}refreshScore(L);const pb=pick.children[sel];if(pb){const old=pb.querySelector(".sc");if(old)old.outerHTML=badge(x);}}}));};
  draw();
- t.append(el(`<span class="eyebrow">Câu trong bài · Hội thoại: ${esc(dd.title)}</span>`),pick,holder);
+ t.append(el(`<div class="note"><b>Cách tính điểm Luyện nói:</b> trung bình điểm cao nhất của ${L.speak.length} câu mẫu có dấu ★. Hãy đọc đủ cả ${L.speak.length} câu. Các câu hội thoại phía sau dùng để luyện thêm, không tính điểm.</div>`),el(`<span class="eyebrow">Câu mẫu ★ · Hội thoại: ${esc(dd.title)}</span>`),pick,holder);
  const own=el(`<div class="practice"><b>Hoặc tự gõ một câu / đoạn giao tiếp muốn luyện</b><input type="text" id="own-${L.id}" placeholder="Ví dụ: Can I have the bill, please?"><button class="btn" type="button">Luyện câu này</button><div></div></div>`);
  own.querySelector("button").onclick=()=>{const v=own.querySelector("input").value.trim();if(!v)return;const s=own.lastElementChild;s.innerHTML="";s.append(practiceBox(v));};
  t.append(own);
@@ -1351,23 +1508,28 @@ function tabStory(L,body){
  function summary(){
   if(!alive())return;prog.textContent="";
   const right=res.filter(x=>x>1).length,first=res.filter(x=>x===3).length;
-  S.story=S.story||{};S.story[L.id]=Math.max(S.story[L.id]||0,right);
-  if(!S.done[L.id])S.done[L.id]=todayStr;save();
+  const PTS={3:100,2:75,1.5:50,1:0};
+  const pct=Math.round(St.qs.reduce((a,_,k)=>a+(PTS[res[k]]||0),0)/St.qs.length);
+  const prevTot=lessonTotal(L);
+  S.qa[L.id]=Math.max(S.qa[L.id]||0,pct);save();refreshScore(L);
+  const tot=lessonTotal(L),idxL=LESSONS.indexOf(L);
+  const unlockMsg=idxL<LESSONS.length-1?(tot>=PASS?(prevTot<PASS?" Bài tiếp theo vừa được mở!":" Bài tiếp theo đã mở."):` Cần đạt ${PASS}% để mở bài tiếp theo. Hãy luyện nói đủ câu mẫu và làm lại phần này.`):"";
   const lab=x=>x===3?["ok","Đúng ngay"]:x===2?["warn","Đúng lần 2"]:x===1.5?["warn","Đúng sau gợi ý"]:["bad","Cần luyện"];
   const all=first===St.qs.length;
-  const box=el(`<div class="chat-fb ${all?"ok":"warn"}"><div class="verdict">Kết quả: trả lời đúng ${right}/${St.qs.length} câu</div><p>${all?"Tuyệt vời! Bạn nghe hiểu rất tốt. Bài học đã được đánh dấu hoàn thành.":"Bài học đã được đánh dấu hoàn thành. Hãy nghe lại đoạn văn và làm lại để trả lời đúng ngay từ lần đầu."}</p><ul class="sum-list">${St.qs.map((Q,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(Q.q)}</li>`;}).join("")}</ul></div>`);
+  const box=el(`<div class="chat-fb ${all?"ok":"warn"}"><div class="verdict">Kết quả: đúng ${right}/${St.qs.length} câu · ${pct}%</div><p>${all?"Tuyệt vời! Bạn nghe hiểu rất tốt.":"Nghe lại đoạn văn và làm lại để trả lời đúng ngay từ lần đầu."} Điểm Nghe & trả lời cao nhất: ${qaScore(L)}%. Điểm bài: ${tot}%.${unlockMsg}</p><ul class="sum-list">${St.qs.map((Q,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(Q.q)}</li>`;}).join("")}</ul></div>`);
   log.append(box);scroll(box);
   say(all?"Great job! You understand the story very well.":"Good effort! Listen again and try one more time.",{gender:"F"});
   ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
   const re=el(`<button class="btn" type="button">Làm lại</button>`);re.onclick=()=>{curTab="story";lesson(L.id);};
   row.append(re);
   const idx=LESSONS.indexOf(L);
-  if(idx<LESSONS.length-1){const nx=el(`<button class="btn primary" type="button">Bài tiếp: ${esc(LESSONS[idx+1].title)} →</button>`);nx.onclick=()=>{curTab="teach";lesson(LESSONS[idx+1].id);};row.append(nx);}
+  if(idx<LESSONS.length-1&&lessonStatus(idx+1)!=="locked"){const nx=el(`<button class="btn primary" type="button">Bài tiếp: ${esc(LESSONS[idx+1].title)} →</button>`);nx.onclick=()=>openLesson(LESSONS[idx+1].id);row.append(nx);}
+  else if(spCount(L)<L.speak.length){const sp=el(`<button class="btn primary" type="button">Sang phần 3. Luyện nói</button>`);sp.onclick=()=>{curTab="speak";lesson(L.id);};row.append(sp);}
   ctrl.append(row);
  }
 }
 
-renderLevels();home();
+renderLevels();if(!S.guideSeen){S.guideSeen=1;save();guide();}else home();
 </script>
 
 </body>
