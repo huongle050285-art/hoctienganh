@@ -263,6 +263,39 @@ s.say.wrong{color:var(--bad);border-bottom:0;text-decoration:line-through;font-w
 .guide ul,.guide ol{margin:6px 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .guide .preview-box{background:transparent;border-style:dashed;font-size:14px;color:var(--muted)}
 @media (max-width:560px){header.top{position:static}.levels{margin-left:0}}
+header.top .in{position:relative}
+.me-wrap{position:relative;flex:none}
+.me-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:var(--board-ink);border-radius:999px;padding:4px 10px 4px 10px;cursor:pointer;max-width:220px}
+.me-btn:hover{background:rgba(255,255,255,.18)}
+.me-t{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15;min-width:0}
+.me-t b{font-size:14px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-t small{font-size:11.5px;color:var(--chalk)}
+.me-n{font-size:12px;font-weight:700;background:#3fae6a;color:#fff;border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.caret{font-size:11px;opacity:.8}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.dot.on{background:#3fd27a;box-shadow:0 0 0 3px rgba(63,210,122,.25)}
+.dot.off{background:var(--muted);opacity:.6}
+.me-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:30;width:min(330px,calc(100vw - 32px));background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:12px;display:flex;flex-direction:column;gap:10px;max-height:70vh;overflow:auto}
+.me-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.me-h b{font-family:var(--f-display);font-weight:500}
+.me-h span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.me-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.me-list li{display:grid;grid-template-columns:22px 12px minmax(0,1fr) auto;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;font-size:14px}
+.me-list li.me{background:var(--chalk-soft)}
+.me-list .pos{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;text-align:right}
+.me-list .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-list .nm em{color:var(--muted);font-style:normal;font-size:12px}
+.me-list .lv{font-size:12px;font-weight:700;color:var(--board);background:var(--ok-soft);border-radius:999px;padding:1px 8px;white-space:nowrap}
+:root[data-theme="dark"] .me-list .lv{color:var(--ok)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .me-list .lv{color:var(--ok)}}
+.me-off summary{cursor:pointer;font-size:13px;color:var(--muted);padding:2px 0}
+.me-note{margin:0;font-size:13px;color:var(--muted);background:var(--bg);border-radius:8px;padding:8px 10px}
+.me-edit{display:flex;flex-direction:column;gap:4px;border-top:1px dashed var(--line);padding-top:10px}
+.me-edit label{font-size:12.5px;color:var(--muted)}
+.me-edit input{padding:6px 10px}
+.name-card{margin-top:4px;background:var(--paper);border:2px solid var(--chalk);border-radius:14px;padding:16px}
+.levels{order:2}.me-wrap{order:3;margin-left:8px}
+@media (max-width:560px){.me-wrap{order:2;margin-left:auto}.levels{order:3;width:100%}.me-t b{max-width:90px}}
 .hidden-vi .bubble .vi,.hidden-vi .ex-item .vi{display:none}
 .practice{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .practice .target{font-size:clamp(18px,4.5vw,22px);font-weight:600;font-family:var(--f-display)}
@@ -305,6 +338,7 @@ footer{margin-top:40px;font-size:13px;color:var(--muted)}
 <header class="top"><div class="in">
   <button class="brand" id="brand" type="button">Lớp Tiếng Anh <span>Mỗi Ngày</span></button>
   <nav class="levels" id="levels" aria-label="Trình độ"></nav>
+  <div class="me-wrap" id="me-wrap"></div>
 </div><div class="road-wrap" id="road-wrap"><nav class="road" id="road" aria-label="Lộ trình Sơ cấp"></nav></div></header>
 
 <main class="wrap" id="app"></main>
@@ -913,7 +947,7 @@ function renderLevels(){
  const nav=document.getElementById("levels");nav.innerHTML="";
  const gb=el(`<button type="button" class="guide-btn" data-g="1" aria-pressed="false">Hướng dẫn</button>`);gb.onclick=guide;nav.append(gb);
  LEVELS.forEach(l=>{const b=el(`<button type="button" aria-pressed="${S.level===l.id}">${l.name}</button>`);b.onclick=()=>{S.level=l.id;save();renderLevels();home();};nav.append(b);});
- renderRoad();
+ renderRoad();renderMe();
 }
 document.getElementById("brand").onclick=()=>home();
 
@@ -969,7 +1003,7 @@ function renderRoad(active){
 /* Sơ đồ lộ trình đầy đủ ở trang chính */
 function roadMap(){
  const passed=LESSONS.filter(L=>lessonTotal(L)>=PASS).length;
- const sec=el(`<section class="block road-sec"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><span class="eyebrow">Lộ trình của bạn</span><h2 style="font-size:22px">Lộ trình Sơ cấp · ${passed}/${LESSONS.length} bài đạt</h2></div><div class="road-legend"><span><i class="lg done"></i>Hoàn thành</span><span><i class="lg review"></i>Cần xem lại</span><span><i class="lg current"></i>Đang học</span><span><i class="lg locked"></i>Chưa mở</span></div></div><ol class="path"></ol></section>`);
+ const sec=el(`<section class="block road-sec"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><span class="eyebrow">Lộ trình của ${esc(S.name||"bạn")}</span><h2 style="font-size:22px">Lộ trình Sơ cấp · ${passed}/${LESSONS.length} bài đạt</h2></div><div class="road-legend"><span><i class="lg done"></i>Hoàn thành</span><span><i class="lg review"></i>Cần xem lại</span><span><i class="lg current"></i>Đang học</span><span><i class="lg locked"></i>Chưa mở</span></div></div><ol class="path"></ol></section>`);
  const ol=sec.querySelector(".path");
  LESSONS.forEach((L,i)=>{
   const st=lessonStatus(i),t=lessonTotal(L),sp=spScore(L),qa=qaScore(L);
@@ -986,7 +1020,7 @@ function scorePanel(L){
  const msg=t>=GOOD?"Bạn đã hoàn thành bài này. Có thể chuyển sang bài tiếp theo.":t>=PASS?`Đã đạt ${PASS}%, bài tiếp theo đã mở. Nên luyện thêm để đạt ${GOOD}% (Hoàn thành).`:`Cần đạt ${PASS}% để mở bài tiếp theo. Hãy luyện nói đủ ${L.speak.length} câu mẫu (phần 3) và làm phần 4. Nghe & trả lời.`;
  return el(`<div class="score-panel ${st}" id="score-panel"><div class="sp-row"><div class="sp-it"><small>Luyện nói (${spCount(L)}/${L.speak.length} câu)</small><b>${sp}%</b></div><div class="sp-it"><small>Nghe & trả lời</small><b>${qa}%</b></div><div class="sp-it tot"><small>Điểm bài</small><b>${t}%</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></div></div><span class="pn-bar"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><p>${msg}</p></div>`);
 }
-function refreshScore(L){const o=document.getElementById("score-panel");if(o)o.replaceWith(scorePanel(L));renderRoad(L.id);}
+function refreshScore(L){const o=document.getElementById("score-panel");if(o)o.replaceWith(scorePanel(L));renderRoad(L.id);pushProfile();}
 
 /* ============ HƯỚNG DẪN ============ */
 function guide(){
@@ -1007,6 +1041,107 @@ function guide(){
  g.querySelector("#preview-all").onchange=e=>{S.preview=e.target.checked;save();renderRoad();toast(S.preview?"Đã mở tất cả bài để xem trước.":"Đã tắt chế độ xem trước. Bài học mở theo điểm.");};
 }
 
+/* ============ TÊN HỌC VIÊN & DANH SÁCH ONLINE ============
+   Danh sách online cần một máy chủ dùng chung: app dùng Firebase Realtime Database (miễn phí).
+   Dán cấu hình Firebase của bạn vào FIREBASE_CONFIG bên dưới. Để null thì app chạy một mình, chỉ hiện bạn. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAuaDuz2xPgkT1aAjdbEgmD__WhPgWBVLI",
+  authDomain: "hoctienganh-f234c.firebaseapp.com",
+  databaseURL: "https://hoctienganh-f234c-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hoctienganh-f234c",
+  storageBucket: "hoctienganh-f234c.firebasestorage.app",
+  messagingSenderId: "651129171441",
+  appId: "1:651129171441:web:aece70bfe4cce58e6fe850"
+};
+/* Ví dụ:
+const FIREBASE_CONFIG = {
+  apiKey: "…", authDomain: "….firebaseapp.com", databaseURL: "https://…-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "…", appId: "…"
+};
+*/
+const RANDOM_NAMES=["Sóc Nâu","Gấu Trúc","Cú Mèo","Thỏ Trắng","Cá Heo","Chim Sẻ","Mèo Mun","Hươu Sao","Voi Con","Rùa Xanh","Cáo Nhỏ","Chim Cánh Cụt"];
+function randomName(){return RANDOM_NAMES[Math.floor(Math.random()*RANDOM_NAMES.length)]+" "+(10+Math.floor(Math.random()*90));}
+function cleanName(n){return String(n||"").replace(/\s+/g," ").trim().slice(0,30);}
+function myName(){return S.name||"bạn";}
+/* Trình độ hiện tại: "Sơ cấp 3" = đang học lộ trình (bài) số 3 của Sơ cấp */
+function myLevel(){
+ const passed=LESSONS.filter(L=>lessonTotal(L)>=PASS).length;
+ const cur=LESSONS.findIndex((L,i)=>lessonStatus(i)==="current");
+ const step=passed>=LESSONS.length?LESSONS.length:(cur>=0?cur+1:passed+1);
+ const curL=LESSONS[Math.min(step,LESSONS.length)-1];
+ return {label:passed>=LESSONS.length?"Sơ cấp ✓":"Sơ cấp "+step,step,passed,rank:passed*1000+(curL?lessonTotal(curL):0)};
+}
+/* ---- Kết nối Firebase ---- */
+const NET={on:false,uid:null,ref:null,users:{},err:null};
+function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=()=>no(new Error("load "+src));document.head.append(s);});}
+async function initOnline(){
+ if(!FIREBASE_CONFIG)return;
+ if(!/^https?:$/.test(location.protocol)||/claude|anthropic/.test(location.hostname)){NET.skip=true;renderMe();return;}
+ try{
+  const V="10.12.2",B="https://www.gstatic.com/firebasejs/"+V+"/";
+  await loadScript(B+"firebase-app-compat.js");
+  await loadScript(B+"firebase-auth-compat.js");
+  await loadScript(B+"firebase-database-compat.js");
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const cred=await firebase.auth().signInAnonymously();
+  NET.uid=cred.user.uid;
+  const db=firebase.database();
+  NET.ref=db.ref("presence/"+NET.uid);
+  db.ref(".info/connected").on("value",snap=>{
+   if(snap.val()!==true){NET.on=false;renderMe();return;}
+   NET.ref.onDisconnect().update({online:false,last:firebase.database.ServerValue.TIMESTAMP}).then(()=>{NET.on=true;pushProfile();});
+  });
+  db.ref("presence").orderByChild("rank").limitToLast(500).on("value",snap=>{NET.users=snap.val()||{};renderMe();});
+  document.addEventListener("visibilitychange",()=>{if(NET.ref&&NET.on)NET.ref.update({online:document.visibilityState==="visible",last:firebase.database.ServerValue.TIMESTAMP});});
+ }catch(e){NET.err=String(e&&e.message||e);NET.on=false;renderMe();}
+}
+function pushProfile(){
+ renderMe();
+ if(!NET.ref||!NET.on||!S.name)return;
+ const lv=myLevel();
+ NET.ref.set({name:S.name,level:lv.label,step:lv.step,passed:lv.passed,rank:lv.rank,online:document.visibilityState!=="hidden",last:firebase.database.ServerValue.TIMESTAMP}).catch(e=>{NET.err=String(e.message||e);renderMe();});
+}
+/* ---- Nút tài khoản ở góc trên bên phải ---- */
+let meOpen=false;
+function onlineList(){
+ const me=myLevel();
+ const list=Object.entries(NET.users).map(([id,u])=>({id,name:cleanName(u.name)||"Học viên",level:String(u.level||"Sơ cấp 1"),rank:Number(u.rank)||0,online:!!u.online,me:id===NET.uid}));
+ if(!list.some(u=>u.me))list.push({id:"me",name:S.name||"Bạn",level:me.label,rank:me.rank,online:true,me:true});
+ list.forEach(u=>{if(u.me){u.name=S.name||u.name;u.level=me.label;u.rank=me.rank;u.online=true;}});
+ list.sort((a,b)=>(b.online-a.online)||(b.rank-a.rank)||a.name.localeCompare(b.name,"vi"));
+ return list;
+}
+function renderMe(){
+ const w=document.getElementById("me-wrap");if(!w)return;
+ const lv=myLevel();const list=onlineList();const onN=list.filter(u=>u.online).length;
+ w.innerHTML="";
+ const btn=el(`<button type="button" class="me-btn" aria-expanded="${meOpen}" aria-haspopup="true"><span class="dot on" aria-hidden="true"></span><span class="me-t"><b>${esc(S.name||"Khách")}</b><small>${esc(lv.label)}</small></span><span class="me-n" title="Số người đang online">${onN}</span><span class="caret" aria-hidden="true">▾</span></button>`);
+ btn.onclick=e=>{e.stopPropagation();meOpen=!meOpen;renderMe();};
+ w.append(btn);
+ if(!meOpen)return;
+ const total=list.length;
+ const online=list.filter(u=>u.online),offline=list.filter(u=>!u.online);
+ const row=(u,i)=>`<li class="${u.me?"me":""}"><span class="pos">${i+1}</span><span class="dot ${u.online?"on":"off"}" title="${u.online?"Đang online":"Đang offline"}"></span><span class="nm">${esc(u.name)}${u.me?' <em>(bạn)</em>':""}</span><span class="lv">${esc(u.level)}</span></li>`;
+ const pop=el(`<div class="me-pop" role="dialog" aria-label="Học viên"><div class="me-h"><b>Học viên đang online</b><span>${onN} online · ${total} học viên</span></div><ol class="me-list">${online.map(row).join("")}</ol>${offline.length?`<details class="me-off"><summary>Đang offline (${offline.length})</summary><ol class="me-list">${offline.slice(0,50).map(row).join("")}</ol></details>`:""}${NET.skip?`<p class="me-note">Danh sách online chỉ hoạt động trên trang web chính của app (địa chỉ github.io).</p>`:!FIREBASE_CONFIG?`<p class="me-note">App chưa nối máy chủ nên chỉ hiện bạn. Khi nối Firebase, danh sách sẽ hiện mọi người đang học.</p>`:NET.err?`<p class="me-note">Chưa kết nối được máy chủ. Lỗi: ${esc(NET.err)}</p>`:!NET.on?`<p class="me-note">Đang kết nối máy chủ…</p>`:""}<div class="me-edit"><label for="me-name-in">Tên của bạn</label><div style="display:flex;gap:6px"><input type="text" id="me-name-in" maxlength="30" value="${esc(S.name||"")}" style="flex:1;min-width:0"><button class="btn sm primary" type="button">Lưu</button></div></div></div>`);
+ pop.onclick=e=>e.stopPropagation();
+ const inp=pop.querySelector("#me-name-in");
+ const saveName=()=>{const n=cleanName(inp.value)||randomName();S.name=n;save();toast("Đã đổi tên thành “"+n+"”.");pushProfile();};
+ pop.querySelector(".me-edit button").onclick=saveName;inp.onkeydown=e=>{if(e.key==="Enter")saveName();};
+ w.append(pop);
+}
+document.addEventListener("click",()=>{if(meOpen){meOpen=false;renderMe();}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&meOpen){meOpen=false;renderMe();}});
+/* ---- Thẻ nhập tên cho người mới (đặt trên lộ trình) ---- */
+function nameCard(){
+ const c=el(`<section class="name-card"><div class="teacher"><span class="av">Cô</span><div style="display:flex;flex-direction:column;gap:8px;min-width:0;flex:1"><b style="font-family:var(--f-display);font-size:19px">Chào bạn! Bạn tên là gì?</b><span class="muted" style="font-size:14px">Cô sẽ gọi bạn bằng tên này. Tên cũng hiện trong danh sách học viên online. Nếu không muốn nhập, Cô sẽ chọn cho bạn một tên vui.</span><div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="first-name" maxlength="30" placeholder="Nhập tên của bạn" autocomplete="given-name" style="flex:1;min-width:180px"><button class="btn primary" type="button" data-a="ok">Bắt đầu</button><button class="btn" type="button" data-a="rnd">Chọn tên giúp tôi</button></div></div></div></section>`);
+ const inp=c.querySelector("#first-name");
+ const done=n=>{S.name=n;save();pushProfile();toast("Chào "+n+"! Cùng bắt đầu học nhé.");say("Hello, "+n+"!",{gender:"F"});home();};
+ c.querySelector('[data-a="ok"]').onclick=()=>done(cleanName(inp.value)||randomName());
+ c.querySelector('[data-a="rnd"]').onclick=()=>{const n=randomName();inp.value=n;done(n);};
+ inp.onkeydown=e=>{if(e.key==="Enter")c.querySelector('[data-a="ok"]').click();};
+ return c;
+}
+
 /* ---- Trang chủ ---- */
 function home(){
  stopReading();renderLevels();renderRoad(null);window.scrollTo(0,0);app.innerHTML="";
@@ -1014,7 +1149,7 @@ function home(){
  const tw=todaysWords();const twDone=tw.filter(w=>S.words[w[0]]).length;
  const levelName=LEVELS.find(l=>l.id===S.level).name;
 
- if(S.level==="A")app.append(roadMap());
+ if(S.level==="A"){if(!S.name)app.append(nameCard());app.append(roadMap());}
  app.append(el(`<div class="board" style="margin-top:${S.level==="A"?28:0}px">
    <span class="eyebrow">Mục tiêu hôm nay · ${new Date().toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"numeric"})}</span>
    <h1>${S.level==="A"?"Học "+DAILY+" từ mới và 1 bài ngữ pháp":"Trình độ "+levelName}</h1>
@@ -1289,8 +1424,9 @@ function tabTeach(L,body){
  t.append(bar,el(`<p class="muted" style="margin:0;font-size:14px">Bấm vào chữ tiếng Anh <b class="say" data-say="English">màu xanh</b> để nghe riêng từ đó.</p>`));
  // Lời giảng chia theo từng ý
  const tb=el(`<div class="teach"></div>`);
- const intro=el(`<div class="teacher"><span class="av">Cô</span><p>${mhtml(L.intro)}</p></div>`);
- tb.append(intro);blocks.push({el:intro,segs:msegs(L.intro)});
+ const introTxt=S.name?L.intro.replace("Chào bạn!","Chào "+S.name+"!"):L.intro;
+ const intro=el(`<div class="teacher"><span class="av">Cô</span><p>${mhtml(introTxt)}</p></div>`);
+ tb.append(intro);blocks.push({el:intro,segs:msegs(introTxt)});
  const ol=el(`<ol class="points"></ol>`);
  L.pts.forEach(([h,x],k)=>{const li=el(`<li><b class="pt-h">${mhtml(h)}</b><p>${mhtml(x)}</p></li>`);ol.append(li);
   blocks.push({el:li,segs:[{lang:"vi",text:"Ý thứ "+ORD[k]+"."}].concat(msegs(h),msegs(x))});});
@@ -1529,7 +1665,7 @@ function tabStory(L,body){
  }
 }
 
-renderLevels();if(!S.guideSeen){S.guideSeen=1;save();guide();}else home();
+initOnline();renderLevels();if(!S.guideSeen){S.guideSeen=1;save();guide();}else home();
 </script>
 
 </body>
