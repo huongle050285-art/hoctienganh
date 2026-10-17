@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Học tiếng Anh từ sơ cấp: ngữ pháp, nghe, từ vựng mỗi ngày, luyện phát âm và nghe hiểu.">
+<meta name="description" content="Học tiếng Anh từ sơ cấp: ngữ pháp, từ vựng qua hình, nghe, luyện phát âm và nghe hiểu.">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
 <title>Lớp Tiếng Anh Mỗi Ngày</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -249,6 +249,8 @@ s.say.wrong{color:var(--bad);border-bottom:0;text-decoration:line-through;font-w
 .score-panel{margin-top:12px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .score-panel p{margin:0;font-size:14px;color:var(--muted)}
 .sp-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;align-items:start}
+.sp-row.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:560px){.sp-row.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .sp-it{display:flex;flex-direction:column}
 .sp-it small{font-size:12.5px;color:var(--muted)}
 .sp-it b{font-family:var(--f-display);font-size:22px;font-variant-numeric:tabular-nums;line-height:1.2}
@@ -263,7 +265,7 @@ s.say.wrong{color:var(--bad);border-bottom:0;text-decoration:line-through;font-w
 .guide ul,.guide ol{margin:6px 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .guide .preview-box{background:transparent;border-style:dashed;font-size:14px;color:var(--muted)}
 @media (max-width:560px){header.top{position:static}.levels{margin-left:0}}
-header.top .in{position:relative}
+header.top .in{position:relative;max-width:1040px}
 .me-wrap{position:relative;flex:none}
 .me-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:var(--board-ink);border-radius:999px;padding:4px 10px 4px 10px;cursor:pointer;max-width:220px}
 .me-btn:hover{background:rgba(255,255,255,.18)}
@@ -296,6 +298,45 @@ header.top .in{position:relative}
 .name-card{margin-top:4px;background:var(--paper);border:2px solid var(--chalk);border-radius:14px;padding:16px}
 .levels{order:2}.me-wrap{order:3;margin-left:8px}
 @media (max-width:560px){.me-wrap{order:2;margin-left:auto}.levels{order:3;width:100%}.me-t b{max-width:90px}}
+.scene{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#f4e6cf;line-height:0;user-select:none;-webkit-user-select:none}
+.scene-svg{display:block;width:100%;height:auto}
+.pmark{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:3px solid #fff;background:#1f4b42;color:#fff;font-weight:800;font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);animation:pulse 1.8s ease-in-out infinite}
+.pmark.seen{background:#3fae6a;animation:none;width:26px;height:26px;font-size:0}
+.pmark.seen::after{content:"✓";font-size:14px}
+.pmark.cur{box-shadow:0 0 0 5px rgba(243,201,74,.8)}
+.pmark.hl{background:#f3c94a;color:#1b1b1b;width:40px;height:40px;font-size:20px;animation:pulse 1s ease-in-out infinite}
+.pmark.hl::after{content:none}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.pmark,.pmark.hl{animation:none}}
+.plab{position:absolute;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:4px;background:#fff;color:#1b2a24;border:2px solid #1f4b42;border-radius:999px;padding:3px 10px 3px 7px;font-weight:800;font-size:15px;line-height:1.2;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2);white-space:nowrap}
+.plab svg{width:15px;height:15px}
+@media (max-width:560px){.plab{font-size:12.5px;padding:2px 7px 2px 5px}.plab svg{width:12px;height:12px}.pmark{width:28px;height:28px;font-size:14px}}
+.q-dot-demo{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--board);color:var(--board-ink);font-weight:800;font-size:12px;vertical-align:middle}
+.pchips{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{border:1px dashed var(--line);background:var(--bg);border-radius:999px;padding:4px 14px;font-weight:700;cursor:pointer;color:var(--muted);min-width:44px}
+.pchip.ok{border:1px solid var(--ok);background:var(--ok-soft);color:var(--ok)}
+.pdetail{display:flex;flex-direction:column;gap:4px;border-top:1px dashed var(--line);padding-top:10px}
+.pd-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.pd-w{font-family:var(--f-display);font-size:26px;text-transform:capitalize}
+.tabs button:last-child:nth-child(odd){grid-column:1 / -1}
+.keyws{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.kw-h{width:100%;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.keyw{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;background:var(--sub);border:1px solid transparent;border-bottom:1px solid transparent;border-radius:12px;padding:6px 14px;cursor:pointer;line-height:1.25}
+.keyw:hover{border-color:var(--sub-ink);background:var(--sub)}
+.kw-en{font-size:21px;font-weight:800;color:var(--sub-ink)}
+.kw-vi{font-size:13px;color:var(--muted)}
+
+.scene .hot{cursor:pointer;transition:filter .15s}
+.scene .hot:hover,.scene .hot:focus{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 4px #f39c12) drop-shadow(0 0 1px #e67e22)}
+.scene.quiz:not(.pickable) .hot{cursor:default}
+.scene.quiz:not(.pickable) .hot:hover{filter:none}
+.ptemp{position:absolute;transform:translate(-50%,-100%);background:#1f2d27;color:#fff;border-radius:10px;padding:5px 10px;font-size:14px;line-height:1.3;white-space:nowrap;pointer-events:none;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.ptemp b{color:#f3c94a;font-size:16px}
+.pmark.good{background:#3fae6a;animation:none;width:34px;height:34px}
+.pmark.good::after{content:none}
+.pact{display:flex;flex-direction:column;gap:8px}
+.pact small{font-weight:500;opacity:.85}
+
 .hidden-vi .bubble .vi,.hidden-vi .ex-item .vi{display:none}
 .practice{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
 .practice .target{font-size:clamp(18px,4.5vw,22px);font-weight:600;font-family:var(--f-display)}
@@ -967,11 +1008,14 @@ if(S.story){LESSONS.forEach(L=>{if(S.story[L.id]!=null&&S.qa[L.id]==null)S.qa[L.
 function spScore(L){const m=S.sp[L.id]||{};return Math.round(L.speak.reduce((a,x)=>a+(m[x]||0),0)/L.speak.length);}
 function spCount(L){const m=S.sp[L.id]||{};return L.speak.filter(x=>m[x]!=null).length;}
 function qaScore(L){return S.qa[L.id]||0;}
-function lessonTotal(L){return Math.round((spScore(L)+qaScore(L))/2);}
+function picScore(L){return L.pic?picScores(L).avg:0;}
+function lessonTotal(L){return L.pic?Math.round((picScore(L)+spScore(L)+qaScore(L))/3):Math.round((spScore(L)+qaScore(L))/2);}
+S.passed=S.passed||{};
+function everPassed(L){return lessonTotal(L)>=PASS||!!S.passed[L.id];}
 function lessonStatus(i){
- const t=lessonTotal(LESSONS[i]);
- if(t>=GOOD)return "done";if(t>=PASS)return "review";
- return (S.preview||i===0||lessonTotal(LESSONS[i-1])>=PASS)?"current":"locked";
+ const L=LESSONS[i],t=lessonTotal(L);
+ if(t>=GOOD)return "done";if(t>=PASS||S.passed[L.id])return "review";
+ return (S.preview||i===0||everPassed(LESSONS[i-1]))?"current":"locked";
 }
 const ST_LABEL={done:"Hoàn thành",review:"Cần xem lại",current:"Đang học",locked:"Chưa mở"};
 const LOCK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -1008,7 +1052,7 @@ function roadMap(){
  LESSONS.forEach((L,i)=>{
   const st=lessonStatus(i),t=lessonTotal(L),sp=spScore(L),qa=qaScore(L);
   const btn=st==="locked"?`<span class="muted" style="font-size:14px">Đạt ${PASS}% bài ${i} để mở</span>`:`<span class="btn sm ${st==="current"?"primary":""}">${st==="current"?(t>0?"Học tiếp":"Vào học"):st==="review"?"Xem lại":"Ôn lại"}</span>`;
-  const li=el(`<li class="pn ${st}"><span class="pn-dot">${dotHtml(st,i)}</span><button type="button" class="pn-card" ${st==="locked"?'aria-disabled="true"':""}><span class="pn-top"><b>${i+1}. ${esc(L.title)}</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></span><small>${esc(L.sub)}</small>${st==="locked"?"":`<span class="pn-bar" aria-label="Điểm ${t}%"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><span class="pn-meta">Tổng <b>${t}%</b> · Luyện nói ${sp}% · Nghe & trả lời ${qa}%</span>`}<span class="pn-act">${btn}</span></button></li>`);
+  const li=el(`<li class="pn ${st}"><span class="pn-dot">${dotHtml(st,i)}</span><button type="button" class="pn-card" ${st==="locked"?'aria-disabled="true"':""}><span class="pn-top"><b>${i+1}. ${esc(L.title)}</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></span><small>${esc(L.sub)}</small>${st==="locked"?"":`<span class="pn-bar" aria-label="Điểm ${t}%"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><span class="pn-meta">Tổng <b>${t}%</b> · ${L.pic?`Hình ${picScore(L)}% · `:""}Nói ${sp}% · Hỏi đáp ${qa}%</span>`}<span class="pn-act">${btn}</span></button></li>`);
   li.querySelector(".pn-card").onclick=()=>openLesson(L.id);
   ol.append(li);
  });
@@ -1016,11 +1060,11 @@ function roadMap(){
 }
 /* Bảng điểm trong trang bài học */
 function scorePanel(L){
- const sp=spScore(L),qa=qaScore(L),t=lessonTotal(L),i=LESSONS.indexOf(L),st=lessonStatus(i);
- const msg=t>=GOOD?"Bạn đã hoàn thành bài này. Có thể chuyển sang bài tiếp theo.":t>=PASS?`Đã đạt ${PASS}%, bài tiếp theo đã mở. Nên luyện thêm để đạt ${GOOD}% (Hoàn thành).`:`Cần đạt ${PASS}% để mở bài tiếp theo. Hãy luyện nói đủ ${L.speak.length} câu mẫu (phần 3) và làm phần 4. Nghe & trả lời.`;
- return el(`<div class="score-panel ${st}" id="score-panel"><div class="sp-row"><div class="sp-it"><small>Luyện nói (${spCount(L)}/${L.speak.length} câu)</small><b>${sp}%</b></div><div class="sp-it"><small>Nghe & trả lời</small><b>${qa}%</b></div><div class="sp-it tot"><small>Điểm bài</small><b>${t}%</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></div></div><span class="pn-bar"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><p>${msg}</p></div>`);
+ const sp=spScore(L),qa=qaScore(L),t=lessonTotal(L),i=LESSONS.indexOf(L),st=lessonStatus(i),pc=L.pic?picScores(L):null;
+ const msg=t>=GOOD?"Bạn đã hoàn thành bài này. Có thể chuyển sang bài tiếp theo.":t>=PASS?`Đã đạt ${PASS}%, bài tiếp theo đã mở. Nên luyện thêm để đạt ${GOOD}% (Hoàn thành).`:`Cần đạt ${PASS}% để mở bài tiếp theo. Hãy làm đủ ${L.pic?"3 phần: Từ vựng qua hình (2 hoạt động), Luyện nói và Nghe & trả lời":"Luyện nói và Nghe & trả lời"}.`;
+ return el(`<div class="score-panel ${st}" id="score-panel"><div class="sp-row ${pc?"four":""}">${pc?`<div class="sp-it"><small>Từ vựng qua hình</small><b>${pc.avg}%</b></div>`:""}<div class="sp-it"><small>Luyện nói (${spCount(L)}/${L.speak.length} câu)</small><b>${sp}%</b></div><div class="sp-it"><small>Nghe & trả lời</small><b>${qa}%</b></div><div class="sp-it tot"><small>Điểm bài</small><b>${t}%</b><span class="pill2 ${st}">${ST_LABEL[st]}</span></div></div><span class="pn-bar"><i style="width:${t}%"></i><em style="left:${PASS}%"></em></span><p>${msg}</p></div>`);
 }
-function refreshScore(L){const o=document.getElementById("score-panel");if(o)o.replaceWith(scorePanel(L));renderRoad(L.id);pushProfile();}
+function refreshScore(L){if(lessonTotal(L)>=PASS&&!S.passed[L.id]){S.passed[L.id]=1;save();}const o=document.getElementById("score-panel");if(o)o.replaceWith(scorePanel(L));renderRoad(L.id);pushProfile();}
 
 /* ============ HƯỚNG DẪN ============ */
 function guide(){
@@ -1030,8 +1074,8 @@ function guide(){
   <div class="board"><span class="eyebrow">Hướng dẫn sử dụng</span><h1>Học cùng Cô mỗi ngày</h1><span style="color:#b9d3cb">Đọc 2 phút trước khi bắt đầu để học hiệu quả hơn.</span></div>
   <section><h2>1. App chạy trên mọi thiết bị</h2><p>Điện thoại, máy tính bảng hay máy tính đều dùng được, chỉ cần trình duyệt và Internet.</p><ul><li><b>iPhone, iPad:</b> mở bằng <b>Safari</b>.</li><li><b>Android và máy tính:</b> mở bằng <b>Chrome</b> hoặc <b>Edge</b>.</li><li>Không mở link trong Zalo hay Messenger vì micro sẽ bị chặn.</li><li>Mẹo: trong trình duyệt, bấm nút chia sẻ hoặc menu ⋮ rồi chọn <b>“Thêm vào màn hình chính”</b> để mở app như một ứng dụng.</li></ul></section>
   <section><h2>2. Cho phép dùng micro</h2><p>Lần đầu bấm nút micro, trình duyệt sẽ hỏi quyền dùng micro. Hãy chọn <b>“Cho phép”</b> (hoặc <b>“Đồng ý”</b>).</p><ul><li><b>Lỡ bấm chặn trên iPhone:</b> bấm “Aa” cạnh địa chỉ web › Cài đặt trang web › Micrô › Cho phép. Và bật Cài đặt › Cài đặt chung › Bàn phím › Đọc chính tả.</li><li><b>Lỡ bấm chặn trên Android, máy tính:</b> bấm biểu tượng ổ khóa cạnh địa chỉ web › Quyền › Micrô › Cho phép, rồi tải lại trang.</li><li>Nói ở nơi yên tĩnh, to và rõ, cầm điện thoại cách miệng khoảng một gang tay.</li></ul></section>
-  <section><h2>3. Học theo lộ trình</h2><p>Học lần lượt từ bài 1 đến bài 8, theo sơ đồ lộ trình ở đầu app. Hoàn thành bài trước rồi mới chuyển sang bài sau.</p><p>Mỗi bài có 4 phần, làm theo thứ tự:</p><ol><li><b>Bài giảng:</b> nghe Cô giảng, xem sơ đồ và ví dụ.</li><li><b>Nghe:</b> nghe câu ví dụ và hội thoại theo chủ đề.</li><li><b>Luyện nói:</b> đọc các câu mẫu, máy chấm phát âm.</li><li><b>Nghe & trả lời:</b> nghe đoạn văn rồi trả lời câu hỏi của Cô.</li></ol></section>
-  <section><h2>4. Cô chấm điểm thế nào?</h2><ul><li><b>Luyện nói (50%):</b> trung bình điểm phát âm cao nhất của các câu mẫu có dấu ★.</li><li><b>Nghe & trả lời (50%):</b> đúng ngay được 100%, đúng ở lần thứ hai được 75%, đúng sau gợi ý được 50%, không đúng được 0%.</li></ul><div class="road-legend" style="margin-top:8px"><span><i class="lg done"></i>Hoàn thành: từ ${GOOD}%</span><span><i class="lg review"></i>Cần xem lại: ${PASS}–${GOOD-1}%</span><span><i class="lg current"></i>Đang học: dưới ${PASS}%</span><span><i class="lg locked"></i>Chưa mở</span></div><p>Đạt từ <b>${PASS}%</b> thì bài tiếp theo được mở. Bạn có thể làm lại nhiều lần, app lưu điểm cao nhất.</p></section>
+  <section><h2>3. Học theo lộ trình</h2><p>Học lần lượt từ bài 1 đến bài 8, theo sơ đồ lộ trình ở đầu app. Hoàn thành bài trước rồi mới chuyển sang bài sau.</p><p>Mỗi bài có 5 phần, làm theo thứ tự:</p><ol><li><b>Bài giảng:</b> nghe Cô giảng, xem sơ đồ và ví dụ.</li><li><b>Từ vựng qua hình:</b> học 5 từ trong tranh, rồi luyện Phản xạ nghe (bấm vào hình) và trả lời bằng giọng nói.</li><li><b>Nghe:</b> nghe câu ví dụ và hội thoại theo chủ đề.</li><li><b>Luyện nói:</b> đọc các câu mẫu, máy chấm phát âm.</li><li><b>Nghe & trả lời:</b> nghe đoạn văn rồi trả lời câu hỏi của Cô.</li></ol></section>
+  <section><h2>4. Cô chấm điểm thế nào?</h2><ul><li>Điểm bài gồm <b>3 phần bằng nhau</b>: Từ vựng qua hình, Luyện nói, Nghe & trả lời.</li><li><b>Từ vựng qua hình:</b> trung bình của Phản xạ nghe và Trả lời bằng giọng nói.</li><li><b>Luyện nói:</b> trung bình điểm phát âm cao nhất của các câu mẫu có dấu ★.</li><li><b>Các phần Cô hỏi:</b> đúng ngay được 100%, đúng ở lần thứ hai được 75%, đúng sau gợi ý (lần ba) được 50%, không đúng được 0%.</li></ul><div class="road-legend" style="margin-top:8px"><span><i class="lg done"></i>Hoàn thành: từ ${GOOD}%</span><span><i class="lg review"></i>Cần xem lại: ${PASS}–${GOOD-1}%</span><span><i class="lg current"></i>Đang học: dưới ${PASS}%</span><span><i class="lg locked"></i>Chưa mở</span></div><p>Đạt từ <b>${PASS}%</b> thì bài tiếp theo được mở. Bạn có thể làm lại nhiều lần, app lưu điểm cao nhất.</p></section>
   <section><h2>5. Luyện nghe và nói thật nhiều</h2><p>App tập trung vào kỹ năng <b>nghe</b> và <b>nói</b>. Muốn giỏi, hãy chịu khó:</p><ul><li>Nghe mỗi câu nhiều lần, nghe chậm trước rồi nghe tốc độ tự nhiên.</li><li>Nói to theo mẫu, đừng ngại sai. Sai thì nghe lại và nói lại.</li><li>Học đều mỗi ngày 15–20 phút, tốt hơn học dồn một lần.</li><li>Dùng thêm mục <b>Trò chuyện với Cô</b> để luyện phản xạ.</li></ul></section>
   <section><h2>6. Tiến độ học</h2><p>Điểm và tiến độ được lưu trên trình duyệt của máy này. Nếu đổi máy, xoá dữ liệu trình duyệt hay dùng chế độ ẩn danh, tiến độ sẽ bắt đầu lại từ đầu.</p></section>
   <section class="preview-box"><label style="display:flex;gap:10px;align-items:flex-start;cursor:pointer"><input type="checkbox" id="preview-all" style="margin-top:4px" ${S.preview?"checked":""}> <span><b>Chế độ xem trước</b> (dành cho người soạn bài): mở tất cả bài mà không cần đạt điểm.</span></label></section>
@@ -1378,16 +1422,17 @@ let curTab="teach";
 function lesson(id){
  stopReading();const L=LESSONS.find(l=>l.id===id),idx=LESSONS.indexOf(L);
  if(lessonStatus(idx)==="locked"){openLesson(id);return;}
- renderRoad(id);window.scrollTo(0,0);app.innerHTML="";
+ renderLevels();renderRoad(id);window.scrollTo(0,0);app.innerHTML="";
  const back=el(`<button class="back" type="button">← Về trang chính</button>`);back.onclick=home;app.append(back);
  app.append(el(`<div class="board" style="margin-top:12px"><span class="eyebrow">Bài ${idx+1} / ${LESSONS.length} · Sơ cấp</span><h1>${L.title}</h1><span style="color:#b9d3cb">${esc(L.sub)}</span></div>`));
  app.append(scorePanel(L));
  const tabs=el(`<div class="tabs" role="tablist"></div>`);
- const T=[["teach","1. Bài giảng"],["listen","2. Nghe"],["speak","3. Luyện nói"],["story","4. Nghe & trả lời"]];
+ const T=[["teach","Bài giảng"],L.pic?["pic","Từ vựng qua hình"]:null,["listen","Nghe"],["speak","Luyện nói"],["story","Nghe & trả lời"]].filter(Boolean).map((x,i)=>[x[0],(i+1)+". "+x[1]]);
+ if(!T.some(x=>x[0]===curTab))curTab="teach";
  const body=el(`<div></div>`);
  T.forEach(([k,n])=>{const b=el(`<button type="button" role="tab" aria-selected="${curTab===k}">${n}</button>`);b.onclick=()=>{curTab=k;lesson(id);};tabs.append(b);});
  app.append(tabs,body);
- const TABF={teach:tabTeach,listen:tabListen,speak:tabSpeak,story:tabStory};(TABF[curTab]||tabTeach)(L,body);
+ const TABF={teach:tabTeach,pic:tabPic,listen:tabListen,speak:tabSpeak,story:tabStory};(TABF[curTab]||tabTeach)(L,body);
  const nav=el(`<div class="row" style="justify-content:space-between;margin-top:28px"></div>`);
  const ti=T.findIndex(t=>t[0]===curTab);
  if(ti>0){const p=el(`<button class="btn" type="button">← ${T[ti-1][1]}</button>`);p.onclick=()=>{curTab=T[ti-1][0];lesson(id);};nav.append(p);}else nav.append(el("<span></span>"));
@@ -1532,6 +1577,431 @@ function tabSpeak(L,body){
  body.append(t);
 }
 
+/* ============ TRANH TỪ VỰNG (vẽ bằng SVG, khung 800 × 520) ============
+   data-obj = đồ vật cần học (5 cái mỗi tranh); data-x = đồ vật khác để ôn từ (rê/chạm vào sẽ sáng viền, bấm sẽ đọc). */
+const SV=(label,inner)=>`<svg viewBox="0 0 800 520" class="scene-svg" role="img" aria-label="${label}">${inner}</svg>`;
+const range=n=>Array.from({length:n},(_,i)=>i);
+/* Người: x = giữa, y = chân. o: shirt, pants, skin, hair, long (tóc dài), skirt, arms, legs, s (tỉ lệ) */
+function person(x,y,o={}){
+ const s=o.s||1,sk=o.skin||"#f2c79a",sh=o.shirt||"#3b7dd8",pa=o.pants||"#34495e",hr=o.hair||"#3a2716";
+ const P=(dx,dy)=>`${x+dx*s},${y-dy*s}`;
+ const L=(a,b,c,w=9)=>`<path d="M${P(...a)} L${P(...b)}${c?` L${P(...c)}`:""}" stroke="${w===9?sk:pa}" stroke-width="${w*s}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+ const leg=(a,b,c)=>`<path d="M${P(...a)} L${P(...b)}${c?` L${P(...c)}`:""}" stroke="${pa}" stroke-width="${11*s}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+ const arm=(a,b,c)=>`<path d="M${P(...a)} L${P(...b)}${c?` L${P(...c)}`:""}" stroke="${sh}" stroke-width="${9*s}" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="${x+(c||b)[0]*s}" cy="${y-(c||b)[1]*s}" r="${5*s}" fill="${sk}"/>`;
+ const legs={stand:leg([-8,66],[-9,4])+leg([8,66],[9,4]),
+  run:leg([-6,66],[-26,36],[-18,4])+leg([6,66],[22,34],[34,10]),
+  kick:leg([-6,66],[-10,4])+leg([6,66],[30,38],[44,26]),
+  sit:leg([-8,66],[-34,64],[-34,10])+leg([8,66],[-22,64],[-22,10])}[o.legs||"stand"];
+ const arms={down:arm([-16,112],[-22,72])+arm([16,112],[22,72]),
+  run:arm([-16,112],[-34,90],[-24,72])+arm([16,112],[30,124],[42,108]),
+  book:arm([-16,112],[-14,84],[2,92])+arm([16,112],[16,84],[4,92]),
+  wave:arm([-16,112],[-22,72])+arm([16,112],[34,136],[38,160]),
+  point:arm([-16,112],[-22,72])+arm([16,112],[44,118],[66,126]),
+  eat:arm([-16,112],[-22,72])+arm([16,112],[24,94],[10,122])}[o.arms||"down"];
+ const body=o.skirt?`<path d="M${P(-16,118)} L${P(16,118)} L${P(24,58)} L${P(-24,58)} Z" fill="${sh}"/>`:`<rect x="${x-16*s}" y="${y-118*s}" width="${32*s}" height="${54*s}" rx="${8*s}" fill="${sh}"/>`;
+ const hx=x,hy=y-136*s;
+ const hair=o.long?`<path d="M${hx-18*s},${hy+16*s} Q${hx-20*s},${hy-20*s} ${hx},${hy-19*s} Q${hx+20*s},${hy-20*s} ${hx+18*s},${hy+16*s} L${hx+12*s},${hy-2*s} L${hx-12*s},${hy-2*s} Z" fill="${hr}"/>`:`<path d="M${hx-16*s},${hy-2*s} Q${hx-16*s},${hy-20*s} ${hx},${hy-19*s} Q${hx+16*s},${hy-20*s} ${hx+16*s},${hy-2*s} Q${hx},${hy-10*s} ${hx-16*s},${hy-2*s} Z" fill="${hr}"/>`;
+ const face=o.sleep?`<path d="M${hx-8*s},${hy} q3,3 6,0 M${hx+2*s},${hy} q3,3 6,0" stroke="#2b2b2b" stroke-width="${2*s}" fill="none"/>`:`<circle cx="${hx-6*s}" cy="${hy}" r="${2.2*s}" fill="#2b2b2b"/><circle cx="${hx+6*s}" cy="${hy}" r="${2.2*s}" fill="#2b2b2b"/><path d="M${hx-5*s},${hy+7*s} Q${hx},${hy+11*s} ${hx+5*s},${hy+7*s}" stroke="#a0522d" stroke-width="${2*s}" fill="none"/>`;
+ return legs+body+arms+`<rect x="${x-5*s}" y="${y-124*s}" width="${10*s}" height="${8*s}" fill="${sk}"/><circle cx="${hx}" cy="${hy}" r="${17*s}" fill="${sk}"/>`+hair+face;
+}
+const sun=(x,y)=>`<g data-x="sun"><circle cx="${x}" cy="${y}" r="30" fill="#ffd34d"/>${range(8).map(i=>{const a=i*Math.PI/4;return `<line x1="${x+Math.cos(a)*38}" y1="${y+Math.sin(a)*38}" x2="${x+Math.cos(a)*50}" y2="${y+Math.sin(a)*50}" stroke="#ffc21a" stroke-width="5" stroke-linecap="round"/>`;}).join("")}</g>`;
+const cloud=(x,y,s=1)=>`<g data-x="cloud"><ellipse cx="${x}" cy="${y}" rx="${46*s}" ry="${20*s}" fill="#fff"/><circle cx="${x-18*s}" cy="${y-10*s}" r="${20*s}" fill="#fff"/><circle cx="${x+14*s}" cy="${y-14*s}" r="${24*s}" fill="#fff"/></g>`;
+const treeG=(x,y,key="tree",s=1)=>`<g data-x="${key}"><rect x="${x-10*s}" y="${y-100*s}" width="${20*s}" height="${100*s}" fill="#8a5a33"/><circle cx="${x}" cy="${y-130*s}" r="${52*s}" fill="#5aa04a"/><circle cx="${x-36*s}" cy="${y-104*s}" r="${30*s}" fill="#4f9441"/><circle cx="${x+36*s}" cy="${y-106*s}" r="${32*s}" fill="#63ab52"/></g>`;
+const catSit=(x,y,c="#f0a04b",d="#d9822f")=>`<path d="M${x+26},${y+14} C${x+64},${y+8} ${x+64},${y-24} ${x+50},${y-30}" stroke="${d}" stroke-width="9" fill="none" stroke-linecap="round"/><ellipse cx="${x}" cy="${y+10}" rx="34" ry="19" fill="${c}"/><circle cx="${x-32}" cy="${y-10}" r="19" fill="${c}"/><path d="M${x-48},${y-22} L${x-46},${y-42} L${x-32},${y-28} Z M${x-30},${y-28} L${x-18},${y-42} L${x-16},${y-21} Z" fill="${c}"/>`;
+const SCENES={
+bedroom:SV("Tranh phòng ngủ",`
+ <rect width="800" height="380" fill="#f4e6cf"/>
+ <g stroke="#ead6b6" stroke-width="2">${range(16).map(i=>`<line x1="${25+i*50}" y1="0" x2="${25+i*50}" y2="372"/>`).join("")}</g>
+ <g data-x="floor"><rect y="380" width="800" height="140" fill="#c99561"/>
+ <g stroke="#b47f4b" stroke-width="3"><line x1="0" y1="415" x2="800" y2="415"/><line x1="0" y1="455" x2="800" y2="455"/><line x1="0" y1="495" x2="800" y2="495"/><line x1="160" y1="380" x2="160" y2="415"/><line x1="420" y1="415" x2="420" y2="455"/><line x1="610" y1="380" x2="610" y2="415"/><line x1="270" y1="455" x2="270" y2="495"/><line x1="700" y1="455" x2="700" y2="495"/></g></g>
+ <rect y="370" width="800" height="12" fill="#e9d6b8"/>
+ <g data-x="window"><rect x="90" y="55" width="150" height="130" rx="6" fill="#bfe2f4" stroke="#8a6a4a" stroke-width="8"/><line x1="165" y1="55" x2="165" y2="185" stroke="#8a6a4a" stroke-width="6"/><line x1="90" y1="120" x2="240" y2="120" stroke="#8a6a4a" stroke-width="6"/><circle cx="125" cy="88" r="14" fill="#fff6c9"/></g>
+ <g data-x="door"><rect x="660" y="138" width="112" height="242" rx="5" fill="#9a6a42"/><rect x="674" y="154" width="84" height="88" rx="4" fill="#ad7d53"/><rect x="674" y="256" width="84" height="108" rx="4" fill="#ad7d53"/><circle cx="676" cy="262" r="7" fill="#f0c95a"/></g>
+ <g data-obj="clock"><circle cx="470" cy="110" r="40" fill="#fff" stroke="#34495e" stroke-width="7"/>${range(12).map(i=>{const a=i*Math.PI/6;return `<line x1="${470+Math.sin(a)*28}" y1="${110-Math.cos(a)*28}" x2="${470+Math.sin(a)*33}" y2="${110-Math.cos(a)*33}" stroke="#34495e" stroke-width="3"/>`;}).join("")}<line x1="470" y1="110" x2="470" y2="84" stroke="#34495e" stroke-width="5" stroke-linecap="round"/><line x1="470" y1="110" x2="489" y2="120" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/><circle cx="470" cy="110" r="4" fill="#34495e"/></g>
+ <g data-x="bed"><rect x="28" y="196" width="34" height="186" rx="8" fill="#7a5034"/><rect x="40" y="318" width="305" height="44" rx="6" fill="#8c5d3b"/><rect x="50" y="360" width="12" height="20" fill="#6e4528"/><rect x="326" y="360" width="12" height="20" fill="#6e4528"/><rect x="58" y="288" width="285" height="40" rx="12" fill="#ffffff"/><rect x="160" y="284" width="185" height="50" rx="12" fill="#5b8fd6"/><path d="M160 300 H345" stroke="#4a7bc0" stroke-width="4"/></g>
+ <g data-x="pillow"><ellipse cx="104" cy="284" rx="40" ry="16" fill="#fdfdfd" stroke="#ddd" stroke-width="2"/></g>
+ <g data-obj="cat"><path d="M262 276 C300 270 300 238 286 232" stroke="#e08a36" stroke-width="9" fill="none" stroke-linecap="round"/><ellipse cx="236" cy="272" rx="34" ry="19" fill="#f0a04b"/><path d="M222 258 v22 M236 255 v26 M250 258 v22" stroke="#d9822f" stroke-width="4"/><circle cx="204" cy="252" r="19" fill="#f0a04b"/><path d="M188 240 L190 220 L204 234 Z M206 234 L218 220 L220 241 Z" fill="#f0a04b"/><path d="M192 236 L193 226 L200 233 Z M210 233 L216 226 L217 236 Z" fill="#f7c3a0"/><circle cx="197" cy="250" r="3" fill="#2b2b2b"/><circle cx="211" cy="250" r="3" fill="#2b2b2b"/><path d="M201 258 L204 261 L207 258" stroke="#2b2b2b" stroke-width="2" fill="none"/></g>
+ <g data-x="table"><rect x="364" y="298" width="112" height="14" rx="3" fill="#a5734b"/><rect x="374" y="312" width="92" height="52" fill="#b98a5f"/><line x1="374" y1="338" x2="466" y2="338" stroke="#9a6d46" stroke-width="3"/><circle cx="420" cy="326" r="3" fill="#6e4528"/><circle cx="420" cy="352" r="3" fill="#6e4528"/><rect x="378" y="364" width="9" height="16" fill="#8c5d3b"/><rect x="453" y="364" width="9" height="16" fill="#8c5d3b"/></g>
+ <g data-obj="lamp"><ellipse cx="420" cy="297" rx="20" ry="5" fill="#5f6a74"/><rect x="417" y="252" width="6" height="45" fill="#6f7a84"/><path d="M394 254 L446 254 L433 214 L407 214 Z" fill="#f6c945" stroke="#d6a52a" stroke-width="3"/></g>
+ <g data-x="chair"><rect x="574" y="226" width="13" height="154" rx="3" fill="#5f7f4c"/><rect x="498" y="318" width="92" height="13" rx="3" fill="#7fa36a"/><rect x="504" y="331" width="9" height="49" fill="#5f7f4c"/><rect x="540" y="331" width="7" height="44" fill="#4f6c3e"/></g>
+ <g data-obj="ball"><circle cx="530" cy="362" r="17" fill="#e2483d"/><path d="M514 357 C524 350 536 350 546 357" stroke="#fff" stroke-width="4" fill="none"/><path d="M515 369 C525 375 537 375 545 369" stroke="#fff" stroke-width="3" fill="none"/></g>
+ <g data-obj="dog"><path d="M650 352 C668 340 668 324 660 318" stroke="#a87a4c" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="626" cy="350" rx="26" ry="29" fill="#c79b6b"/><ellipse cx="614" cy="376" rx="10" ry="6" fill="#b88a5b"/><ellipse cx="638" cy="376" rx="10" ry="6" fill="#b88a5b"/><circle cx="626" cy="306" r="21" fill="#c79b6b"/><ellipse cx="606" cy="308" rx="8" ry="16" fill="#8a6440"/><ellipse cx="646" cy="308" rx="8" ry="16" fill="#8a6440"/><ellipse cx="626" cy="316" rx="10" ry="8" fill="#e8cfae"/><circle cx="626" cy="312" r="4" fill="#2b2b2b"/><circle cx="618" cy="300" r="3" fill="#2b2b2b"/><circle cx="634" cy="300" r="3" fill="#2b2b2b"/></g>`),
+
+living:SV("Tranh phòng khách",`
+ <rect width="800" height="380" fill="#e3eedd"/>
+ <g data-x="floor"><rect y="380" width="800" height="140" fill="#b98757"/><rect x="200" y="420" width="360" height="80" rx="40" fill="#d9a46f" opacity=".6"/></g>
+ <rect y="370" width="800" height="12" fill="#cfdcc6"/>
+ <g data-x="window"><rect x="40" y="60" width="140" height="140" rx="6" fill="#c3e6f7" stroke="#7a6a55" stroke-width="8"/><line x1="110" y1="60" x2="110" y2="200" stroke="#7a6a55" stroke-width="6"/><line x1="40" y1="130" x2="180" y2="130" stroke="#7a6a55" stroke-width="6"/></g>
+ <g data-x="picture"><rect x="230" y="80" width="120" height="86" fill="#fff" stroke="#b07b3f" stroke-width="7"/><path d="M238 158 L272 116 L298 146 L314 126 L342 158 Z" fill="#7cb76a"/><circle cx="320" cy="102" r="10" fill="#f6c945"/></g>
+ <g data-x="shelf"><rect x="500" y="150" width="150" height="10" fill="#8c5d3b"/><rect x="505" y="112" width="12" height="38" fill="#c0392b"/><rect x="519" y="118" width="12" height="32" fill="#2e86de"/><rect x="533" y="108" width="10" height="42" fill="#27ae60"/></g>
+ <g data-obj="keys"><circle cx="606" cy="136" r="9" fill="none" stroke="#c9a227" stroke-width="4"/><rect x="613" y="134" width="22" height="5" fill="#c9a227"/><rect x="628" y="138" width="4" height="7" fill="#c9a227"/><rect x="620" y="138" width="4" height="5" fill="#c9a227"/></g>
+ <g data-x="plant"><path d="M30 300 h44 l-6 80 h-32 Z" fill="#c0703a"/><path d="M52 300 C40 260 20 250 14 236 M52 300 C56 250 70 230 82 222 M52 300 C46 262 52 240 48 214" stroke="#3f8f3a" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="18" cy="238" rx="12" ry="7" fill="#4fa548"/><ellipse cx="80" cy="224" rx="12" ry="7" fill="#4fa548"/><ellipse cx="48" cy="214" rx="8" ry="12" fill="#4fa548"/></g>
+ <g data-x="sofa"><rect x="100" y="250" width="300" height="70" rx="20" fill="#d1564f"/><rect x="88" y="290" width="324" height="60" rx="16" fill="#e0675f"/><rect x="88" y="270" width="36" height="90" rx="14" fill="#c74a44"/><rect x="376" y="270" width="36" height="90" rx="14" fill="#c74a44"/><rect x="108" y="350" width="12" height="28" fill="#6e4528"/><rect x="380" y="350" width="12" height="28" fill="#6e4528"/></g>
+ <g data-obj="bag"><path d="M150 292 h70 l-6 -46 h-58 Z" fill="#7b4fb0"/><path d="M164 248 C164 226 206 226 206 248" stroke="#5e3a8c" stroke-width="6" fill="none"/><rect x="175" y="262" width="20" height="8" rx="2" fill="#f0c95a"/></g>
+ <g data-x="lamp"><rect x="461" y="160" width="6" height="218" fill="#6f7a84"/><ellipse cx="464" cy="378" rx="22" ry="6" fill="#5f6a74"/><path d="M436 168 L492 168 L480 128 L448 128 Z" fill="#f6e3a1" stroke="#d6b44a" stroke-width="3"/></g>
+ <g data-x="table"><ellipse cx="400" cy="402" rx="110" ry="16" fill="#8c5d3b"/><rect x="320" y="402" width="10" height="44" fill="#6e4528"/><rect x="470" y="402" width="10" height="44" fill="#6e4528"/></g>
+ <g data-obj="phone"><rect x="424" y="386" width="34" height="14" rx="4" fill="#2d3436" transform="rotate(-8 441 393)"/><rect x="428" y="388" width="26" height="9" rx="2" fill="#74b9ff" transform="rotate(-8 441 393)"/></g>
+ <g data-x="armchair"><rect x="530" y="250" width="120" height="70" rx="20" fill="#3f8f8a"/><rect x="520" y="300" width="140" height="56" rx="14" fill="#4aa39d"/><rect x="514" y="280" width="28" height="84" rx="12" fill="#357b77"/><rect x="638" y="280" width="28" height="84" rx="12" fill="#357b77"/><rect x="530" y="356" width="10" height="22" fill="#6e4528"/><rect x="640" y="356" width="10" height="22" fill="#6e4528"/></g>
+ <g data-obj="hat"><ellipse cx="590" cy="302" rx="40" ry="9" fill="#5a3d2b"/><path d="M566 302 C566 270 614 270 614 302 Z" fill="#7a5236"/><rect x="566" y="290" width="48" height="7" fill="#c0392b"/></g>
+ <g data-x="door"><rect x="690" y="138" width="100" height="242" rx="5" fill="#9a6a42"/><rect x="702" y="154" width="76" height="88" rx="4" fill="#ad7d53"/><rect x="702" y="256" width="76" height="108" rx="4" fill="#ad7d53"/><circle cx="704" cy="262" r="7" fill="#f0c95a"/></g>
+ <g data-obj="umbrella"><path d="M684 228 L700 228 L696 350 L688 350 Z" fill="#f39c12"/><path d="M684 252 L700 252 M685 284 L699 284 M686 316 L698 316" stroke="#e67e22" stroke-width="4"/><line x1="692" y1="350" x2="692" y2="376" stroke="#2d3436" stroke-width="4"/><path d="M692 214 v14" stroke="#2d3436" stroke-width="4"/><path d="M692 214 q0 -14 -12 -12" stroke="#2d3436" stroke-width="5" fill="none" stroke-linecap="round"/></g>`),
+
+kitchen:SV("Tranh nhà bếp",`
+ <rect width="800" height="380" fill="#fbf1de"/>
+ <g data-x="floor"><rect y="380" width="800" height="140" fill="#9fb3c6"/>${range(9).map(i=>`<line x1="${i*100}" y1="380" x2="${i*100-40}" y2="520" stroke="#8aa0b5" stroke-width="3"/>`).join("")}<line x1="0" y1="440" x2="800" y2="440" stroke="#8aa0b5" stroke-width="3"/></g>
+ <g data-x="fridge"><rect x="40" y="110" width="130" height="270" rx="12" fill="#e9eef2" stroke="#b7c3cc" stroke-width="4"/><line x1="40" y1="200" x2="170" y2="200" stroke="#b7c3cc" stroke-width="4"/><rect x="150" y="130" width="8" height="50" rx="4" fill="#9aa8b3"/><rect x="150" y="220" width="8" height="70" rx="4" fill="#9aa8b3"/></g>
+ <g data-x="window"><rect x="300" y="50" width="160" height="120" rx="6" fill="#c3e6f7" stroke="#8a6a4a" stroke-width="8"/><line x1="380" y1="50" x2="380" y2="170" stroke="#8a6a4a" stroke-width="6"/></g>
+ <g data-x="shelf"><rect x="540" y="140" width="220" height="10" fill="#8c5d3b"/><g data-x="jar"><rect x="560" y="104" width="34" height="36" rx="6" fill="#f6d7a7" stroke="#c99a5b" stroke-width="3"/><rect x="556" y="98" width="42" height="10" rx="3" fill="#c0392b"/></g></g>
+ <g data-obj="cup"><path d="M690 104 h40 l-5 36 h-30 Z" fill="#2e86de"/><path d="M730 112 q16 2 10 18 q-4 6 -12 4" stroke="#2e86de" stroke-width="5" fill="none"/></g>
+ <g data-x="counter"><rect x="520" y="260" width="270" height="120" fill="#c98b56"/><rect x="514" y="250" width="282" height="14" fill="#7f8c8d"/><rect x="536" y="282" width="110" height="80" rx="4" fill="#b67a48"/><rect x="664" y="282" width="110" height="80" rx="4" fill="#b67a48"/><circle cx="636" cy="322" r="4" fill="#6e4528"/><circle cx="674" cy="322" r="4" fill="#6e4528"/></g>
+ <g data-x="stove"><rect x="640" y="240" width="130" height="12" rx="3" fill="#2d3436"/><ellipse cx="672" cy="240" rx="18" ry="4" fill="#636e72"/><ellipse cx="736" cy="240" rx="18" ry="4" fill="#636e72"/></g>
+ <g data-obj="kettle"><path d="M716 236 C712 196 760 196 756 236 Z" fill="#e74c3c"/><path d="M756 214 l18 -10" stroke="#e74c3c" stroke-width="7" stroke-linecap="round"/><path d="M722 202 C724 184 748 184 750 202" stroke="#2d3436" stroke-width="5" fill="none"/></g>
+ <g data-x="sink"><rect x="548" y="246" width="70" height="8" rx="3" fill="#b2bec3"/><path d="M584 246 v-24 h14" stroke="#95a5a6" stroke-width="5" fill="none"/></g>
+ <g data-x="table"><rect x="220" y="300" width="250" height="14" rx="4" fill="#a5734b"/><rect x="232" y="314" width="12" height="82" fill="#8c5d3b"/><rect x="446" y="314" width="12" height="82" fill="#8c5d3b"/></g>
+ <g data-x="bowl"><path d="M262 284 h76 a38 18 0 0 1 -76 0 Z" fill="#f5f6fa" stroke="#b2bec3" stroke-width="3"/></g>
+ <g data-obj="apple"><circle cx="300" cy="276" r="17" fill="#e53935"/><path d="M300 260 q2 -10 8 -12" stroke="#6d4c41" stroke-width="3" fill="none"/><ellipse cx="310" cy="254" rx="7" ry="4" fill="#43a047"/></g>
+ <g data-x="plate"><ellipse cx="410" cy="296" rx="40" ry="7" fill="#fff" stroke="#b2bec3" stroke-width="3"/></g>
+ <g data-obj="egg"><ellipse cx="410" cy="286" rx="14" ry="10" fill="#fff"/><circle cx="410" cy="286" r="7" fill="#f9ca24"/></g>
+ <g data-obj="orange"><circle cx="350" cy="380" r="18" fill="#f39c12"/><circle cx="356" cy="372" r="3" fill="#e67e22"/><ellipse cx="350" cy="362" rx="6" ry="3" fill="#43a047"/></g>
+ <g data-x="chair"><rect x="180" y="250" width="12" height="146" fill="#7f8c8d"/><rect x="180" y="330" width="60" height="10" fill="#95a5a6"/><rect x="230" y="340" width="8" height="56" fill="#7f8c8d"/></g>`),
+
+market:SV("Tranh quầy chợ",`
+ <rect width="800" height="520" fill="#dff1fb"/>
+ ${sun(720,60)}${cloud(150,60)}
+ <g data-x="stall"><rect x="70" y="120" width="12" height="190" fill="#8c5d3b"/><rect x="718" y="120" width="12" height="190" fill="#8c5d3b"/>${range(8).map(i=>`<path d="M${60+i*85} 70 h85 v50 q-21 18 -42 0 q-21 18 -43 0 Z" fill="${i%2?"#fff":"#e74c3c"}"/>`).join("")}</g>
+ <g data-x="sign"><rect x="320" y="130" width="160" height="44" rx="6" fill="#fff8e1" stroke="#8c5d3b" stroke-width="4"/><text x="400" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#8c5d3b">MARKET</text></g>
+ <g data-x="table"><rect x="50" y="300" width="700" height="18" fill="#a5734b"/><rect x="60" y="318" width="680" height="110" fill="#c18c5d"/>${range(7).map(i=>`<line x1="${60+i*97}" y1="318" x2="${60+i*97}" y2="428" stroke="#a5734b" stroke-width="3"/>`).join("")}</g>
+ <rect y="428" width="800" height="92" fill="#cfd8dc"/>
+ <g data-x="basket"><path d="M110 300 l14 -40 h92 l14 40 Z" fill="#d4a056"/><path d="M118 280 h104 M124 266 h92" stroke="#b07d36" stroke-width="3"/></g>
+ <g data-obj="apples">${[[140,252],[166,246],[192,252],[153,234],[180,232]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="15" fill="#e53935"/><path d="M${x} ${y-14} q2 -7 6 -8" stroke="#6d4c41" stroke-width="3" fill="none"/>`).join("")}</g>
+ <g data-obj="bananas">${range(4).map(i=>`<path d="M${270+i*10} 292 C${262+i*10} 262 ${288+i*10} 240 ${318+i*10} 238 C${300+i*10} 252 ${292+i*10} 270 ${290+i*10} 292 Z" fill="#f9d423" stroke="#e0b100" stroke-width="2"/>`).join("")}</g>
+ <g data-x="box"><rect x="380" y="262" width="110" height="38" fill="#e6c08f" stroke="#b9925e" stroke-width="3"/></g>
+ <g data-obj="eggs">${[[400,258],[426,256],[452,258],[476,258]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="11" ry="14" fill="#fff8ec" stroke="#e0d2bb" stroke-width="2"/>`).join("")}</g>
+ <g data-x="plate"><ellipse cx="575" cy="296" rx="62" ry="10" fill="#fff" stroke="#b2bec3" stroke-width="3"/></g>
+ <g data-obj="fish">${[[560,284],[590,276]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="30" ry="11" fill="#7fb3d5"/><path d="M${x+28} ${y} l16 -10 v20 Z" fill="#5d9cc4"/><circle cx="${x-18}" cy="${y-2}" r="3" fill="#2b2b2b"/>`).join("")}</g>
+ <g data-x="bag"><path d="M650 300 l-6 -62 h72 l-6 62 Z" fill="#f5e6c8" stroke="#c9b38a" stroke-width="3"/></g>
+ <g data-obj="carrots">${[[662,238],[680,234],[698,238]].map(([x,y])=>`<path d="M${x-7} ${y} L${x} ${y+40} L${x+7} ${y} Z" fill="#f57c00"/><path d="M${x} ${y} l-6 -14 M${x} ${y} l0 -16 M${x} ${y} l6 -14" stroke="#43a047" stroke-width="4" stroke-linecap="round"/>`).join("")}</g>`),
+
+garden:SV("Tranh khu vườn",`
+ <rect width="800" height="520" fill="#d6effa"/>
+ ${sun(80,70)}${cloud(300,70)}${cloud(560,50,.8)}
+ <g data-x="grass"><rect y="330" width="800" height="190" fill="#8fce6b"/><path d="M0 330 Q200 310 400 330 T800 330 V340 H0 Z" fill="#7fc35b"/></g>
+ <g data-x="house"><rect x="20" y="200" width="150" height="150" fill="#f3d9b1"/><path d="M8 206 L95 130 L182 206 Z" fill="#c0392b"/><rect x="74" y="270" width="42" height="80" fill="#8c5d3b"/><rect x="34" y="230" width="34" height="30" fill="#bfe2f4" stroke="#8a6a4a" stroke-width="3"/><rect x="124" y="230" width="34" height="30" fill="#bfe2f4" stroke="#8a6a4a" stroke-width="3"/></g>
+ ${treeG(300,360,"tree",1.15)}
+ <g data-obj="bird"><ellipse cx="300" cy="190" rx="20" ry="13" fill="#2e86de"/><circle cx="318" cy="180" r="10" fill="#2e86de"/><path d="M327 180 l10 3 l-10 3 Z" fill="#f39c12"/><circle cx="320" cy="178" r="2.5" fill="#fff"/><path d="M282 186 l-14 -8 l4 14 Z" fill="#1b6fbd"/><path d="M296 186 q4 -14 14 -12" stroke="#1b6fbd" stroke-width="5" fill="none"/></g>
+ <g data-x="doghouse"><rect x="420" y="270" width="120" height="90" fill="#d35400"/><path d="M408 276 L480 220 L552 276 Z" fill="#a04000"/><path d="M455 360 v-40 a25 25 0 0 1 50 0 v40 Z" fill="#4a2a12"/></g>
+ <g data-obj="dog"><ellipse cx="480" cy="352" rx="22" ry="10" fill="#c79b6b"/><circle cx="480" cy="338" r="16" fill="#c79b6b"/><ellipse cx="465" cy="338" rx="6" ry="12" fill="#8a6440"/><ellipse cx="495" cy="338" rx="6" ry="12" fill="#8a6440"/><path d="M472 336 q3 3 6 0 M482 336 q3 3 6 0" stroke="#2b2b2b" stroke-width="2" fill="none"/><text x="508" y="318" font-family="Arial" font-size="18" font-weight="700" fill="#2c3e50">z z</text></g>
+ <g data-x="pond"><ellipse cx="640" cy="440" rx="130" ry="44" fill="#4fa3d9"/><ellipse cx="640" cy="440" rx="110" ry="32" fill="#6cb8e6"/></g>
+ <g data-obj="fish"><ellipse cx="620" cy="440" rx="24" ry="10" fill="#f39c12"/><path d="M642 440 l14 -9 v18 Z" fill="#e67e22"/><circle cx="604" cy="438" r="3" fill="#2b2b2b"/></g>
+ <g data-x="rock"><ellipse cx="720" cy="372" rx="52" ry="26" fill="#95a5a6"/><ellipse cx="708" cy="364" rx="30" ry="12" fill="#a9b6b7"/></g>
+ <g data-obj="frog"><ellipse cx="720" cy="344" rx="22" ry="14" fill="#27ae60"/><circle cx="708" cy="332" r="8" fill="#2ecc71"/><circle cx="732" cy="332" r="8" fill="#2ecc71"/><circle cx="708" cy="331" r="3" fill="#2b2b2b"/><circle cx="732" cy="331" r="3" fill="#2b2b2b"/><path d="M710 348 q10 6 20 0" stroke="#145a32" stroke-width="2" fill="none"/></g>
+ <g data-x="flowers">${[[110,430,"#e84393"],[150,445,"#fdcb6e"],[190,428,"#e17055"],[230,446,"#a29bfe"],[270,432,"#e84393"]].map(([x,y,c])=>`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+46}" stroke="#27ae60" stroke-width="4"/>${range(5).map(k=>`<circle cx="${x+Math.cos(k*1.256)*10}" cy="${y+Math.sin(k*1.256)*10}" r="7" fill="${c}"/>`).join("")}<circle cx="${x}" cy="${y}" r="5" fill="#fff3b0"/>`).join("")}</g>
+ <g data-obj="butterfly"><ellipse cx="180" cy="388" rx="14" ry="10" fill="#9b59b6" transform="rotate(-25 180 388)"/><ellipse cx="200" cy="388" rx="14" ry="10" fill="#9b59b6" transform="rotate(25 200 388)"/><ellipse cx="183" cy="400" rx="8" ry="6" fill="#c39bd3"/><ellipse cx="197" cy="400" rx="8" ry="6" fill="#c39bd3"/><rect x="188" y="382" width="4" height="22" rx="2" fill="#2c3e50"/></g>`),
+
+park:SV("Tranh công viên",`
+ <rect width="800" height="520" fill="#d6effa"/>
+ ${sun(720,70)}${cloud(220,60)}
+ <g data-x="grass"><rect y="300" width="800" height="220" fill="#8fce6b"/></g>
+ <g data-x="path"><path d="M0 470 C200 430 600 470 800 430 V485 C600 520 200 480 0 520 Z" fill="#e8d5b0"/></g>
+ ${treeG(690,370,"tree",1.1)}
+ <g data-obj="cat"><ellipse cx="660" cy="372" rx="26" ry="12" fill="#7f8c8d"/><circle cx="638" cy="364" r="12" fill="#7f8c8d"/><path d="M628 356 l2 -12 l8 8 Z M640 352 l8 -10 l2 12 Z" fill="#7f8c8d"/><path d="M632 364 q3 3 6 0 M641 364 q3 3 6 0" stroke="#2b2b2b" stroke-width="2" fill="none"/><path d="M684 374 q16 4 18 -8" stroke="#7f8c8d" stroke-width="6" fill="none" stroke-linecap="round"/><text x="600" y="340" font-family="Arial" font-size="16" font-weight="700" fill="#2c3e50">z z</text></g>
+ <g data-x="bench"><rect x="380" y="330" width="170" height="12" rx="4" fill="#a0522d"/><rect x="380" y="296" width="170" height="10" rx="4" fill="#a0522d"/><rect x="380" y="312" width="170" height="8" rx="4" fill="#a0522d"/><rect x="392" y="342" width="10" height="40" fill="#5d4037"/><rect x="528" y="342" width="10" height="40" fill="#5d4037"/></g>
+ <g data-obj="woman">${person(465,382,{shirt:"#e84393",pants:"#2d3436",long:true,hair:"#4a2c17",legs:"sit",arms:"eat",s:.9})}<path d="M474 266 l8 24 l8 -24 Z" fill="#d4a056"/><circle cx="482" cy="264" r="9" fill="#ffb6c1"/></g>
+ <g data-obj="boy">${person(110,420,{shirt:"#e74c3c",pants:"#2c3e50",legs:"kick",arms:"run",s:.85})}</g>
+ <g data-obj="ball"><circle cx="160" cy="404" r="14" fill="#fff" stroke="#2d3436" stroke-width="3"/><path d="M152 398 l8 -4 l8 4 l-3 9 h-10 Z" fill="#2d3436"/></g>
+ <g data-obj="girl">${person(270,396,{shirt:"#f1c40f",pants:"#8e44ad",long:true,hair:"#2c1b0e",skirt:true,legs:"stand",arms:"book",s:.75})}<rect x="262" y="318" width="22" height="16" rx="2" fill="#2e86de" stroke="#1b4f72" stroke-width="2"/></g>
+ <g data-obj="man">${person(330,500,{shirt:"#27ae60",pants:"#34495e",legs:"run",arms:"run",s:.75,hair:"#1e1e1e"})}</g>`),
+
+street:SV("Tranh đường phố",`
+ <rect width="800" height="520" fill="#d6effa"/>
+ ${cloud(120,50,.8)}${cloud(620,40,.9)}
+ <g data-obj="school"><rect x="20" y="150" width="180" height="230" fill="#f6d55c"/><path d="M10 156 L110 96 L210 156 Z" fill="#c0392b"/><rect x="90" y="300" width="40" height="80" fill="#8c5d3b"/>${[40,140].map(x=>`<rect x="${x}" y="190" width="40" height="34" fill="#bfe2f4" stroke="#8a6a4a" stroke-width="3"/><rect x="${x}" y="240" width="40" height="34" fill="#bfe2f4" stroke="#8a6a4a" stroke-width="3"/>`).join("")}<line x1="110" y1="96" x2="110" y2="56" stroke="#555" stroke-width="4"/><path d="M110 56 h30 v18 h-30 Z" fill="#e74c3c"/><circle cx="110" cy="128" r="12" fill="#fff" stroke="#555" stroke-width="3"/></g>
+ <g data-obj="bank"><rect x="215" y="170" width="170" height="210" fill="#dfe6e9"/><path d="M205 176 L300 126 L395 176 Z" fill="#95a5a6"/>${[232,272,312,352].map(x=>`<rect x="${x}" y="196" width="16" height="150" fill="#fff" stroke="#b2bec3" stroke-width="2"/>`).join("")}<rect x="215" y="346" width="170" height="34" fill="#b2bec3"/><circle cx="300" cy="152" r="14" fill="#f1c40f"/><text x="300" y="158" text-anchor="middle" font-family="Arial" font-weight="700" font-size="17" fill="#7d6608">$</text></g>
+ <g data-obj="supermarket"><rect x="400" y="190" width="180" height="190" fill="#55efc4"/><rect x="400" y="190" width="180" height="30" fill="#00b894"/><rect x="420" y="250" width="140" height="70" fill="#dff9fb" stroke="#00a085" stroke-width="3"/><rect x="466" y="330" width="48" height="50" fill="#81ecec" stroke="#00a085" stroke-width="3"/><path d="M450 202 h8 l6 14 h18 l4 -10" stroke="#fff" stroke-width="3" fill="none"/><circle cx="466" cy="218" r="2.5" fill="#fff"/><circle cx="480" cy="218" r="2.5" fill="#fff"/></g>
+ <g data-x="hospital"><rect x="595" y="140" width="190" height="240" fill="#fff" stroke="#dfe6e9" stroke-width="3"/>${[615,665,715].map(x=>[170,220,270].map(y=>`<rect x="${x}" y="${y}" width="34" height="30" fill="#bfe2f4"/>`).join("")).join("")}<rect x="664" y="320" width="52" height="60" fill="#bfe2f4" stroke="#b2bec3" stroke-width="3"/><rect x="680" y="104" width="20" height="56" fill="#e74c3c"/><rect x="662" y="122" width="56" height="20" fill="#e74c3c"/></g>
+ <g data-x="road"><rect y="380" width="800" height="30" fill="#b2bec3"/><rect y="410" width="800" height="110" fill="#636e72"/>${range(8).map(i=>`<rect x="${20+i*100}" y="462" width="60" height="8" fill="#fff"/>`).join("")}</g>
+ ${treeG(60,400,"tree",.8).replace('data-x="tree"','data-obj="tree"')}
+ <g data-obj="busstop"><rect x="296" y="290" width="7" height="104" fill="#2d3436"/><rect x="270" y="262" width="60" height="38" rx="6" fill="#0984e3"/><text x="300" y="288" text-anchor="middle" font-family="Arial" font-weight="700" font-size="20" fill="#fff">BUS</text></g>
+ <g data-x="car"><rect x="520" y="420" width="140" height="40" rx="12" fill="#e17055"/><path d="M548 420 l18 -28 h56 l18 28 Z" fill="#fab1a0"/><circle cx="552" cy="462" r="14" fill="#2d3436"/><circle cx="630" cy="462" r="14" fill="#2d3436"/></g>
+ <g data-x="traffic light"><rect x="742" y="300" width="8" height="96" fill="#2d3436"/><rect x="730" y="236" width="32" height="70" rx="6" fill="#2d3436"/><circle cx="746" cy="252" r="8" fill="#e74c3c"/><circle cx="746" cy="271" r="8" fill="#555"/><circle cx="746" cy="290" r="8" fill="#555"/></g>`),
+
+classroom:SV("Tranh lớp học",`
+ <rect width="800" height="380" fill="#f3ead8"/>
+ <g data-x="floor"><rect y="380" width="800" height="140" fill="#c99561"/></g>
+ <g data-x="window"><rect x="20" y="70" width="110" height="150" rx="6" fill="#c3e6f7" stroke="#8a6a4a" stroke-width="8"/><line x1="75" y1="70" x2="75" y2="220" stroke="#8a6a4a" stroke-width="6"/></g>
+ <g data-x="board"><rect x="170" y="60" width="320" height="170" rx="6" fill="#2f5d50" stroke="#8c5d3b" stroke-width="10"/><text x="210" y="125" font-family="Comic Sans MS, Arial" font-size="34" fill="#f5f6fa">Hello!</text><text x="210" y="180" font-family="Comic Sans MS, Arial" font-size="28" fill="#f5f6fa">A  B  C</text><rect x="200" y="226" width="40" height="6" fill="#fff"/></g>
+ <g data-obj="clock"><circle cx="660" cy="90" r="40" fill="#fff" stroke="#34495e" stroke-width="7"/>${range(12).map(i=>{const a=i*Math.PI/6;return `<line x1="${660+Math.sin(a)*28}" y1="${90-Math.cos(a)*28}" x2="${660+Math.sin(a)*33}" y2="${90-Math.cos(a)*33}" stroke="#34495e" stroke-width="3"/>`;}).join("")}<line x1="660" y1="90" x2="660" y2="62" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/><line x1="660" y1="90" x2="${660-Math.sin(Math.PI/3)*20}" y2="${90+Math.cos(Math.PI/3)*20}" stroke="#34495e" stroke-width="6" stroke-linecap="round"/><circle cx="660" cy="90" r="4" fill="#34495e"/></g>
+ <g data-obj="teacher">${person(540,380,{shirt:"#8e44ad",pants:"#2d3436",long:true,hair:"#3a2716",skirt:true,arms:"point",s:1.1})}</g>
+ <g data-x="desk"><rect x="600" y="290" width="170" height="14" rx="3" fill="#8c5d3b"/><rect x="612" y="304" width="146" height="76" fill="#a5734b"/></g>
+ <g data-obj="apple"><circle cx="700" cy="276" r="15" fill="#e53935"/><path d="M700 262 q2 -8 8 -10" stroke="#6d4c41" stroke-width="3" fill="none"/><ellipse cx="710" cy="252" rx="6" ry="3" fill="#43a047"/></g>
+ <g data-obj="students">${[[120,"#3498db","#2c1b0e",false],[250,"#e67e22","#5a3417",true],[380,"#16a085","#1e1e1e",false]].map(([x,c,h,l])=>`<g>${person(x,470,{shirt:c,pants:"#34495e",hair:h,long:l,arms:"down",s:.72})}</g>`).join("")}</g>
+ <g data-x="desks">${[120,250,380].map(x=>`<rect x="${x-52}" y="430" width="104" height="12" rx="3" fill="#8c5d3b"/><rect x="${x-46}" y="442" width="8" height="70" fill="#6e4528"/><rect x="${x+38}" y="442" width="8" height="70" fill="#6e4528"/>`).join("")}</g>
+ <g data-obj="bag"><path d="M226 506 h52 l-4 -40 h-44 Z" fill="#c0392b"/><path d="M238 468 C238 452 266 452 266 468" stroke="#922b21" stroke-width="5" fill="none"/></g>`)
+};
+
+/* ============ NỘI DUNG TRANH CHO 8 BÀI ============
+   Mỗi đồ vật: w (từ), vi (nghĩa), at (vị trí dấu ?), lab (vị trí nhãn), sent (câu học),
+   q (câu Cô hỏi để trả lời bằng giọng nói), lq (câu hỏi phản xạ nghe, bấm vào hình), ans (đáp án), good/ok/bad, hint. */
+const XW={bed:"cái giường",window:"cửa sổ",door:"cửa ra vào",table:"cái bàn",chair:"cái ghế",pillow:"cái gối",floor:"sàn nhà",picture:"bức tranh",shelf:"cái kệ",plant:"cây cảnh",sofa:"ghế sô-pha",lamp:"cái đèn",armchair:"ghế bành",fridge:"tủ lạnh",jar:"cái lọ",counter:"tủ bếp",stove:"bếp",sink:"bồn rửa",bowl:"cái bát",plate:"cái đĩa",sun:"mặt trời",cloud:"đám mây",stall:"sạp hàng",sign:"biển hiệu",basket:"cái giỏ",box:"cái hộp",bag:"cái túi",grass:"bãi cỏ",house:"ngôi nhà",tree:"cái cây",doghouse:"chuồng chó",pond:"cái ao",rock:"tảng đá",flowers:"những bông hoa",path:"lối đi",bench:"ghế dài",hospital:"bệnh viện",road:"con đường",car:"xe ô tô","traffic light":"đèn giao thông",board:"cái bảng",desk:"bàn giáo viên",desks:"bàn học"};
+const R=(...a)=>a; // gom regex cho dễ đọc
+const PICS={
+be:{title:"My bedroom",vi:"Phòng ngủ của tôi",scene:"bedroom",preps:[["on","ở trên"],["under","ở dưới"],["next to","bên cạnh"]],items:[
+ {k:"cat",w:"cat",vi:"con mèo",ipa:"/kæt/",at:[226,262],lab:[226,212],sent:"The cat is on the bed.",q:"Where is the cat?",ans:"It is on the bed.",good:R("\\b(it is|the cat is|cat is) on (the|a) (bed|bad)\\b"),ok:R("^on (the|a) (bed|bad)\\b"),bad:[{re:"\\b(under|next to|in) the (bed|bad)\\b",fix:"on the bed",why:"Con mèo nằm trên giường nên dùng on."},{re:"\\bit on the\\b",fix:"It is on …",why:"Thiếu is."}],hint:"Con mèo nằm trên giường. Trên là on, giường là bed."},
+ {k:"lamp",w:"lamp",vi:"cái đèn",ipa:"/læmp/",at:[420,240],lab:[420,196],sent:"The lamp is on the table.",q:"Where is the lamp?",ans:"It is on the table.",good:R("\\b(it is|the lamp is|lamp is) on the (table|desk)\\b"),ok:R("^on the (table|desk)\\b"),bad:[{re:"\\b(under|next to) the (table|desk)\\b",fix:"on the table",why:"Cái đèn đặt trên bàn nên dùng on."},{re:"\\bit on the\\b",fix:"It is on …",why:"Thiếu is."}],hint:"Cái đèn đặt trên cái bàn nhỏ. Bàn là table."},
+ {k:"clock",w:"clock",vi:"đồng hồ",ipa:"/klɒk/",at:[470,110],lab:[470,172],sent:"The clock is on the wall.",q:"Where is the clock?",ans:"It is on the wall.",good:R("\\b(it is|the clock is|clock is) on the (wall|well)\\b"),ok:R("^on the (wall|well)\\b"),bad:[{re:"\\bin the wall\\b",fix:"on the wall",why:"Đồ treo trên tường dùng on the wall."},{re:"\\bit on the\\b",fix:"It is on …",why:"Thiếu is."}],hint:"Đồng hồ treo trên tường. Tường là wall."},
+ {k:"ball",w:"ball",vi:"quả bóng",ipa:"/bɔːl/",at:[530,362],lab:[530,410],sent:"The ball is under the chair.",q:"Where is the ball?",ans:"It is under the chair.",good:R("\\b(it is|the ball is|ball is) under the chair\\b"),ok:R("^under the chair\\b"),bad:[{re:"\\bon the chair\\b",fix:"under the chair",why:"Quả bóng nằm dưới ghế nên dùng under."},{re:"\\bit under the\\b",fix:"It is under …",why:"Thiếu is."}],hint:"Quả bóng nằm dưới cái ghế. Dưới là under, ghế là chair."},
+ {k:"dog",w:"dog",vi:"con chó",ipa:"/dɒɡ/",at:[626,330],lab:[618,262],sent:"The dog is next to the door.",q:"Where is the dog?",ans:"It is next to the door.",good:R("\\b(it is|the dog is|dog is) (next to|near|beside|by) the door\\b"),ok:R("^(next to|near|beside|by) the door\\b"),bad:[{re:"\\b(on|under) the door\\b",fix:"next to the door",why:"Con chó ngồi bên cạnh cửa nên dùng next to."},{re:"\\bit next to\\b",fix:"It is next to …",why:"Thiếu is."}],hint:"Con chó ngồi bên cạnh cái cửa. Bên cạnh là next to, cửa là door."}]},
+pron:{title:"Our living room",vi:"Phòng khách nhà mình",scene:"living",preps:[["my → your","của tôi → của bạn"],["his","của anh ấy"],["her","của cô ấy"]],items:[
+ {k:"bag",w:"bag",vi:"cái túi",ipa:"/bæɡ/",at:[185,268],lab:[185,212],sent:"My bag is on the sofa.",q:"Where is my bag?",qvi:"Túi của Cô ở đâu?",ans:"Your bag is on the sofa.",good:R("\\b(your bag is|it is) on the (sofa|couch)\\b"),ok:R("^on the (sofa|couch)\\b"),bad:[{re:"\\bmy bag is\\b",fix:"Your bag is …",why:"Cô hỏi “my bag” (túi của Cô) thì bạn trả lời “your bag” (túi của Cô)."},{re:"\\b(his|her) bag\\b",fix:"Your bag",why:"Túi của Cô, khi nói với Cô thì dùng your."}],hint:"Cô hỏi túi CỦA CÔ (my bag). Bạn trả lời: Your bag is on the … Ghế sô-pha là sofa."},
+ {k:"phone",w:"phone",vi:"điện thoại",ipa:"/fəʊn/",at:[441,392],lab:[441,436],sent:"My phone is on the table.",q:"Where is my phone?",qvi:"Điện thoại của Cô ở đâu?",ans:"Your phone is on the table.",good:R("\\b(your phone is|it is) on the table\\b"),ok:R("^on the table\\b"),bad:[{re:"\\bmy phone is\\b",fix:"Your phone is …",why:"Cô hỏi “my phone” thì bạn trả lời “your phone”."}],hint:"Trả lời bằng your: Your phone is on the …"},
+ {k:"keys",w:"keys",vi:"chùm chìa khóa",ipa:"/kiːz/",at:[616,138],lab:[616,96],sent:"My keys are on the shelf.",q:"Where are my keys?",qvi:"Chìa khóa của Cô ở đâu?",ans:"Your keys are on the shelf.",good:R("\\b(your keys are|they are) on the shelf\\b"),ok:R("^on the shelf\\b"),bad:[{re:"\\b(your keys|they|it) is\\b",fix:"Your keys are …",why:"keys là số nhiều nên dùng are."},{re:"\\bmy keys\\b",fix:"Your keys",why:"Cô hỏi “my keys” thì bạn trả lời “your keys”."}],hint:"keys là số nhiều: Your keys ARE on the … Cái kệ là shelf."},
+ {k:"hat",w:"hat",vi:"cái mũ",ipa:"/hæt/",at:[590,288],lab:[590,244],sent:"Dad's hat is on the armchair. His hat is on the armchair.",q:"Where is Dad's hat?",qvi:"Mũ của bố ở đâu?",ans:"His hat is on the armchair.",good:R("\\b(his hat is|it is) on the (arm ?chair|chair)\\b"),ok:R("^on the (arm ?chair|chair)\\b"),bad:[{re:"\\bher hat\\b",fix:"His hat",why:"Bố là nam nên dùng his."},{re:"\\b(my|your) hat\\b",fix:"His hat",why:"Mũ của bố (anh ấy) nên dùng his."}],hint:"Mũ của bố, bố là nam: His hat is on the … Ghế bành là armchair."},
+ {k:"umbrella",w:"umbrella",vi:"cái ô",ipa:"/ʌmˈbrelə/",at:[692,290],lab:[640,190],sent:"Mom's umbrella is next to the door. Her umbrella is next to the door.",q:"Where is Mom's umbrella?",qvi:"Cái ô của mẹ ở đâu?",ans:"Her umbrella is next to the door.",good:R("\\b(her umbrella is|it is) (next to|near|beside|by) the door\\b"),ok:R("^(next to|near|beside|by) the door\\b"),bad:[{re:"\\bhis umbrella\\b",fix:"Her umbrella",why:"Mẹ là nữ nên dùng her."}],hint:"Ô của mẹ, mẹ là nữ: Her umbrella is next to the …"}]},
+art:{title:"In the kitchen",vi:"Trong nhà bếp",scene:"kitchen",preps:[["in","ở trong"],["on","ở trên"],["under","ở dưới"]],items:[
+ {k:"apple",w:"an apple",vi:"một quả táo",ipa:"/ən ˈæpəl/",at:[300,272],lab:[300,226],sent:"This is an apple. The apple is in the bowl.",q:"Where is the apple?",ans:"It is in the bowl.",good:R("\\b(it is|the apple is) in the bowl\\b"),ok:R("^in the bowl\\b"),bad:[{re:"\\bon the bowl\\b",fix:"in the bowl",why:"Quả táo nằm trong bát nên dùng in."},{re:"\\ba apple\\b",fix:"an apple",why:"apple bắt đầu bằng âm nguyên âm nên dùng an."}],hint:"Quả táo nằm trong cái bát. Trong là in, cái bát là bowl."},
+ {k:"egg",w:"an egg",vi:"một quả trứng",ipa:"/ən eɡ/",at:[410,284],lab:[430,250],sent:"This is an egg. The egg is on the plate.",q:"Where is the egg?",ans:"It is on the plate.",good:R("\\b(it is|the egg is) on the plate\\b"),ok:R("^on the plate\\b"),bad:[{re:"\\bin the plate\\b",fix:"on the plate",why:"Đồ để trên đĩa dùng on the plate."},{re:"\\ba egg\\b",fix:"an egg",why:"egg bắt đầu bằng âm nguyên âm nên dùng an."}],hint:"Quả trứng nằm trên cái đĩa. Cái đĩa là plate."},
+ {k:"cup",w:"a cup",vi:"một cái cốc",ipa:"/ə kʌp/",at:[712,120],lab:[712,78],sent:"This is a cup. The cup is on the shelf.",q:"Where is the cup?",ans:"It is on the shelf.",good:R("\\b(it is|the cup is) on the shelf\\b"),ok:R("^on the shelf\\b"),bad:[{re:"\\bin the shelf\\b",fix:"on the shelf",why:"Đồ để trên kệ dùng on the shelf."}],hint:"Cái cốc ở trên kệ. Cái kệ là shelf."},
+ {k:"kettle",w:"a kettle",vi:"một cái ấm đun nước",ipa:"/ə ˈketl/",at:[736,214],lab:[700,174],sent:"This is a kettle. The kettle is on the stove.",q:"Where is the kettle?",ans:"It is on the stove.",good:R("\\b(it is|the kettle is) on the (stove|cooker)\\b"),ok:R("^on the (stove|cooker)\\b"),bad:[],hint:"Cái ấm ở trên bếp. Bếp là stove."},
+ {k:"orange",w:"an orange",vi:"một quả cam",ipa:"/ən ˈɒrɪndʒ/",at:[350,380],lab:[350,426],sent:"This is an orange. The orange is under the table.",q:"Where is the orange?",ans:"It is under the table.",good:R("\\b(it is|the orange is) under the table\\b"),ok:R("^under the table\\b"),bad:[{re:"\\bon the table\\b",fix:"under the table",why:"Quả cam lăn xuống dưới bàn nên dùng under."},{re:"\\ba orange\\b",fix:"an orange",why:"orange bắt đầu bằng âm nguyên âm nên dùng an."}],hint:"Quả cam nằm dưới cái bàn. Dưới là under."}]},
+plural:{title:"At the market",vi:"Ở chợ",scene:"market",preps:[["in","ở trong"],["on","ở trên"],["they are","chúng ở (số nhiều)"]],items:[
+ {k:"apples",w:"apples",vi:"những quả táo",ipa:"/ˈæpəlz/",at:[166,244],lab:[166,200],sent:"These are apples. They are in the basket.",q:"Where are the apples?",ans:"They are in the basket.",good:R("\\b(they are|the apples are) in the basket\\b"),ok:R("^in the basket\\b"),bad:[{re:"\\b(it is|they is|apples is)\\b",fix:"They are …",why:"apples là số nhiều nên dùng They are."}],hint:"Táo là số nhiều nên dùng They are. Cái giỏ là basket."},
+ {k:"bananas",w:"bananas",vi:"những quả chuối",ipa:"/bəˈnɑːnəz/",at:[296,262],lab:[300,216],sent:"These are bananas. They are on the table.",q:"Where are the bananas?",ans:"They are on the table.",good:R("\\b(they are|the bananas are) on the (table|counter)\\b"),ok:R("^on the (table|counter)\\b"),bad:[{re:"\\b(it is|they is|bananas is)\\b",fix:"They are …",why:"bananas là số nhiều nên dùng They are."}],hint:"Chuối để trên bàn: They are on the …"},
+ {k:"eggs",w:"eggs",vi:"những quả trứng",ipa:"/eɡz/",at:[438,256],lab:[438,212],sent:"These are eggs. They are in the box.",q:"Where are the eggs?",ans:"They are in the box.",good:R("\\b(they are|the eggs are) in the box\\b"),ok:R("^in the box\\b"),bad:[{re:"\\b(it is|they is|eggs is)\\b",fix:"They are …",why:"eggs là số nhiều nên dùng They are."}],hint:"Trứng nằm trong cái hộp. Cái hộp là box."},
+ {k:"fish",w:"fish",vi:"những con cá",ipa:"/fɪʃ/",at:[576,282],lab:[576,240],sent:"These are fish. They are on the plate.",q:"Where are the fish?",ans:"They are on the plate.",good:R("\\b(they are|the fish are) on the plate\\b"),ok:R("^on the plate\\b"),bad:[{re:"\\b(it is|they is|fish is)\\b",fix:"They are …",why:"Ở đây có hai con cá, số nhiều nên dùng They are."}],hint:"fish số nhiều vẫn là fish. Cá để trên đĩa: They are on the …"},
+ {k:"carrots",w:"carrots",vi:"những củ cà rốt",ipa:"/ˈkærəts/",at:[680,262],lab:[680,206],sent:"These are carrots. They are in the bag.",q:"Where are the carrots?",ans:"They are in the bag.",good:R("\\b(they are|the carrots are) in the bag\\b"),ok:R("^in the bag\\b"),bad:[{re:"\\b(it is|they is|carrots is)\\b",fix:"They are …",why:"carrots là số nhiều nên dùng They are."}],hint:"Cà rốt nằm trong cái túi. Cái túi là bag."}]},
+ps:{title:"In the garden",vi:"Trong khu vườn",scene:"garden",preps:[["live → lives","sống"],["sleep → sleeps","ngủ"],["fly → flies","bay"]],items:[
+ {k:"bird",w:"bird",vi:"con chim",ipa:"/bɜːd/",at:[302,184],lab:[302,144],sent:"The bird lives in the tree.",q:"Where does the bird live?",qvi:"Con chim sống ở đâu?",ans:"It lives in the tree.",good:R("\\b(it|the bird) lives in (the|a) tree\\b"),ok:R("^in (the|a) tree\\b"),bad:[{re:"\\b(it|the bird) live in\\b",fix:"It lives …",why:"Với it, động từ thêm s: lives."}],hint:"Con chim sống trên cây. Nhớ thêm s: It lives in the …"},
+ {k:"fish",w:"fish",vi:"con cá",ipa:"/fɪʃ/",at:[620,440],lab:[600,480],sent:"The fish lives in the pond.",q:"Where does the fish live?",qvi:"Con cá sống ở đâu?",ans:"It lives in the pond.",good:R("\\b(it|the fish) lives in (the|a) (pond|lake|water)\\b"),ok:R("^in (the|a) (pond|lake|water)\\b"),bad:[{re:"\\b(it|the fish) live in\\b",fix:"It lives …",why:"Với it, động từ thêm s: lives."}],hint:"Con cá sống trong ao. Cái ao là pond. Trả lời: It lives in the …"},
+ {k:"dog",w:"dog",vi:"con chó",ipa:"/dɒɡ/",at:[480,338],lab:[480,296],sent:"The dog sleeps in the doghouse.",q:"Where does the dog sleep?",qvi:"Con chó ngủ ở đâu?",ans:"It sleeps in the doghouse.",good:R("\\b(it|the dog) sleeps in (the|its|a) (dog ?house|kennel)\\b"),ok:R("^in (the|its|a) (dog ?house|kennel)\\b"),bad:[{re:"\\b(it|the dog) sleep in\\b",fix:"It sleeps …",why:"Với it, động từ thêm s: sleeps."}],hint:"Con chó ngủ trong chuồng. Chuồng chó là doghouse. Trả lời: It sleeps in the …"},
+ {k:"butterfly",w:"butterfly",vi:"con bướm",ipa:"/ˈbʌtəflaɪ/",at:[190,392],lab:[200,350],sent:"The butterfly flies over the flowers.",q:"Where does the butterfly fly?",qvi:"Con bướm bay ở đâu?",ans:"It flies over the flowers.",good:R("\\b(it|the butterfly) flies (over|above|near|around|on) the flowers?\\b"),ok:R("^(over|above|near|around|on) the flowers?\\b","\\bflowers\\b"),bad:[{re:"\\b(it|the butterfly) fly\\b",fix:"It flies …",why:"fly với it đổi thành flies."}],hint:"Con bướm bay trên những bông hoa. Bay là fly, với it đổi thành flies. Hoa là flowers."},
+ {k:"frog",w:"frog",vi:"con ếch",ipa:"/frɒɡ/",at:[720,344],lab:[700,300],sent:"The frog sits on the rock.",q:"Where does the frog sit?",qvi:"Con ếch ngồi ở đâu?",ans:"It sits on the rock.",good:R("\\b(it|the frog) sits on (the|a) (rock|stone)\\b"),ok:R("^on (the|a) (rock|stone)\\b"),bad:[{re:"\\b(it|the frog) sit on\\b",fix:"It sits …",why:"Với it, động từ thêm s: sits."}],hint:"Con ếch ngồi trên tảng đá. Tảng đá là rock. Trả lời: It sits on the …"}]},
+pc:{title:"In the park",vi:"Trong công viên",scene:"park",preps:[["is playing","đang chơi"],["is reading","đang đọc"],["is running","đang chạy"]],items:[
+ {k:"boy",w:"boy",vi:"cậu bé",ipa:"/bɔɪ/",at:[110,340],lab:[110,282],sent:"The boy is playing football.",q:"What is the boy doing?",qvi:"Cậu bé đang làm gì?",lq:"Who is playing football?",ans:"He is playing football.",good:R("\\b(he is|the boy is) playing (football|soccer)\\b"),ok:R("^playing (football|soccer)\\b"),bad:[{re:"\\bhe play\\b",fix:"He is playing …",why:"Việc đang xảy ra: is + V-ing."}],hint:"Cậu bé đang đá bóng. Đá bóng là play football. Trả lời: He is playing …"},
+ {k:"girl",w:"girl",vi:"cô bé",ipa:"/ɡɜːl/",at:[270,340],lab:[270,274],sent:"The girl is reading a book.",q:"What is the girl doing?",qvi:"Cô bé đang làm gì?",lq:"Who is reading a book?",ans:"She is reading a book.",good:R("\\b(she is|the girl is) reading( a book)?\\b"),ok:R("^reading( a book)?\\b"),bad:[{re:"\\bshe read\\b",fix:"She is reading …",why:"Việc đang xảy ra: is + V-ing."}],hint:"Cô bé đang đọc sách. Đọc là read, thêm ing: She is reading a …"},
+ {k:"man",w:"man",vi:"người đàn ông",ipa:"/mæn/",at:[330,420],lab:[330,378],sent:"The man is running.",q:"What is the man doing?",qvi:"Người đàn ông đang làm gì?",lq:"Who is running?",ans:"He is running.",good:R("\\b(he is|the man is) (running|jogging)\\b"),ok:R("^(running|jogging)\\b"),bad:[{re:"\\bhe run\\b",fix:"He is running.",why:"Việc đang xảy ra: is + V-ing. run gấp đôi n: running."}],hint:"Người đàn ông đang chạy. Chạy là run, thêm ing: running."},
+ {k:"woman",w:"woman",vi:"người phụ nữ",ipa:"/ˈwʊmən/",at:[465,300],lab:[465,236],sent:"The woman is eating an ice cream.",q:"What is the woman doing?",qvi:"Người phụ nữ đang làm gì?",lq:"Who is eating an ice cream?",ans:"She is eating an ice cream.",good:R("\\b(she is|the woman is) (eating|having)( an?)? ice ?cream\\b"),ok:R("\\b(eating|having)( an?)? ice ?cream\\b","\\bice ?cream\\b"),bad:[{re:"\\bshe eat\\b",fix:"She is eating …",why:"Việc đang xảy ra: is + V-ing."}],hint:"Người phụ nữ đang ăn kem. Ăn là eat, kem là ice cream."},
+ {k:"cat",w:"cat",vi:"con mèo",ipa:"/kæt/",at:[656,366],lab:[650,322],sent:"The cat is sleeping under the tree.",q:"What is the cat doing?",qvi:"Con mèo đang làm gì?",lq:"Which animal is sleeping?",ans:"It is sleeping.",good:R("\\b(it is|the cat is) sleeping\\b"),ok:R("^sleeping\\b"),bad:[{re:"\\bit sleep\\b",fix:"It is sleeping.",why:"Việc đang xảy ra: is + V-ing."}],hint:"Con mèo đang ngủ dưới gốc cây. Ngủ là sleep, thêm ing: sleeping."}]},
+there:{title:"My street",vi:"Con phố của tôi",scene:"street",preps:[["there is","có (một)"],["next to","bên cạnh"],["in front of","ở phía trước"],["between","ở giữa"]],items:[
+ {k:"school",w:"school",vi:"trường học",ipa:"/skuːl/",at:[110,250],lab:[110,330],sent:"There is a school in my street.",q:"Is there a school in the street?",qvi:"Trên phố có trường học không?",lq:"Where is the school?",ans:"Yes, there is.",good:R("\\byes there is\\b"),ok:R("^yes\\b"),bad:[{re:"\\byes it is\\b",fix:"Yes, there is.",why:"Câu hỏi Is there …? thì trả lời Yes, there is."}],hint:"Câu hỏi Is there …? Trả lời ngắn: Yes, there is."},
+ {k:"bank",w:"bank",vi:"ngân hàng",ipa:"/bæŋk/",at:[300,240],lab:[300,110],sent:"There is a bank next to the school.",q:"What is there next to the school?",qvi:"Bên cạnh trường học có gì?",lq:"Where is the bank?",ans:"There is a bank.",good:R("\\bthere is a bank\\b","^a bank\\b"),ok:R("\\bbank\\b"),bad:[{re:"\\bthere are a\\b",fix:"There is a …",why:"Số ít dùng There is."}],hint:"Bên cạnh trường học là ngân hàng (bank). Trả lời: There is a …"},
+ {k:"supermarket",w:"supermarket",vi:"siêu thị",ipa:"/ˈsuːpəmɑːkɪt/",at:[490,285],lab:[490,170],sent:"There is a supermarket between the bank and the hospital.",q:"What is there between the bank and the hospital?",qvi:"Giữa ngân hàng và bệnh viện có gì?",lq:"Where is the supermarket?",ans:"There is a supermarket.",good:R("\\bthere is a (super ?market|shop|store)\\b","^a (super ?market|shop|store)\\b"),ok:R("\\b(super ?market|shop|store)\\b"),bad:[{re:"\\bthere are a\\b",fix:"There is a …",why:"Số ít dùng There is."}],hint:"Ở giữa ngân hàng và bệnh viện là siêu thị (supermarket)."},
+ {k:"busstop",w:"bus stop",vi:"trạm xe buýt",ipa:"/ˈbʌs stɒp/",at:[300,320],lab:[300,236],sent:"There is a bus stop in front of the bank.",q:"What is there in front of the bank?",qvi:"Phía trước ngân hàng có gì?",lq:"Where is the bus stop?",ans:"There is a bus stop.",good:R("\\bthere is a bus stop\\b","^a bus stop\\b"),ok:R("\\bbus( stop)?\\b"),bad:[{re:"\\bthere are a\\b",fix:"There is a …",why:"Số ít dùng There is."}],hint:"Phía trước ngân hàng là trạm xe buýt (bus stop)."},
+ {k:"tree",w:"tree",vi:"cái cây",ipa:"/triː/",at:[60,300],lab:[60,372],sent:"There is a tree in front of the school.",q:"What is there in front of the school?",qvi:"Phía trước trường học có gì?",lq:"Where is the tree?",ans:"There is a tree.",good:R("\\bthere is a tree\\b","^a tree\\b"),ok:R("\\btree\\b"),bad:[{re:"\\bthere are a\\b",fix:"There is a …",why:"Số ít dùng There is."}],hint:"Phía trước trường học có một cái cây (tree)."}]},
+wh:{title:"In the classroom",vi:"Trong lớp học",scene:"classroom",preps:[["What","cái gì"],["Who","ai"],["Where","ở đâu"],["How many","bao nhiêu"]],items:[
+ {k:"clock",w:"clock",vi:"đồng hồ",ipa:"/klɒk/",at:[660,90],lab:[660,152],sent:"The clock is on the wall. It is eight o'clock.",q:"What time is it?",qvi:"Bây giờ là mấy giờ?",lq:"Where is the clock?",ans:"It is eight o'clock.",good:R("\\bit is (eight|8)( o ?clock)?\\b"),ok:R("\\b(eight|8)\\b"),bad:[],hint:"Nhìn đồng hồ: kim ngắn chỉ số 8, kim dài chỉ số 12. Trả lời: It is … o'clock."},
+ {k:"teacher",w:"teacher",vi:"cô giáo",ipa:"/ˈtiːtʃə/",at:[540,270],lab:[530,200],sent:"The teacher is next to the board.",q:"Who is next to the board?",qvi:"Ai đứng cạnh cái bảng?",lq:"Who is the teacher?",ans:"The teacher is next to the board.",good:R("\\b(the )?teacher( is next to the board)?\\b"),ok:R("\\bteacher\\b"),bad:[],hint:"Who hỏi về người. Người đứng cạnh bảng là cô giáo (teacher)."},
+ {k:"students",w:"students",vi:"các học sinh",ipa:"/ˈstjuːdənts/",at:[250,384],lab:[250,330],sent:"There are three students in the classroom.",q:"How many students are there?",qvi:"Có bao nhiêu học sinh?",lq:"Where are the students?",ans:"There are three students.",good:R("\\bthere are (three|3) students\\b","^(three|3) students\\b"),ok:R("\\b(three|3)\\b"),bad:[{re:"\\bthere is (three|3)\\b",fix:"There are three …",why:"Số nhiều dùng There are."}],hint:"How many hỏi số lượng. Đếm số học sinh rồi trả lời: There are … students."},
+ {k:"apple",w:"apple",vi:"quả táo",ipa:"/ˈæpəl/",at:[700,274],lab:[700,232],sent:"There is an apple on the teacher's desk.",q:"What is on the teacher's desk?",qvi:"Trên bàn cô giáo có gì?",lq:"Where is the apple?",ans:"There is an apple.",good:R("\\b(there is )?an apple\\b"),ok:R("\\bapple\\b"),bad:[{re:"\\ba apple\\b",fix:"an apple",why:"apple bắt đầu bằng âm nguyên âm nên dùng an."}],hint:"What hỏi về đồ vật. Trên bàn có một quả táo: There is an …"},
+ {k:"bag",w:"bag",vi:"cái cặp",ipa:"/bæɡ/",at:[252,488],lab:[330,488],sent:"The bag is under the desk.",q:"Where is the bag?",qvi:"Cái cặp ở đâu?",lq:"Where is the bag?",ans:"It is under the desk.",good:R("\\b(it is|the bag is) under the (desk|table)\\b"),ok:R("^under the (desk|table)\\b"),bad:[{re:"\\bon the (desk|table)\\b",fix:"under the desk",why:"Cái cặp nằm dưới bàn nên dùng under."}],hint:"Where hỏi nơi chốn. Cái cặp nằm dưới bàn: It is under the …"}]}
+};
+
+/* ============ TAB: TỪ VỰNG QUA HÌNH ============
+   1) Học: bấm dấu ? để học 5 từ; rê/chạm vào đồ vật khác để ôn từ cũ.
+   2) Phản xạ nghe: Cô hỏi, học viên bấm vào đúng đồ vật trong tranh.
+   3) Trả lời bằng giọng nói: Cô hỏi, học viên bấm micro trả lời. */
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function picScores(L){const l=(S.picL||{})[L.id],s=(S.picS||{})[L.id];return {l:l||0,s:s||0,avg:Math.round(((l||0)+(s||0))/2),hasL:l!=null,hasS:s!=null};}
+function tabPic(L,body){
+ const P=L.pic;const sess=chatSession;const alive=()=>sess===chatSession;
+ const N=P.items.length;
+ const t=el(`<section class="block"></section>`);
+ t.append(el(`<p style="margin:0"><b>Học:</b> bấm vào từng dấu <span class="q-dot-demo">?</span> để học ${N} từ mới. Rê chuột hoặc chạm vào các đồ vật khác trong tranh để ôn lại từ cũ. <b>Luyện:</b> khi đã học xong, chọn <b>Phản xạ nghe</b> (nghe Cô hỏi rồi bấm vào đúng hình) hoặc <b>Trả lời bằng giọng nói</b>.</p>`));
+ const card=el(`<div class="story"><div class="story-h"><span class="eyebrow">Tranh từ vựng</span><h2>${esc(P.title)}</h2><span class="muted">${esc(P.vi)}</span></div></div>`);
+ const wrap=el(`<div class="scene">${SCENES[P.scene]}</div>`);
+ const learned=new Set();let mode="learn";let onPick=null;
+ const marks={},labs={};
+ P.items.forEach(it=>{
+  const m=el(`<button type="button" class="pmark" style="left:${it.at[0]/8}%;top:${it.at[1]/5.2}%" aria-label="Xem đồ vật">?</button>`);
+  const lb=el(`<button type="button" class="plab" hidden style="left:${it.lab[0]/8}%;top:${it.lab[1]/5.2}%">${IC.spk}<span>${esc(it.w)}</span></button>`);
+  m.onclick=e=>{e.stopPropagation();if(mode==="learn")learn(it);else if(mode==="listen"&&onPick)onPick(it.k,e);};
+  lb.onclick=e=>{e.stopPropagation();readToken++;say(it.w);};
+  wrap.append(m,lb);marks[it.k]=m;labs[it.k]=lb;
+ });
+ // Nhãn tạm thời cho đồ vật ôn tập
+ const temp=el(`<span class="ptemp" hidden></span>`);wrap.append(temp);let tempT;
+ const showTemp=(word,vi,e)=>{const r=wrap.getBoundingClientRect();const x=Math.min(Math.max((e.clientX-r.left)/r.width*100,12),88),y=Math.max((e.clientY-r.top)/r.height*100-8,6);
+  temp.innerHTML=`<b>${esc(word)}</b> <span>${esc(vi)}</span>`;temp.style.left=x+"%";temp.style.top=y+"%";temp.hidden=false;clearTimeout(tempT);tempT=setTimeout(()=>temp.hidden=true,2600);};
+ wrap.querySelectorAll("[data-obj],[data-x]").forEach(g=>{
+  g.classList.add("hot");
+  g.addEventListener("click",e=>{
+   e.stopPropagation();
+   const k=g.dataset.obj,x=g.dataset.x;
+   if(mode==="listen"){if(onPick)onPick(k||x,e);return;}
+   if(mode==="speak")return;
+   if(k){const it=P.items.find(i=>i.k===k);if(it)learn(it);}
+   else{readToken++;say(x);showTemp(x,XW[x]||"",e);detailExtra(x);}
+  });
+ });
+ const detail=el(`<div class="pdetail muted">Bấm vào một dấu ? trong tranh để bắt đầu.</div>`);
+ const chips=el(`<div class="pchips"></div>`);
+ const preps=el(`<div class="keyws"><b class="kw-h">Cần nhớ</b>${P.preps.map(([w,v])=>`<span class="keyw say" data-say="${esc(w.replace(/→.*/,""))}"><span class="kw-en">${esc(w)}</span><span class="kw-vi">${esc(v)}</span></span>`).join("")}</div>`);
+ const drawChips=()=>{chips.innerHTML="";P.items.forEach(it=>{const b=el(`<button type="button" class="pchip ${learned.has(it.k)?"ok":""}">${learned.has(it.k)?"✓ "+esc(it.w):"?"}</button>`);b.onclick=()=>{if(mode==="learn")learn(it);};chips.append(b);});};
+ function detailExtra(x){detail.className="pdetail";detail.innerHTML=`<div class="pd-top"><b class="pd-w">${esc(x)}</b><span>${esc(XW[x]||"")}</span><span class="tag">Ôn từ</span></div>`;}
+ function learn(it){
+  learned.add(it.k);marks[it.k].classList.add("seen");labs[it.k].hidden=false;
+  Object.values(marks).forEach(m=>m.classList.remove("cur"));marks[it.k].classList.add("cur");
+  detail.className="pdetail";
+  detail.innerHTML=`<div class="pd-top"><b class="pd-w">${esc(it.w)}</b><span class="ipa">${esc(it.ipa)}</span><span>${esc(it.vi)}</span></div><button type="button" class="map-ex">${IC.spk}<span>${esc(it.sent)}</span></button>`;
+  detail.querySelector(".map-ex").onclick=e=>sayBtn(e.currentTarget,it.sent);
+  drawChips();updateStart();
+  (async()=>{const my=++readToken;await say(it.w);if(my!==readToken)return;await wait(250);if(my!==readToken)return;await say(it.sent);})();
+ }
+ card.append(wrap,chips,detail,preps);t.append(card);
+ // Hai hoạt động
+ const act=el(`<div class="pact"></div>`);
+ const sc=picScores(L);
+ const listenB=el(`<button class="btn chalk big-mic" type="button" disabled>👆 Phản xạ nghe <small>${sc.hasL?"· cao nhất "+sc.l+"%":""}</small></button>`);
+ const speakB=el(`<button class="btn primary big-mic" type="button" disabled>${IC.mic} Trả lời bằng giọng nói <small>${sc.hasS?"· cao nhất "+sc.s+"%":""}</small></button>`);
+ const skipLearn=el(`<button class="btn sm" type="button">Xem nhanh cả ${N} từ</button>`);
+ const note=el(`<p style="margin:0" class="muted">Học hết ${N} từ thì hai hoạt động luyện tập sẽ mở.</p>`);
+ act.append(note,el(`<div class="row"></div>`));act.lastChild.append(listenB,speakB,skipLearn);
+ function updateStart(){const ok=learned.size>=N;listenB.disabled=speakB.disabled=!ok;note.textContent=ok?"Chọn một hoạt động để Cô kiểm tra.":`Đã học ${learned.size}/${N} từ. Học hết ${N} từ thì hai hoạt động luyện tập sẽ mở.`;}
+ skipLearn.onclick=()=>{P.items.forEach(it=>{learned.add(it.k);marks[it.k].classList.add("seen");labs[it.k].hidden=false;});drawChips();updateStart();};
+ t.append(act);
+ const head=el(`<h2 style="font-size:20px;margin-top:6px" hidden></h2>`);
+ const log=el(`<div class="dialog chat-log" aria-live="polite"></div>`);
+ const prog=el(`<div class="muted" style="font-size:14px;font-variant-numeric:tabular-nums"></div>`);
+ const ctrl=el(`<div class="practice chat-ctrl" hidden></div>`);
+ t.append(head,log,prog,ctrl);body.append(t);drawChips();
+ const scroll=n=>{try{n.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}};
+ async function co(en,vi,buttons,showText=true){
+  if(!alive())return;
+  const b=el(`<div class="bubble A gb-F"><div class="who"><span class="g g-F">Cô</span></div><div class="en" ${showText?"":"hidden"}>${esc(en)}</div>${showText?"":`<div class="muted" style="font-size:14px">🔊 Nghe Cô hỏi…</div>`}${vi?`<div class="vi" hidden>${esc(vi)}</div>`:""}${buttons?`<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-a="n">${IC.spk} Nghe lại</button><button class="btn sm" type="button" data-a="s">${IC.slow} Chậm</button>${showText?"":`<button class="btn sm" type="button" data-a="t">Hiện chữ</button>`}${vi?`<button class="btn sm" type="button" data-a="v">Xem nghĩa</button>`:""}</div>`:""}</div>`);
+  const q=x=>b.querySelector(`[data-a="${x}"]`);
+  if(q("n"))q("n").onclick=()=>{readToken++;say(en,{gender:"F"});};
+  if(q("s"))q("s").onclick=()=>{readToken++;say(en,{gender:"F",rate:0.6});};
+  if(q("t"))q("t").onclick=()=>{b.querySelector(".en").hidden=false;q("t").remove();};
+  if(q("v"))q("v").onclick=()=>{const x=b.querySelector(".vi");x.hidden=!x.hidden;q("v").textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
+  log.append(b);scroll(b);await say(en,{gender:"F"});
+ }
+ const setMode=m=>{mode=m;wrap.classList.toggle("quiz",m!=="learn");wrap.classList.toggle("pickable",m==="listen");
+  Object.values(labs).forEach(l=>l.hidden=m!=="learn");Object.values(marks).forEach(x=>{x.classList.remove("cur","hl","good");x.hidden=m!=="learn";x.textContent="?";});temp.hidden=true;};
+ const PRAISE=["Good!","Very good!","Great!","Excellent!","Well done!"];
+ const PTS={3:100,2:75,1.5:50,1:0};
+ let order=[],i=0,tries=0;const res=[];
+ function begin(kind){
+  readToken++;try{speechSynthesis.cancel();}catch(e){}
+  order=P.items.slice().sort(()=>Math.random()-.5);i=0;res.length=0;log.innerHTML="";ctrl.innerHTML="";ctrl.hidden=false;act.hidden=true;
+  head.hidden=false;head.textContent=kind==="listen"?"Phản xạ nghe: nghe rồi bấm vào hình":"Trả lời bằng giọng nói";
+  setMode(kind);wrap.scrollIntoView({block:"start",behavior:"smooth"});
+  (async()=>{await co(kind==="listen"?"Listen and click on the picture.":"Look at the picture and answer my questions.","",false);ask(kind);})();
+ }
+ listenB.onclick=()=>begin("listen");speakB.onclick=()=>begin("speak");
+ async function ask(kind){
+  if(!alive())return;const it=order[i];tries=0;prog.textContent=`Câu ${i+1} / ${N}`;
+  if(kind==="listen"){
+   const q=it.lq||it.q;
+   ctrl.innerHTML=`<p style="margin:0"><b>Bấm vào đúng hình trong tranh.</b> Có thể bấm “Nghe lại” hoặc “Chậm”.</p>`;
+   onPick=null;await co(q,(it.qvi||cap(it.vi)+" ở đâu?"),true,false);if(!alive())return;
+   onPick=(k,e)=>pickAnswer(it,k,e);
+  }else{
+   await co(it.q,it.qvi||cap(it.vi)+" ở đâu?",true,true);if(!alive())return;controls(it);
+  }
+ }
+ /* ---- Phản xạ nghe ---- */
+ async function pickAnswer(it,k,e){
+  onPick=null;
+  const name=k===it.k?it.w:(P.items.find(x=>x.k===k)||{}).w||k;
+  if(k===it.k){
+   res[i]=tries===0?3:tries===1?2:1.5;
+   marks[it.k].hidden=false;marks[it.k].classList.add("good");marks[it.k].textContent="✓";labs[it.k].hidden=false;
+   log.append(el(`<div class="chat-fb ok"><div class="verdict">Đúng rồi! Đây là ${esc(it.w)} (${esc(it.vi)}).</div></div>`));
+   await co(PRAISE[(i+tries)%PRAISE.length]+" "+it.sent,"",false);
+   marks[it.k].hidden=true;labs[it.k].hidden=true;return next("listen");
+  }
+  tries++;
+  showTemp(name,(P.items.find(x=>x.k===k)||{}).vi||XW[k]||"",e);
+  if(tries===1){
+   log.append(el(`<div class="chat-fb warn"><div class="verdict">Chưa đúng</div><p>Bạn vừa bấm vào <b>${esc(name)}</b>. Nghe lại câu hỏi và thử lần nữa.</p></div>`));
+   await co(`No, that is the ${name}. Try again.`,"",false);if(!alive())return;onPick=(k2,e2)=>pickAnswer(it,k2,e2);return;
+  }
+  if(tries===2){
+   log.append(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p><b>${esc(it.w)}</b> nghĩa là <b>${esc(it.vi)}</b>. ${esc(it.hint)}</p></div>`));
+   await co(`No, that is the ${name}. Here is a hint. Find the ${it.w}.`,"",false);if(!alive())return;onPick=(k2,e2)=>pickAnswer(it,k2,e2);return;
+  }
+  res[i]=1;
+  marks[it.k].hidden=false;marks[it.k].classList.add("hl");marks[it.k].textContent="!";labs[it.k].hidden=false;
+  log.append(el(`<div class="chat-fb bad"><div class="verdict">Cô chỉ cho bạn</div><p>Đây là <b>${esc(it.w)}</b> (${esc(it.vi)}). ${esc(it.sent)}</p></div>`));
+  await co(`Look. This is the ${it.w}. ${it.sent}`,"",false);if(!alive())return;
+  await wait(1400);marks[it.k].hidden=true;labs[it.k].hidden=true;return next("listen");
+ }
+ /* ---- Trả lời bằng giọng nói ---- */
+ function controls(it){
+  ctrl.innerHTML="";
+  const mic=el(`<button class="btn primary big-mic" type="button">${IC.mic} ${tries?"Bấm để nói lại":"Bấm để trả lời"}</button>`);
+  const typeB=el(`<button class="btn" type="button">Gõ câu trả lời</button>`);
+  const typeBox=el(`<div hidden style="gap:8px"><input type="text" id="pic-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
+  const msg=el(`<div></div>`);
+  const row=el(`<div class="row"></div>`);row.append(mic,typeB);ctrl.append(row,typeBox,msg);scroll(ctrl);
+  const showType=()=>{typeBox.hidden=false;typeBox.style.display="flex";typeBox.querySelector("input").focus();};
+  typeB.onclick=showType;
+  const send=()=>{const v=typeBox.querySelector("input").value.trim();if(v){ctrl.innerHTML="";judge(it,[v],0);}};
+  typeBox.querySelector("button").onclick=send;typeBox.querySelector("input").onkeydown=e=>{if(e.key==="Enter")send();};
+  let rec=false;
+  mic.onclick=async()=>{
+   if(rec){try{listen.current&&listen.current.stop();}catch(e){}return;}
+   readToken++;try{speechSynthesis.cancel();}catch(e){}
+   rec=true;mic.className="btn rec big-mic";mic.innerHTML=IC.stop+" Đang nghe… nói xong bấm để dừng";msg.innerHTML="";
+   try{const alts=await listen();rec=false;ctrl.innerHTML="";judge(it,alts,alts.conf||0);}
+   catch(code){rec=false;code=String(code);
+    if(code==="no-speech"){ctrl.innerHTML="";judge(it,[""],0);return;}
+    mic.className="btn primary big-mic";mic.innerHTML=IC.mic+" Bấm để trả lời";
+    msg.innerHTML=`<div class="alert">${esc(srErrorText(code))}</div>`;showType();}
+  };
+ }
+ async function judge(it,alts,conf){
+  if(!alive())return;
+  const r=alts.map(a=>evalTurn(it,a)).sort((a,b)=>b.rank-a.rank)[0];
+  const unclear=r.level==="none"||(conf>0&&conf<0.45&&r.level!=="good");
+  if(r.text)log.append(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
+  const pass=!unclear&&(r.level==="good"||(r.level==="ok"&&!r.issues.length));
+  if(pass){
+   res[i]=tries===0?3:tries===1?2:1.5;
+   log.append(el(`<div class="chat-fb ok"><div class="verdict">${tries===2?"Đúng rồi! (sau gợi ý)":"Đúng rồi!"}</div>${r.level==="ok"?`<p>Nói đủ câu: ${esc(it.ans)}</p>`:""}</div>`));
+   await co(PRAISE[(i+tries)%PRAISE.length]+" "+it.sent,"",false);return next("speak");
+  }
+  tries++;
+  const errs=r.issues.length?`<ul class="fix-list">${r.issues.slice(0,3).map(x=>`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`).join("")}</ul>`:"";
+  if(tries===1){
+   log.append(el(`<div class="chat-fb warn"><div class="verdict">Thử lại nhé</div><p>${unclear?"Cô chưa nghe rõ. Nói to, chậm và rõ hơn nhé.":r.issues.length?"Gần đúng rồi, nhưng còn lỗi:":"Chưa đúng. Nhìn kỹ lại bức tranh rồi trả lời lần nữa."}</p>${errs}</div>`));
+   await co(unclear?"Sorry, I didn't hear you clearly. Please say it again.":"Not quite. Look at the picture and try again.","",false);if(!alive())return;
+   return controls(it);
+  }
+  if(tries===2){
+   marks[it.k].hidden=false;marks[it.k].classList.add("hl");marks[it.k].textContent="!";
+   log.append(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p>Cô đã đánh dấu ${esc(it.vi)} trong tranh. ${esc(it.hint)}</p>${errs}</div>`));
+   await co("Here is a hint. Look at the picture and try again.","",false);if(!alive())return;
+   return controls(it);
+  }
+  res[i]=1;marks[it.k].hidden=true;labs[it.k].hidden=false;
+  const fb=el(`<div class="chat-fb bad"><div class="verdict">Cô giải thích</div><p>${esc(it.hint)}</p><p>Ta trả lời:</p><div class="models"></div>${errs}</div>`);
+  [it.ans,it.sent].filter((x,k,a)=>a.indexOf(x)===k).forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};fb.querySelector(".models").append(b);});
+  log.append(fb);scroll(fb);
+  await co("The answer is: "+it.ans,"",false);if(!alive())return;
+  await wait(400);await say(it.ans,{gender:"F",rate:0.6});if(!alive())return;
+  await wait(900);labs[it.k].hidden=true;return next("speak");
+ }
+ async function next(kind){
+  if(!alive())return;await wait(500);i++;
+  if(i<N)ask(kind);else summary(kind);
+ }
+ function summary(kind){
+  if(!alive())return;prog.textContent="";setMode("learn");Object.values(labs).forEach(l=>l.hidden=false);Object.values(marks).forEach(m=>m.hidden=true);
+  const pct=Math.round(order.reduce((a,_,k)=>a+(PTS[res[k]]||0),0)/N);
+  const key=kind==="listen"?"picL":"picS";S[key]=S[key]||{};S[key][L.id]=Math.max(S[key][L.id]||0,pct);save();refreshScore(L);
+  const lab=x=>x===3?["ok","Đúng ngay"]:x===2?["warn","Đúng lần 2"]:x===1.5?["warn","Đúng sau gợi ý"]:["bad","Cần luyện"];
+  const box=el(`<div class="chat-fb ${pct>=85?"ok":"warn"}"><div class="verdict">${kind==="listen"?"Phản xạ nghe":"Trả lời bằng giọng nói"}: ${pct}% · đúng ${res.filter(x=>x>1).length}/${N}</div><p>${pct>=85?"Tuyệt vời!":"Học lại các từ chưa thuộc rồi làm lại nhé."} Điểm cao nhất: ${S[key][L.id]}%.</p><ul class="sum-list">${order.map((it,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(kind==="listen"?(it.lq||it.q):it.q)} → <b>${esc(kind==="listen"?it.w:it.ans)}</b></li>`;}).join("")}</ul></div>`);
+  log.append(box);scroll(box);
+  say(pct>=85?"Great job!":"Good effort! Let's practice again.",{gender:"F"});
+  ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
+  const other=kind==="listen"?"speak":"listen";
+  const ob=el(`<button class="btn primary" type="button">${other==="listen"?"Làm tiếp: Phản xạ nghe":"Làm tiếp: Trả lời bằng giọng nói"}</button>`);ob.onclick=()=>begin(other);
+  const re=el(`<button class="btn" type="button">Làm lại</button>`);re.onclick=()=>begin(kind);
+  row.append(ob,re);ctrl.append(row);
+ }
+}
+LESSONS.forEach(L=>{if(PICS[L.id])L.pic=PICS[L.id];});
+
 /* ---- 4. Nghe & trả lời: nghe đoạn văn, Cô hỏi, học viên trả lời bằng giọng nói ---- */
 function tabStory(L,body){
  const St=L.story;const sess=chatSession;const alive=()=>sess===chatSession;
@@ -1547,7 +2017,7 @@ function tabStory(L,body){
  ctl.append(playB,slowB,showB,viB);
  const textBox=el(`<div class="story-text hidden-text"><p class="story-cover muted">Đoạn văn đang ẩn để bạn luyện nghe. Nghe 2–3 lần, nếu cần thì bấm “Hiện đoạn văn”.</p></div>`);
  const sents=St.text.map(([en,vi])=>{const sp=el(`<span class="sent" role="button" tabindex="0"><span class="en">${esc(en)}</span> <span class="vi">${esc(vi)}</span></span>`);sp.onclick=()=>{readToken++;say(en);};textBox.append(sp);return sp;});
- const words=el(`<div class="story-words"><b>Từ mới:</b> ${St.words.map(([w,v])=>`<span class="say" data-say="${esc(w)}">${esc(w)}</span> <span class="muted">${esc(v)}</span>`).join(" · ")}</div>`);
+ const words=el(`<div class="keyws"><b class="kw-h">Từ mới</b>${St.words.map(([w,v])=>`<span class="keyw say" data-say="${esc(w)}"><span class="kw-en">${esc(w)}</span><span class="kw-vi">${esc(v)}</span></span>`).join("")}</div>`);
  card.append(ctl,words,textBox);t.append(card);
  showB.onclick=()=>{const h=textBox.classList.toggle("hidden-text");showB.textContent=h?"Hiện đoạn văn":"Ẩn đoạn văn";};
  viB.onclick=()=>{if(textBox.classList.contains("hidden-text"))showB.click();const v=textBox.classList.toggle("show-vi");viB.textContent=v?"Ẩn bản dịch":"Xem bản dịch";};
@@ -1664,7 +2134,7 @@ function tabStory(L,body){
   row.append(re);
   const idx=LESSONS.indexOf(L);
   if(idx<LESSONS.length-1&&lessonStatus(idx+1)!=="locked"){const nx=el(`<button class="btn primary" type="button">Bài tiếp: ${esc(LESSONS[idx+1].title)} →</button>`);nx.onclick=()=>openLesson(LESSONS[idx+1].id);row.append(nx);}
-  else if(spCount(L)<L.speak.length){const sp=el(`<button class="btn primary" type="button">Sang phần 3. Luyện nói</button>`);sp.onclick=()=>{curTab="speak";lesson(L.id);};row.append(sp);}
+  else if(spCount(L)<L.speak.length){const sp=el(`<button class="btn primary" type="button">Sang phần Luyện nói</button>`);sp.onclick=()=>{curTab="speak";lesson(L.id);};row.append(sp);}
   ctrl.append(row);
  }
 }
