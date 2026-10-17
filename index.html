@@ -319,6 +319,15 @@ header.top .in{position:relative;max-width:1040px}
 .pd-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
 .pd-w{font-family:var(--f-display);font-size:26px;text-transform:capitalize}
 .tabs button:last-child:nth-child(odd){grid-column:1 / -1}
+.quizbox{display:flex;flex-direction:column;gap:8px}
+.quizbox h2:not([hidden])+div:empty{display:none}
+.story.quizzing .pchips,.story.quizzing .pdetail{display:none}
+.quizbox .chat-log{gap:12px}
+.turn{display:flex;flex-direction:column;gap:8px}
+.turn+.chat-ctrl{margin-bottom:6px}
+.chat-log>.turn:not(:first-child){opacity:.62;border-top:1px dashed var(--line);padding-top:10px}
+.chat-log>.chat-ctrl{border:2px solid var(--chalk)}
+
 .keyws{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .kw-h{width:100%;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .keyw{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;background:var(--sub);border:1px solid transparent;border-bottom:1px solid transparent;border-radius:12px;padding:6px 14px;cursor:pointer;line-height:1.25}
@@ -1827,7 +1836,7 @@ function tabPic(L,body){
    e.stopPropagation();
    const k=g.dataset.obj,x=g.dataset.x;
    if(mode==="listen"){if(onPick)onPick(k||x,e);return;}
-   if(mode==="speak")return;
+   if(mode==="speak"){const it=k&&P.items.find(i=>i.k===k);readToken++;say(it?it.w:x);showTemp(it?it.w:x,it?it.vi:(XW[x]||""),e);return;}
    if(k){const it=P.items.find(i=>i.k===k);if(it)learn(it);}
    else{readToken++;say(x);showTemp(x,XW[x]||"",e);detailExtra(x);}
   });
@@ -1846,7 +1855,7 @@ function tabPic(L,body){
   drawChips();updateStart();
   (async()=>{const my=++readToken;await say(it.w);if(my!==readToken)return;await wait(250);if(my!==readToken)return;await say(it.sent);})();
  }
- card.append(wrap,chips,detail,preps);t.append(card);
+ card.append(preps,wrap,chips,detail);t.append(card);
  // Hai hoạt động
  const act=el(`<div class="pact"></div>`);
  const sc=picScores(L);
@@ -1862,8 +1871,12 @@ function tabPic(L,body){
  const log=el(`<div class="dialog chat-log" aria-live="polite"></div>`);
  const prog=el(`<div class="muted" style="font-size:14px;font-variant-numeric:tabular-nums"></div>`);
  const ctrl=el(`<div class="practice chat-ctrl" hidden></div>`);
- t.append(head,log,prog,ctrl);body.append(t);drawChips();
- const scroll=n=>{try{n.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}};
+ const quizBox=el(`<div class="quizbox"></div>`);quizBox.append(head,prog,log);
+ card.append(quizBox);t.append(ctrl);ctrl.hidden=true;body.append(t);drawChips();
+ let cur=null;
+ const newTurn=()=>{cur=el(`<div class="turn"></div>`);log.prepend(cur);cur.after(ctrl);return cur;};
+ const add=x=>{(cur||newTurn()).append(x);return x;};
+ const scroll=()=>{try{const h=document.querySelector("header.top");const off=h&&getComputedStyle(h).position==="sticky"?h.offsetHeight:0;const y=card.getBoundingClientRect().top+window.scrollY-off-8;if(Math.abs(window.scrollY-y)>40)window.scrollTo({top:y,behavior:"smooth"});}catch(e){}};
  async function co(en,vi,buttons,showText=true){
   if(!alive())return;
   const b=el(`<div class="bubble A gb-F"><div class="who"><span class="g g-F">Cô</span></div><div class="en" ${showText?"":"hidden"}>${esc(en)}</div>${showText?"":`<div class="muted" style="font-size:14px">🔊 Nghe Cô hỏi…</div>`}${vi?`<div class="vi" hidden>${esc(vi)}</div>`:""}${buttons?`<div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-a="n">${IC.spk} Nghe lại</button><button class="btn sm" type="button" data-a="s">${IC.slow} Chậm</button>${showText?"":`<button class="btn sm" type="button" data-a="t">Hiện chữ</button>`}${vi?`<button class="btn sm" type="button" data-a="v">Xem nghĩa</button>`:""}</div>`:""}</div>`);
@@ -1872,7 +1885,7 @@ function tabPic(L,body){
   if(q("s"))q("s").onclick=()=>{readToken++;say(en,{gender:"F",rate:0.6});};
   if(q("t"))q("t").onclick=()=>{b.querySelector(".en").hidden=false;q("t").remove();};
   if(q("v"))q("v").onclick=()=>{const x=b.querySelector(".vi");x.hidden=!x.hidden;q("v").textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
-  log.append(b);scroll(b);await say(en,{gender:"F"});
+  add(b);await say(en,{gender:"F"});
  }
  const setMode=m=>{mode=m;wrap.classList.toggle("quiz",m!=="learn");wrap.classList.toggle("pickable",m==="listen");
   Object.values(labs).forEach(l=>l.hidden=m!=="learn");Object.values(marks).forEach(x=>{x.classList.remove("cur","hl","good");x.hidden=m!=="learn";x.textContent="?";});temp.hidden=true;};
@@ -1880,15 +1893,16 @@ function tabPic(L,body){
  const PTS={3:100,2:75,1.5:50,1:0};
  let order=[],i=0,tries=0;const res=[];
  function begin(kind){
+  log.innerHTML="";cur=null;
   readToken++;try{speechSynthesis.cancel();}catch(e){}
   order=P.items.slice().sort(()=>Math.random()-.5);i=0;res.length=0;log.innerHTML="";ctrl.innerHTML="";ctrl.hidden=false;act.hidden=true;
   head.hidden=false;head.textContent=kind==="listen"?"Phản xạ nghe: nghe rồi bấm vào hình":"Trả lời bằng giọng nói";
-  setMode(kind);wrap.scrollIntoView({block:"start",behavior:"smooth"});
+  setMode(kind);card.classList.add("quizzing");newTurn();scroll();
   (async()=>{await co(kind==="listen"?"Listen and click on the picture.":"Look at the picture and answer my questions.","",false);ask(kind);})();
  }
  listenB.onclick=()=>begin("listen");speakB.onclick=()=>begin("speak");
  async function ask(kind){
-  if(!alive())return;const it=order[i];tries=0;prog.textContent=`Câu ${i+1} / ${N}`;
+  if(!alive())return;const it=order[i];tries=0;prog.textContent=`Câu ${i+1} / ${N}`;newTurn();scroll();
   if(kind==="listen"){
    const q=it.lq||it.q;
    ctrl.innerHTML=`<p style="margin:0"><b>Bấm vào đúng hình trong tranh.</b> Có thể bấm “Nghe lại” hoặc “Chậm”.</p>`;
@@ -1905,23 +1919,23 @@ function tabPic(L,body){
   if(k===it.k){
    res[i]=tries===0?3:tries===1?2:1.5;
    marks[it.k].hidden=false;marks[it.k].classList.add("good");marks[it.k].textContent="✓";labs[it.k].hidden=false;
-   log.append(el(`<div class="chat-fb ok"><div class="verdict">Đúng rồi! Đây là ${esc(it.w)} (${esc(it.vi)}).</div></div>`));
+   add(el(`<div class="chat-fb ok"><div class="verdict">Đúng rồi! Đây là ${esc(it.w)} (${esc(it.vi)}).</div></div>`));
    await co(PRAISE[(i+tries)%PRAISE.length]+" "+it.sent,"",false);
    marks[it.k].hidden=true;labs[it.k].hidden=true;return next("listen");
   }
   tries++;
   showTemp(name,(P.items.find(x=>x.k===k)||{}).vi||XW[k]||"",e);
   if(tries===1){
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Chưa đúng</div><p>Bạn vừa bấm vào <b>${esc(name)}</b>. Nghe lại câu hỏi và thử lần nữa.</p></div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Chưa đúng</div><p>Bạn vừa bấm vào <b>${esc(name)}</b>. Nghe lại câu hỏi và thử lần nữa.</p></div>`));
    await co(`No, that is the ${name}. Try again.`,"",false);if(!alive())return;onPick=(k2,e2)=>pickAnswer(it,k2,e2);return;
   }
   if(tries===2){
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p><b>${esc(it.w)}</b> nghĩa là <b>${esc(it.vi)}</b>. ${esc(it.hint)}</p></div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p><b>${esc(it.w)}</b> nghĩa là <b>${esc(it.vi)}</b>. ${esc(it.hint)}</p></div>`));
    await co(`No, that is the ${name}. Here is a hint. Find the ${it.w}.`,"",false);if(!alive())return;onPick=(k2,e2)=>pickAnswer(it,k2,e2);return;
   }
   res[i]=1;
   marks[it.k].hidden=false;marks[it.k].classList.add("hl");marks[it.k].textContent="!";labs[it.k].hidden=false;
-  log.append(el(`<div class="chat-fb bad"><div class="verdict">Cô chỉ cho bạn</div><p>Đây là <b>${esc(it.w)}</b> (${esc(it.vi)}). ${esc(it.sent)}</p></div>`));
+  add(el(`<div class="chat-fb bad"><div class="verdict">Cô chỉ cho bạn</div><p>Đây là <b>${esc(it.w)}</b> (${esc(it.vi)}). ${esc(it.sent)}</p></div>`));
   await co(`Look. This is the ${it.w}. ${it.sent}`,"",false);if(!alive())return;
   await wait(1400);marks[it.k].hidden=true;labs[it.k].hidden=true;return next("listen");
  }
@@ -1932,7 +1946,7 @@ function tabPic(L,body){
   const typeB=el(`<button class="btn" type="button">Gõ câu trả lời</button>`);
   const typeBox=el(`<div hidden style="gap:8px"><input type="text" id="pic-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
   const msg=el(`<div></div>`);
-  const row=el(`<div class="row"></div>`);row.append(mic,typeB);ctrl.append(row,typeBox,msg);scroll(ctrl);
+  const row=el(`<div class="row"></div>`);row.append(mic,typeB);ctrl.append(row,typeBox,msg);
   const showType=()=>{typeBox.hidden=false;typeBox.style.display="flex";typeBox.querySelector("input").focus();};
   typeB.onclick=showType;
   const send=()=>{const v=typeBox.querySelector("input").value.trim();if(v){ctrl.innerHTML="";judge(it,[v],0);}};
@@ -1953,30 +1967,30 @@ function tabPic(L,body){
   if(!alive())return;
   const r=alts.map(a=>evalTurn(it,a)).sort((a,b)=>b.rank-a.rank)[0];
   const unclear=r.level==="none"||(conf>0&&conf<0.45&&r.level!=="good");
-  if(r.text)log.append(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
+  if(r.text)add(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
   const pass=!unclear&&(r.level==="good"||(r.level==="ok"&&!r.issues.length));
   if(pass){
    res[i]=tries===0?3:tries===1?2:1.5;
-   log.append(el(`<div class="chat-fb ok"><div class="verdict">${tries===2?"Đúng rồi! (sau gợi ý)":"Đúng rồi!"}</div>${r.level==="ok"?`<p>Nói đủ câu: ${esc(it.ans)}</p>`:""}</div>`));
+   add(el(`<div class="chat-fb ok"><div class="verdict">${tries===2?"Đúng rồi! (sau gợi ý)":"Đúng rồi!"}</div>${r.level==="ok"?`<p>Nói đủ câu: ${esc(it.ans)}</p>`:""}</div>`));
    await co(PRAISE[(i+tries)%PRAISE.length]+" "+it.sent,"",false);return next("speak");
   }
   tries++;
   const errs=r.issues.length?`<ul class="fix-list">${r.issues.slice(0,3).map(x=>`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`).join("")}</ul>`:"";
   if(tries===1){
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Thử lại nhé</div><p>${unclear?"Cô chưa nghe rõ. Nói to, chậm và rõ hơn nhé.":r.issues.length?"Gần đúng rồi, nhưng còn lỗi:":"Chưa đúng. Nhìn kỹ lại bức tranh rồi trả lời lần nữa."}</p>${errs}</div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Thử lại nhé</div><p>${unclear?"Cô chưa nghe rõ. Nói to, chậm và rõ hơn nhé.":r.issues.length?"Gần đúng rồi, nhưng còn lỗi:":"Chưa đúng. Nhìn kỹ lại bức tranh rồi trả lời lần nữa."}</p>${errs}</div>`));
    await co(unclear?"Sorry, I didn't hear you clearly. Please say it again.":"Not quite. Look at the picture and try again.","",false);if(!alive())return;
    return controls(it);
   }
   if(tries===2){
    marks[it.k].hidden=false;marks[it.k].classList.add("hl");marks[it.k].textContent="!";
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p>Cô đã đánh dấu ${esc(it.vi)} trong tranh. ${esc(it.hint)}</p>${errs}</div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p>Cô đã đánh dấu ${esc(it.vi)} trong tranh. ${esc(it.hint)}</p>${errs}</div>`));
    await co("Here is a hint. Look at the picture and try again.","",false);if(!alive())return;
    return controls(it);
   }
   res[i]=1;marks[it.k].hidden=true;labs[it.k].hidden=false;
   const fb=el(`<div class="chat-fb bad"><div class="verdict">Cô giải thích</div><p>${esc(it.hint)}</p><p>Ta trả lời:</p><div class="models"></div>${errs}</div>`);
   [it.ans,it.sent].filter((x,k,a)=>a.indexOf(x)===k).forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};fb.querySelector(".models").append(b);});
-  log.append(fb);scroll(fb);
+  add(fb);
   await co("The answer is: "+it.ans,"",false);if(!alive())return;
   await wait(400);await say(it.ans,{gender:"F",rate:0.6});if(!alive())return;
   await wait(900);labs[it.k].hidden=true;return next("speak");
@@ -1986,12 +2000,12 @@ function tabPic(L,body){
   if(i<N)ask(kind);else summary(kind);
  }
  function summary(kind){
-  if(!alive())return;prog.textContent="";setMode("learn");Object.values(labs).forEach(l=>l.hidden=false);Object.values(marks).forEach(m=>m.hidden=true);
+  if(!alive())return;prog.textContent="";setMode("learn");card.classList.remove("quizzing");newTurn();scroll();Object.values(labs).forEach(l=>l.hidden=false);Object.values(marks).forEach(m=>m.hidden=true);
   const pct=Math.round(order.reduce((a,_,k)=>a+(PTS[res[k]]||0),0)/N);
   const key=kind==="listen"?"picL":"picS";S[key]=S[key]||{};S[key][L.id]=Math.max(S[key][L.id]||0,pct);save();refreshScore(L);
   const lab=x=>x===3?["ok","Đúng ngay"]:x===2?["warn","Đúng lần 2"]:x===1.5?["warn","Đúng sau gợi ý"]:["bad","Cần luyện"];
   const box=el(`<div class="chat-fb ${pct>=85?"ok":"warn"}"><div class="verdict">${kind==="listen"?"Phản xạ nghe":"Trả lời bằng giọng nói"}: ${pct}% · đúng ${res.filter(x=>x>1).length}/${N}</div><p>${pct>=85?"Tuyệt vời!":"Học lại các từ chưa thuộc rồi làm lại nhé."} Điểm cao nhất: ${S[key][L.id]}%.</p><ul class="sum-list">${order.map((it,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(kind==="listen"?(it.lq||it.q):it.q)} → <b>${esc(kind==="listen"?it.w:it.ans)}</b></li>`;}).join("")}</ul></div>`);
-  log.append(box);scroll(box);
+  add(box);
   say(pct>=85?"Great job!":"Good effort! Let's practice again.",{gender:"F"});
   ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
   const other=kind==="listen"?"speak":"listen";
@@ -2030,14 +2044,17 @@ function tabStory(L,body){
  };
  playB.onclick=()=>play(undefined,playB);slowB.onclick=()=>play(0.65,slowB);
  // Phần hỏi đáp
- t.append(el(`<h2 style="font-size:20px;margin-top:6px">Cô hỏi, bạn trả lời</h2>`));
+ const qh=el(`<h2 style="font-size:20px;margin-top:6px">Cô hỏi, bạn trả lời</h2>`);t.append(qh);
  const log=el(`<div class="dialog chat-log" aria-live="polite"></div>`);
  const prog=el(`<div class="muted" style="font-size:14px;font-variant-numeric:tabular-nums"></div>`);
  const ctrl=el(`<div class="practice chat-ctrl"></div>`);
  const startB=el(`<button class="btn chalk big-mic" type="button">${IC.mic} Bắt đầu trả lời câu hỏi</button>`);
  ctrl.append(el(`<p style="margin:0" class="muted">Hãy nghe đoạn văn ít nhất một lần trước khi trả lời.</p>`),startB);
- t.append(log,prog,ctrl);body.append(t);
- const scroll=n=>{try{n.scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}};
+ t.append(prog,log,ctrl);body.append(t);
+ let cur=null;
+ const newTurn=()=>{cur=el(`<div class="turn"></div>`);log.prepend(cur);cur.after(ctrl);return cur;};
+ const add=x=>{(cur||newTurn()).append(x);return x;};
+ const scroll=()=>{try{const h=document.querySelector("header.top");const off=h&&getComputedStyle(h).position==="sticky"?h.offsetHeight:0;const y=qh.getBoundingClientRect().top+window.scrollY-off-8;if(Math.abs(window.scrollY-y)>40)window.scrollTo({top:y,behavior:"smooth"});}catch(e){}};
  let i=0,tries=0;const res=[];
  async function co(en,vi,buttons){
   if(!alive())return;
@@ -2046,12 +2063,12 @@ function tabStory(L,body){
   if(q("n"))q("n").onclick=()=>{readToken++;say(en,{gender:"F"});};
   if(q("s"))q("s").onclick=()=>{readToken++;say(en,{gender:"F",rate:0.6});};
   if(q("v"))q("v").onclick=()=>{const x=b.querySelector(".vi");x.hidden=!x.hidden;q("v").textContent=x.hidden?"Xem nghĩa":"Ẩn nghĩa";};
-  log.append(b);scroll(b);await say(en,{gender:"F"});
+  add(b);await say(en,{gender:"F"});
  }
- startB.onclick=async()=>{stopStory();ctrl.innerHTML="";log.innerHTML="";i=0;res.length=0;
+ startB.onclick=async()=>{stopStory();ctrl.innerHTML="";log.innerHTML="";cur=null;i=0;res.length=0;newTurn();scroll();
   await co("Now, answer my questions about the story.","",false);ask();};
  async function ask(){
-  if(!alive())return;const Q=St.qs[i];tries=0;prog.textContent=`Câu ${i+1} / ${St.qs.length}`;
+  if(!alive())return;const Q=St.qs[i];tries=0;prog.textContent=`Câu ${i+1} / ${St.qs.length}`;newTurn();scroll();
   await co(Q.q,Q.vi,true);if(!alive())return;controls(Q);
  }
  function controls(Q){
@@ -2061,7 +2078,7 @@ function tabStory(L,body){
   const typeB=el(`<button class="btn" type="button">Gõ câu trả lời</button>`);
   const typeBox=el(`<div hidden style="gap:8px"><input type="text" id="story-type" autocomplete="off" autocapitalize="sentences" placeholder="Gõ câu trả lời bằng tiếng Anh…" style="flex:1;min-width:0"><button class="btn primary" type="button">Gửi</button></div>`);
   const msg=el(`<div></div>`);
-  const row=el(`<div class="row"></div>`);row.append(mic,again,typeB);ctrl.append(row,typeBox,msg);scroll(ctrl);
+  const row=el(`<div class="row"></div>`);row.append(mic,again,typeB);ctrl.append(row,typeBox,msg);
   again.onclick=()=>play(undefined,again);
   const showType=()=>{typeBox.hidden=false;typeBox.style.display="flex";typeBox.querySelector("input").focus();};
   typeB.onclick=showType;
@@ -2083,31 +2100,31 @@ function tabStory(L,body){
   if(!alive())return;
   const r=alts.map(a=>evalTurn(Q,a)).sort((a,b)=>b.rank-a.rank)[0];
   const unclear=r.level==="none"||(conf>0&&conf<0.45&&r.level!=="good");
-  if(r.text)log.append(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
+  if(r.text)add(el(`<div class="bubble B"><div class="who">Bạn</div><div>${esc(r.text)}</div></div>`));
   const pass=!unclear&&(r.level==="good"||(r.level==="ok"&&!r.issues.length));
   if(pass){
    res[i]=tries===0?3:tries===1?2:1.5;
    const fb=el(`<div class="chat-fb ok"><div class="verdict">Đúng rồi!</div>${r.level==="ok"&&Q.tipOk?`<p>${esc(Q.tipOk)}</p>`:""}</div>`);
-   log.append(fb);scroll(fb);
+   add(fb);
    await co(PRAISE[(i+tries)%PRAISE.length],"",false);return next();
   }
   tries++;
   const errs=r.issues.length?`<ul class="fix-list">${r.issues.slice(0,3).map(x=>`<li><s>${esc(x.wrong)}</s> → <ins>${esc(x.right)}</ins><br><span class="muted" style="font-size:14px">${esc(x.why)}</span></li>`).join("")}</ul>`:"";
   if(tries===1){
    const note=unclear?"Cô chưa nghe rõ. Nói to, chậm và rõ hơn nhé.":r.issues.length?"Gần đúng rồi, nhưng còn lỗi:":"Câu trả lời chưa đúng. Nghe lại câu hỏi, có thể nghe lại đoạn văn, rồi trả lời lần nữa.";
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Thử lại nhé</div><p>${esc(note)}</p>${errs}</div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Thử lại nhé</div><p>${esc(note)}</p>${errs}</div>`));
    await co(unclear?"Sorry, I didn't hear you clearly. Please say it again.":"Not quite. Please try again.","",false);if(!alive())return;
    return controls(Q);
   }
   if(tries===2){
-   log.append(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p><b>Câu hỏi nghĩa là:</b> “${esc(Q.vi)}”</p><p>${esc(Q.hint)}</p>${errs}</div>`));
+   add(el(`<div class="chat-fb warn"><div class="verdict">Gợi ý của Cô</div><p><b>Câu hỏi nghĩa là:</b> “${esc(Q.vi)}”</p><p>${esc(Q.hint)}</p>${errs}</div>`));
    await co("Here is a hint. Please try again.","",false);if(!alive())return;
    return controls(Q);
   }
   res[i]=1;
   const fb=el(`<div class="chat-fb bad"><div class="verdict">Đáp án</div>${errs}<div class="models"><b>Bạn có thể trả lời:</b></div></div>`);
   Q.models.forEach(x=>{const b=el(`<button class="btn sm model" type="button">${IC.spk} ${esc(x)}</button>`);b.onclick=()=>{readToken++;say(x,{gender:"F"});};fb.querySelector(".models").append(b);});
-  log.append(fb);scroll(fb);
+  add(fb);
   await co("The answer is: "+Q.models[0],"",false);if(!alive())return;
   await wait(1200);return next();
  }
@@ -2116,7 +2133,7 @@ function tabStory(L,body){
   if(i<St.qs.length)ask();else summary();
  }
  function summary(){
-  if(!alive())return;prog.textContent="";
+  if(!alive())return;prog.textContent="";newTurn();scroll();
   const right=res.filter(x=>x>1).length,first=res.filter(x=>x===3).length;
   const PTS={3:100,2:75,1.5:50,1:0};
   const pct=Math.round(St.qs.reduce((a,_,k)=>a+(PTS[res[k]]||0),0)/St.qs.length);
@@ -2127,7 +2144,7 @@ function tabStory(L,body){
   const lab=x=>x===3?["ok","Đúng ngay"]:x===2?["warn","Đúng lần 2"]:x===1.5?["warn","Đúng sau gợi ý"]:["bad","Cần luyện"];
   const all=first===St.qs.length;
   const box=el(`<div class="chat-fb ${all?"ok":"warn"}"><div class="verdict">Kết quả: đúng ${right}/${St.qs.length} câu · ${pct}%</div><p>${all?"Tuyệt vời! Bạn nghe hiểu rất tốt.":"Nghe lại đoạn văn và làm lại để trả lời đúng ngay từ lần đầu."} Điểm Nghe & trả lời cao nhất: ${qaScore(L)}%. Điểm bài: ${tot}%.${unlockMsg}</p><ul class="sum-list">${St.qs.map((Q,k)=>{const l=lab(res[k]);return `<li><span class="pill ${l[0]}">${l[1]}</span> ${esc(Q.q)}</li>`;}).join("")}</ul></div>`);
-  log.append(box);scroll(box);
+  add(box);
   say(all?"Great job! You understand the story very well.":"Good effort! Listen again and try one more time.",{gender:"F"});
   ctrl.innerHTML="";const row=el(`<div class="row"></div>`);
   const re=el(`<button class="btn" type="button">Làm lại</button>`);re.onclick=()=>{curTab="story";lesson(L.id);};
